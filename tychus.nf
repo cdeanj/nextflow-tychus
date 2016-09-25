@@ -32,7 +32,6 @@ if(!plasmid_db.exists()) {
         exit 1, "Unable to find plasmid file: {params.plasmid_db}"
 }
 
-
 forward_reads = Channel
 		.fromPath(params.pair1)
 		.map { path -> [ path.toString().replace('_R1', '_RX'), path ] }
@@ -129,13 +128,26 @@ process bowtie2_plasmid_alignment {
 process amr_coverage_sampler {
 	input:
 	set dataset_id, file(amr_sam_alignment) from amr_sam_files
-	file genome from amr_db
+	file amrdb from amr_db
 
 	output:
 	set dataset_id, file('coverage_sampler_amr.tab') into amr_csa_files
 
 	"""
-	csa -ref_fp $genome -sam_fp $amr_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_amr.tab
+	csa -ref_fp $amrdb -sam_fp $amr_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_amr.tab
+	"""
+}
+
+process vf_coverage_sampler {
+	input:
+	set dataset_id, file(vf_sam_alignment) from vf_sam_files
+	file vfdb from vf_db
+
+	output:
+	set dataset_id, file('coverage_sampler_vf.tab') into vf_csa_files
+
+	"""
+	csa -ref_fp $vfdb -sam_fp $vf_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_vf.tab
 	"""
 }
 
