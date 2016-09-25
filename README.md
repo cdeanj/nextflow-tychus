@@ -15,18 +15,25 @@ $ ./nextflow run tychus.nf -with-docker
 ## Parameters
 
 ##### `--forward`
+Location of the forward read pairs
 
 ##### `--reverse`
+Location of the reverse read pairs
 
 ##### `--amr_db`
+Location of the fasta formatted antimicrobial resistance database
 
 ##### `--vf_db`
+Location of the fasta formatted virulence factor database
 
 ##### `--plasmid_db`
+Location of the fasta formatted plasmid database
 
 ##### `--threads`
+Number of threads to use for each process (where applicable)
 
 ##### `--output`
+Location for output files to be written to. Note, directory does not need to exist prior to pipeline execution
 
 
 ## Dependencies
