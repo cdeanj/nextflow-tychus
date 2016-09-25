@@ -12,6 +12,23 @@ $ curl -fsSL get.nextflow.io | bash
 $ ./nextflow run tychus.nf -with-docker
 ```
 
+## Parameters
+
+### `--forward`
+
+### `--reverse`
+
+### `--amr_db`
+
+### `--vf_db`
+
+### `--plasmid_db`
+
+### `--threads`
+
+### `--output`
+
+
 ## Dependencies
 
 Tychus utilizes a number of open source projects to run:
