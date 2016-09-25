@@ -17,6 +17,7 @@ $ ./nextflow run tychus.nf -with-docker
 Tychus utilizes a number of open source projects to run:
 
 * [Docker](https://www.docker.com/what-docker) - Software containerization platform
+* [Trimmomatic](https://github.com/timflutre/trimmomatic) - Read trimmer
 * [Bowtie2](https://github.com/BenLangmead/bowtie2) - Sequence aligner
 * [Samtools](https://github.com/samtools/samtools) - Alignment processor
 * [Freebayes](https://github.com/ekg/freebayes) - Variant caller
