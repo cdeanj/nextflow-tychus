@@ -51,9 +51,9 @@ $ --threads 10
 ```
 
 ##### `--output`
-Location for output files to be written to. Note, directory does not need to exist prior to pipeline execution
+Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
 ```bash
-$ --output /path/to/where/your/want/your/output/files
+$ --output /path/to/where/you/want/your/output/files
 ```
 
 ## Dependencies
