@@ -16,25 +16,45 @@ $ ./nextflow run tychus.nf -with-docker
 
 ##### `--forward`
 Location of the forward read pairs
+```bash
+$ --forward /path/to/your/fastq/*.fq
+```
 
 ##### `--reverse`
 Location of the reverse read pairs
+```bash
+$ --reverse /path/to/your/fastq/*.fq
+```
 
 ##### `--amr_db`
 Location of the fasta formatted antimicrobial resistance database
+```bash
+$ --amr_db /path/to/your/resistance/database/*.fa
+```
 
 ##### `--vf_db`
 Location of the fasta formatted virulence factor database
+```bash
+$ --vf_db /path/to/your/virulence/database/*.fa
+```
 
 ##### `--plasmid_db`
 Location of the fasta formatted plasmid database
+```bash
+$ --plasmid_db /path/to/your/plasmid/database/*.fa
+```
 
 ##### `--threads`
 Number of threads to use for each process (where applicable)
+```bash
+$ --threads 10
+```
 
 ##### `--output`
 Location for output files to be written to. Note, directory does not need to exist prior to pipeline execution
-
+```bash
+$ --output /path/to/where/your/want/your/output/files
+```
 
 ## Dependencies
 
