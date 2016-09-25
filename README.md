@@ -14,19 +14,19 @@ $ ./nextflow run tychus.nf -with-docker
 
 ## Parameters
 
-### `--forward`
+##### `--forward`
 
-### `--reverse`
+##### `--reverse`
 
-### `--amr_db`
+##### `--amr_db`
 
-### `--vf_db`
+##### `--vf_db`
 
-### `--plasmid_db`
+##### `--plasmid_db`
 
-### `--threads`
+##### `--threads`
 
-### `--output`
+##### `--output`
 
 
 ## Dependencies
