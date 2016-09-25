@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
         openjdk-7-jre-headless \
         unzip \
         python \
+	samtools \
+	trimmomatic \
+	vcftools \
 && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/BenLangmead/bowtie2.git && \
@@ -25,3 +28,8 @@ RUN git clone https://github.com/cdeanj/coverage_sampler.git && \
 	cd coverage_sampler && \
 	make && \
 	cp csa /usr/local/bin
+
+RUN git clone --recursive https://github.com/ekg/freebayes.git && \
+        cd freebayes && \
+        make && \
+        cp -r bin/* /usr/local/bin
