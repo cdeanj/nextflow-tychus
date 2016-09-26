@@ -2,6 +2,7 @@
 
 params.pair1 = "/home/chris_dean/nextflow/tychus/tutorial/listeria_reads/*_R1*.fastq"
 params.pair2 = "/home/chris_dean/nextflow/tychus/tutorial/listeria_reads/*_R2*.fastq"
+params.genome = "/home/chris_dean/nextflow/tychus/tutorial/listeriadb/listeriadb.fa"
 params.amr_db = "/home/chris_dean/nextflow/tychus/tutorial/amrdb/amrdb.fa"
 params.vf_db = "/home/chris_dean/nextflow/tychus/tutorial/vfdb/vfdb.fa"
 params.plasmid_db = "/home/chris_dean/nextflow/tychus/tutorial/plasmiddb/plasmiddb.fa"
@@ -17,11 +18,15 @@ log.info "Reverse Reads      : ${params.pair2}"
 log.info "Number of Threads  : ${params.threads}"
 log.info "\n"
 
+genome = file(params.genome)
 amr_db = file(params.amr_db)
 vf_db = file(params.vf_db)
 plasmid_db = file(params.plasmid_db)
 threads = params.threads
 
+if(!genome.exists()) {
+	exit 1, "Unable to find genome file: {params.genome}"
+}
 if(!amr_db.exists()) {
         exit 1, "Unable to find genome file: {params.amr_db}"
 }
@@ -45,9 +50,22 @@ params.read_pairs = forward_reads
              .map { pair1, pair2 -> [ pathToDatasetID(pair1[1]), pair1[1], pair2[1] ] }
 
 params.read_pairs.into {
+	read_files_genome;
 	read_files_amr;
 	read_files_vf;
 	read_files_plasmid
+}
+
+process build_genome_index {
+	input:
+	file genome
+
+	output:
+	file 'genome.index*' into genome_index
+
+	"""
+	bowtie2-build ${genome} genome.index
+	"""
 }
 
 process build_amr_index {
@@ -86,7 +104,24 @@ process build_plasmiddb_index {
 	"""
 }
 
-process bowtie_amr_alignment {
+process bowtie2_genome_alignment {
+	input:
+	set dataset_id, file(forward), file(reverse) from read_files_genome
+	file index from genome_index.first()
+
+	output:
+	set dataset_id, file('alignment.sam') into genome_sam_files
+	set dataset_id, file('alignment.bam') into genome_bam_files
+	set dataset_id, file('alignment_index.bai') into genome_index_files
+
+	"""
+	bowtie2 -p ${threads} -x genome.index -1 $forward -2 $reverse -S alignment.sam
+	samtools view -bS alignment.sam | samtools sort - alignment
+	samtools index alignment.bam alignment_index.bai
+	"""
+}
+
+process bowtie2_amr_alignment {
 	input:
 	set dataset_id, file(forward), file(reverse) from read_files_amr
 	file index from amr_index.first()
@@ -122,6 +157,32 @@ process bowtie2_plasmid_alignment {
 
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S plasmid_alignment.sam
+	"""
+}
+
+process genome_snp_consensus {
+	input:
+	set dataset_id, file('alignment.bam') from genome_bam_files
+	file genome
+
+	output:
+	set dataset_id, file('variants.vcf') into variants
+
+	"""
+	freebayes -p 1 -f ${genome} alignment.bam > variants.vcf
+	"""
+}
+
+process genome_coverage_sampler {
+	input:
+	set dataset_id, file(genome_sam_alignment) from genome_sam_files
+	file genome
+
+	output:
+	set dataset_id, file('coverage_sampler_genome.tab') into genome_csa_files
+
+	"""
+	csa -ref_fp $genome -sam_fp $genome_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_genome.tab
 	"""
 }
 
