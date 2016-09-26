@@ -1,3 +1,5 @@
+[![nextflow](https://img.shields.io/badge/nextflow-≥0.14.3-brightgreen.svg)](http://nextflow.io)
+
 # What is Tychus?
 That's a good question
 
