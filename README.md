@@ -62,6 +62,7 @@ $ --output /path/to/where/you/want/your/output/files
 
 Tychus utilizes a number of open source projects to run:
 
+* [Nextflow](https://www.nextflow.io/index.html) - Workflow framework
 * [Docker](https://www.docker.com/what-docker) - Software containerization platform
 * [Trimmomatic](https://github.com/timflutre/trimmomatic) - Read trimmer
 * [Bowtie2](https://github.com/BenLangmead/bowtie2) - Sequence aligner
