@@ -15,6 +15,7 @@ Contents:
    installation
    usage
    output
+   pipeline
    contributors
    contact
 
