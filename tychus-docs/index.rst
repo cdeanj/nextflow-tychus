@@ -18,13 +18,3 @@ Contents:
    pipeline
    contributors
    contact
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
