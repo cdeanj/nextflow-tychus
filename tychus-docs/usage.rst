@@ -5,7 +5,9 @@ Assembly Parameters
 -------------------
 
 -forward
+
 Location of the forward read pairs
+
 .. code-block:: console
 
    -forward /path/to/your/fastq/*.fq
