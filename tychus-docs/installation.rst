@@ -3,7 +3,7 @@ Installation
 
 What You Need
 -------------
-To run Tychus, you will need Nextflow, a DSL workflow framework for running computational pipelines, and Docker, a software containerization platform that resolves dependency nightmares for complex workflows such as Tychus. See below for installation instructions.
+To run Tychus, you will need `Nextflow <https://www.nextflow.io>`_, a DSL workflow framework for running computational pipelines, and `Docker <https://www.docker.com>`_, a software containerization platform that resolves dependency nightmares for complex workflows such as Tychus. See below for installation instructions.
 
 Nextflow Installation
 ---------------------
