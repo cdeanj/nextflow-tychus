@@ -21,7 +21,7 @@ Docker Installation
 
 Dependencies
 ------------
-Tychus utilizes a number of open source projects, which are all resolved with Docker:
+Tychus utilizes a number of open source projects, which are all resolved by Docker:
 
 * `Nextflow <https://www.nextflow.io>`_ Workflow framework
 * `Docker <https://www.docker.com/what-docker>`_ Software containerization platform
