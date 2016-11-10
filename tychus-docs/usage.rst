@@ -4,6 +4,7 @@ Usage
 Assembly Parameters
 -------------------
 R = Required Parameters
+
 NR = Not Required Parameters
 
 Location of the forward read pairs (R)
