@@ -11,6 +11,13 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   introduction
+   installation
+   usage
+   output
+   contributors
+   contact
+
 
 
 Indices and tables
