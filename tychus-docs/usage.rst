@@ -39,6 +39,8 @@ Location for output files to be written to. Note, the output directory does not 
 Alignment Parameters
 --------------------
 
+It is not required to have access to a resistance, virulence, or plasmid database to run the alignment module. These databases have been custom curated and provided in the tutorial directory of the Tychus repository. If you have access to your own databases, simply specify the appropriate parameter and location of each database on your file system.
+
 Location of the forward read pairs
 
 .. code-block:: console
