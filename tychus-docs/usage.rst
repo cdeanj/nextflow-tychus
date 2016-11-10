@@ -13,6 +13,7 @@ Location of the forward read pairs
    -forward /path/to/your/fastq/*.fq
 
 -reverse
+
 Location of the reverse read pairs
 .. code-block:: console
 
