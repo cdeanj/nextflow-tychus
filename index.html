@@ -63,7 +63,7 @@ $ sudo apt-get install docker-compose</pre></div>
 <h3>
 <a id="tychus-assembly" class="anchor" href="#tychus-assembly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tychus Assembly</h3>
 
-<p>Some stuff here..</p>
+<p>The goal of our assembly module is to create high quality genome assemblies from short-read bacterial DNA. Because no single assembly will produce the highest quality results, it is often necessary to assemble reads using multiple genome assemblers. However, this is often time-consuming and error-prone. To this end, our assembly module assembles short-reads using four different De-Bruijn graph based assemblers (Abyss, IDBA-UD, SPades, and Velvet). Kmergenie is used to pick the most optimal kmer value to build the DBG graph when necessary. On completion, contigs from each assembly are used to create a hybrid assembly using CISA, which has shown to produce assemblies with higher contiguity and accuracy. Reads can be assembled <em>de novo</em> or with a reference and each assembly is run in parallel for those with access to multi-core machines.</p>
 
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
@@ -104,6 +104,8 @@ $ sudo apt-get install docker-compose</pre></div>
 <a href="https://github.com/loneknightpy/idba">IDBA-UD</a> - Genome assembler for short reads</li>
 <li>
 <a href="https://github.com/dzerbino/velvet">Velvet</a> - De novo short-read assembler</li>
+<li>
+<a href="http://sb.nhri.org.tw/CISA/en/CISA;jsessionid=125169F363E3D18705C397E7C6F68C8E">CISA</a> - Contig integrator</li>
 </ul>
 
 <h3>
