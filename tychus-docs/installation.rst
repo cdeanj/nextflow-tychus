@@ -22,6 +22,7 @@ Docker Installation
 Dependencies
 ------------
 Tychus utilizes a number of open source projects, which are all resolved with Docker:
+
 * `Nextflow <https://www.nextflow.io>`_
 * `Docker <https://www.docker.com/what-docker`_
 * `Trimmomatic <https://github.com/timflutre/trimmomatic>`_
