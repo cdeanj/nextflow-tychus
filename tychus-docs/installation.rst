@@ -10,13 +10,13 @@ Nextflow Installation
 .. code-block:: console
    :linenos:
 
-   $ curl -fsSL get.nextflow.io | bash
-   $ ./nextflow
+   curl -fsSL get.nextflow.io | bash
+   ./nextflow
 
 Docker Installation
 -------------------
 .. code-block:: console
    :linenos:
 
-   $ sudo apt-get update
-   $ sudo apt-get install docker-compose
+   sudo apt-get update
+   sudo apt-get install docker-compose
