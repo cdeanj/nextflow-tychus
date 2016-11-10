@@ -18,6 +18,8 @@ Docker Installation
 
    sudo apt-get update
    sudo apt-get install docker-compose
+   sudo groupadd docker
+   sudo usermod -aG docker $USER
 
 Dependencies
 ------------
