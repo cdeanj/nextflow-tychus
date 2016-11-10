@@ -31,6 +31,7 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 * `Bowtie2 <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
 * `Samtools <https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
 * `Freebayes <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
+* `Prokka <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
 * `CoverageSampler <https://github.com/cdeanj/coverage_sampler>`_ Resistome analyzer
 * `kSNP3 <https://sourceforge.net/projects/ksnp/>`_ Phylogenetic analysis
 * `KmerGenie <http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for build De-Bruijn graphs
