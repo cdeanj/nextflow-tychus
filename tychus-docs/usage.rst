@@ -4,6 +4,8 @@ Usage
 Assembly Parameters
 -------------------
 
+The assembly module can run reference-based or de novo assemblies. If you want to run de novo assemblies, simply omit the reference parameter. If you wish to run a reference-based assembly, specify the location of your fasta formatted reference database.
+
 Location of the forward read pairs
 
 .. code-block:: console
