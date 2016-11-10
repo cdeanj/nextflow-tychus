@@ -22,9 +22,9 @@ Docker Installation
 Dependencies
 ------------
 Tychus utilizes a number of open source projects, which are all resolved with Docker:
-* `Nextflow <https://www.nextflow.io>`_ Workflow framework
-* `Docker <https://www.docker.com/what-docker`_ Software containerization platform
-* `Trimmomatic <https://github.com/timflutre/trimmomatic>`_ Read trimmer and quality control
+* `Nextflow <https://www.nextflow.io>`_
+* `Docker <https://www.docker.com/what-docker`_
+* `Trimmomatic <https://github.com/timflutre/trimmomatic>`_
 * `Bowtie2 <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
 * `Samtools <https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
 * `Freebayes <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
