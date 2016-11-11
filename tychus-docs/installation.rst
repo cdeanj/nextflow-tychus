@@ -21,6 +21,27 @@ Docker Installation
    sudo groupadd docker
    sudo usermod -aG docker $USER
 
+Pull Images
+-----------
+If you wish to run the alignment pipeline you will need to obtain the latest tychus-alignment Docker image
+.. code-bluck:: console
+   :linenos:
+
+   docker pull chrisd/tychus-alignment
+
+If you wish to run the assembly pipeline, you will need to obtain the latest tychus-assembly Docker image
+.. code-block:: console
+   :linenos:
+
+   docker pull chrisd/tychus-assembly
+
+======================= =============== 
+Image Name              Image Size     
+======================= =============== 
+chrisd/tychus-alignment 1.779 GB
+chrisd/tychus-assembly  1.000 GB
+======================= ===============
+
 Dependencies
 ------------
 Tychus utilizes a number of open source projects, which are all resolved by Docker:
