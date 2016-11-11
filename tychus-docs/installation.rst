@@ -24,12 +24,14 @@ Docker Installation
 Pull Images
 -----------
 If you wish to run the alignment pipeline you will need to obtain the latest tychus-alignment Docker image
+
 .. code-bluck:: console
    :linenos:
 
    docker pull chrisd/tychus-alignment
 
 If you wish to run the assembly pipeline, you will need to obtain the latest tychus-assembly Docker image
+
 .. code-block:: console
    :linenos:
 
