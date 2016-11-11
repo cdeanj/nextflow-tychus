@@ -42,8 +42,8 @@ If you wish to run the ``assembly`` pipeline, you will need the latest ``tychus-
 ======================= =============== =============== ================= =============
 Repository              Tag             Image OS        Image Size        Download Time
 ======================= =============== =============== ================= =============
-chrisd/tychus-alignment Latest          Ubuntu 15.10    1.000 GB          7 minutes
-chrisd/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          5 minutes
+chrisd/tychus-alignment Latest          Ubuntu 15.10    1.000 GB          4 minutes
+chrisd/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          7 minutes
 ======================= =============== =============== ================= =============
 
 Dependencies
