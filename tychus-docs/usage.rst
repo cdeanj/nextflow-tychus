@@ -24,6 +24,12 @@ Location of fasta formatted reference database
 
    -reference /path/to/your/reference/database.fa
 
+The forks paramter allows you to define the maximum number of processes that will be run in parallel. By default, this parameter is set to the number of cores on your machine minus one. For example, if you have access to a machine with 12 cores, and you have 12 paired-end read files, 11 paired files will be run in parallel, but each instance of the running process will be running exactly one thread, so it is important that an appropriate value for this parameter is chosen so that you may take advantage of running programs with multiple threads.
+
+.. code-block:: console
+   
+   -forks 1
+
 Number of threads to use (default: 10)
 
 .. code-block:: console
