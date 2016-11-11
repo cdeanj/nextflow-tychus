@@ -37,12 +37,12 @@ If you wish to run the ``assembly`` pipeline, you will need the latest ``tychus-
 
    docker pull chrisd/tychus-assembly
 
-======================= =============== 
-Repository              Image Size     
-======================= =============== 
-chrisd/tychus-alignment 1.000 GB
-chrisd/tychus-assembly  1.779 GB
-======================= ===============
+======================= =============== =============== 
+Repository              Image OS        Image Size     
+======================= =============== ===============
+chrisd/tychus-alignment Ubuntu 15.10    1.000 GB
+chrisd/tychus-assembly  Ubuntu 15.10    1.779 GB
+======================= =============== ===============
 
 Dependencies
 ------------
