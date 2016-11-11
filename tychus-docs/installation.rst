@@ -39,12 +39,12 @@ If you wish to run the ``assembly`` pipeline, you will need the latest ``tychus-
 
    docker pull abdolab/tychus-assembly
 
-======================= =============== =============== ================= =============
-Repository              Tag             Image OS        Image Size        Download Time
-======================= =============== =============== ================= =============
+======================== =============== =============== ================= =============
+Repository               Tag             Image OS        Image Size        Download Time
+======================== =============== =============== ================= =============
 abdolab/tychus-alignment Latest          Ubuntu 15.10    1.000 GB          4 minutes
 abdolab/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          7 minutes
-======================= =============== =============== ================= =============
+======================== =============== =============== ================= =============
 
 Dependencies
 ------------
