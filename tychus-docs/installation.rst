@@ -25,7 +25,7 @@ Pull Images
 -----------
 If you wish to run the alignment pipeline you will need to obtain the latest tychus-alignment Docker image
 
-.. code-bluck:: console
+.. code-block:: console
    :linenos:
 
    docker pull chrisd/tychus-alignment
