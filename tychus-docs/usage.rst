@@ -18,19 +18,19 @@ The ``reverse`` parameter allows you to specify the location of the reverse read
 
    -reverse /path/to/your/reverse/fastq/*.fq
 
-Location of fasta formatted reference database
+The ``reference`` parameter allow you to specify the location of fasta formatted reference database
 
 .. code-block:: console
 
    -reference /path/to/your/reference/database.fa
 
-Number of threads to use (default: 10)
+The ``threads`` parameter can be used to specify the number of threads to use for each process (default: 10)
 
 .. code-block:: console
 
    -threads 10
 
-Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
+The ``output`` parameter can be used to specify the location for writing output files. Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
 
 .. code-block:: console
 
@@ -41,43 +41,43 @@ Alignment Parameters
 
 It is not required to have access to a resistance, virulence, or plasmid database to run the alignment module. These databases have been custom curated and provided in the tutorial directory of the Tychus repository. If you have access to your own databases, simply specify the appropriate parameter and location of each database on your file system.
 
-Location of the forward read pairs
+The ``forward`` parameter allows you to specify the location of the forward read pairs
 
 .. code-block:: console
 
    -forward /path/to/your/fastq/*.fq
 
-Location of the reverse read pairs
+The ``reverse`` parameter allows you to specify the location of the forward read pairs
 
 .. code-block:: console
 
    -reverse /path/to/your/fastq/*.fq
 
-Location of fasta formatted antimicrobial resistance database
+The ``amr_db`` parameter allows you to specify the location of your fasta formatted antimicrobial resistance database
 
 .. code-block:: console
 
    -amr_db /path/to/your/resistance/database.fa
 
-Location of fasta formatted virulence factor database
+The ``vf_db`` parameter allows you to specify the location of your fasta formatted virulence factor database
 
 .. code-block:: console
 
    -vf_db /path/to/your/virulence/database.fa
 
-Location of fasta formatted plasmid database
+The ``plasmid_db`` parameter allows you to specify the location of your fasta formatted plasmid database
 
 .. code-block:: console
 
    -plasmid_db /path/to/your/plasmid/database.fa
 
-Number of threads to use (default: 10)
+The ``threads`` parameter can be used to specify the number of threads to use for each process (default: 10)
 
 .. code-block:: console
 
    -threads 10
 
-Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
+The ``output`` parameter can be used to specify the location for writing output files. Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
 
 .. code-block:: console
 
