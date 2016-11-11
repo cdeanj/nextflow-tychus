@@ -23,14 +23,14 @@ Docker Installation
 
 Pull Images
 -----------
-If you wish to run the alignment pipeline you will need to obtain the latest tychus-alignment Docker image
+If you wish to run the alignment pipeline you will need the latest tychus-alignment Docker image.
 
 .. code-block:: console
    :linenos:
 
    docker pull chrisd/tychus-alignment
 
-If you wish to run the assembly pipeline, you will need to obtain the latest tychus-assembly Docker image
+If you wish to run the assembly pipeline, you will need the latest tychus-assembly Docker image.
 
 .. code-block:: console
    :linenos:
@@ -38,10 +38,10 @@ If you wish to run the assembly pipeline, you will need to obtain the latest tyc
    docker pull chrisd/tychus-assembly
 
 ======================= =============== 
-Image Name              Image Size     
+Repository              Image Size     
 ======================= =============== 
-chrisd/tychus-alignment 1.779 GB
-chrisd/tychus-assembly  1.000 GB
+chrisd/tychus-alignment 1.000 GB
+chrisd/tychus-assembly  1.779 GB
 ======================= ===============
 
 Dependencies
