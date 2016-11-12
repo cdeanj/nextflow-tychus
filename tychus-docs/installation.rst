@@ -61,7 +61,7 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 * `Prokka <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
 * `CoverageSampler <https://github.com/cdeanj/coverage_sampler>`_ Resistome analyzer
 * `kSNP3 <https://sourceforge.net/projects/ksnp/>`_ Phylogenetic analysis
-* `KmerGenie <http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for build De-Bruijn graphs
+* `KmerGenie <http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for building De-Bruijn graphs
 * `Abyss <https://github.com/bcgsc/abyss>`_ *De novo* sequence assembler for short-paired reads
 * `SPades <http://spades.bioinf.spbau.ru/release3.9.0/manual.html>`_ Assembler for single-celled bacterial genomes
 * `IDBA-UD <https://github.com/loneknightpy/idba>`_ Genome assembler for short reads
