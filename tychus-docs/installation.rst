@@ -55,15 +55,15 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 * `Nextflow <https://www.nextflow.io>`_ Workflow framework
 * `Docker <https://www.docker.com/what-docker>`_ Software containerization platform
 * Trimmomatic `[Paper] <http://bioinformatics.oxfordjournals.org/content/early/2014/04/01/bioinformatics.btu170>`_ `[Code] <https://github.com/timflutre/trimmomatic>`_ Read trimmer and quality control
-* `Bowtie2 <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
-* `Samtools <https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
-* `Freebayes <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
-* `Prokka <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
-* `CoverageSampler <https://github.com/cdeanj/coverage_sampler>`_ Resistome analyzer
-* `kSNP3 <https://sourceforge.net/projects/ksnp/>`_ Phylogenetic analysis
-* `KmerGenie <http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for building De-Bruijn graphs
-* `Abyss <https://github.com/bcgsc/abyss>`_ *De novo* sequence assembler for short-paired reads
-* `SPades <http://spades.bioinf.spbau.ru/release3.9.0/manual.html>`_ Assembler for single-celled bacterial genomes
-* `IDBA-UD <https://github.com/loneknightpy/idba>`_ Genome assembler for short reads
-* `Velvet <https://github.com/dzerbino/velvet>`_ *De novo* short-read assembler
-* `CISA <http://sb.nhri.org.tw/CISA/en/CISA;jsessionid=125169F363E3D18705C397E7C6F68C8E>`_ Contig integrator
+* Bowtie2 `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3322381/>`_ `[Code] <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
+* Samtools `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2723002/>`_ `[Code]<https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
+* Freebayes `[Paper] <https://arxiv.org/abs/1207.3907>`_ `[Code] <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
+* `Prokka `[Paper] <https://www.ncbi.nlm.nih.gov/pubmed/24642063>`_ `[Code] <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
+* CoverageSampler `[Code] <https://github.com/cdeanj/coverage_sampler>`_ Resistome analyzer
+* kSNP3 `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3857212/>`_ `[Code] <https://sourceforge.net/projects/ksnp/>`_ Phylogenetic analysis
+* KmerGenie `[Paper] <https://arxiv.org/pdf/1304.5665.pdf>`_ `[Code]<http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for building De-Bruijn graphs
+* Abyss `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2694472/>`_ `[Code] <https://github.com/bcgsc/abyss>`_ *De novo* sequence assembler for short-paired reads
+* SPades `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3342519/>`_ `[Code] <https://github.com/ablab/spades>`_ Assembler for single-celled bacterial genomes
+* IDBA-UD `[Paper] <http://i.cs.hku.hk/~chin/paper/idba_ud-revised-latest.pdf>`_ `[Code] <https://github.com/loneknightpy/idba>`_ Genome assembler for short reads
+* Velvet `[Paper] <http://genome.cshlp.org/content/genome/18/5/821.full.html>`_ `[Code] <https://github.com/dzerbino/velvet>`_ *De novo* short-read assembler
+* CISA `[Paper] <http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0060843q`_ `[Code] <http://sb.nhri.org.tw/CISA/en/CISA;jsessionid=125169F363E3D18705C397E7C6F68C8E>`_ Contig integrator
