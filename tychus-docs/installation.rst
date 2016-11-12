@@ -1,7 +1,7 @@
 Installation
 ============
 
-Tychus can be run on all major operating systems, including MAC OS X (10.8), Linux 64-bit, and Windows. If running on Windows, you will need access to a virtual machine, such as `Virtual Box <https://www.virtualbox.org>`_.
+Tychus can be run on all major operating systems, including ``MAC OS X``, ``Linux 64-bit``, and ``Windows``. If running on Windows, you will need access to a virtual machine, such as `Virtual Box <https://www.virtualbox.org>`_.
 
 To run Tychus, you will need `Nextflow <https://www.nextflow.io>`_, a DSL workflow framework for running computational pipelines, and `Docker <https://www.docker.com>`_, a software containerization platform that resolves dependency nightmares for complex workflows such as Tychus. See below for installation instructions.
 
