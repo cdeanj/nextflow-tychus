@@ -54,7 +54,7 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 
 * `Nextflow <https://www.nextflow.io>`_ Workflow framework
 * `Docker <https://www.docker.com/what-docker>`_ Software containerization platform
-* `Trimmomatic <https://github.com/timflutre/trimmomatic>`_ Read trimmer and quality control
+* `Trimmomatic `[Paper] <http://bioinformatics.oxfordjournals.org/content/early/2014/04/01/bioinformatics.btu170>`_ <https://github.com/timflutre/trimmomatic>`_ Read trimmer and quality control
 * `Bowtie2 <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
 * `Samtools <https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
 * `Freebayes <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
