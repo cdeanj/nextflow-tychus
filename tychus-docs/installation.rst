@@ -58,7 +58,7 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 * Bowtie2 `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3322381/>`_ `[Code] <https://github.com/BenLangmead/bowtie2>`_ Short-read sequence aligner
 * Samtools `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2723002/>`_ `[Code]<https://github.com/samtools/samtools>`_ SAM/BAM alignment processor
 * Freebayes `[Paper] <https://arxiv.org/abs/1207.3907>`_ `[Code] <https://github.com/ekg/freebayes>`_ Probabilistic variant caller
-* `Prokka `[Paper] <https://www.ncbi.nlm.nih.gov/pubmed/24642063>`_ `[Code] <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
+* Prokka `[Paper] <https://www.ncbi.nlm.nih.gov/pubmed/24642063>`_ `[Code] <https://github.com/tseemann/prokka>`_ Prokaryotic genome annotation tool
 * CoverageSampler `[Code] <https://github.com/cdeanj/coverage_sampler>`_ Resistome analyzer
 * kSNP3 `[Paper] <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3857212/>`_ `[Code] <https://sourceforge.net/projects/ksnp/>`_ Phylogenetic analysis
 * KmerGenie `[Paper] <https://arxiv.org/pdf/1304.5665.pdf>`_ `[Code]<http://kmergenie.bx.psu.edu/>`_ Optimal kmer selection for building De-Bruijn graphs
