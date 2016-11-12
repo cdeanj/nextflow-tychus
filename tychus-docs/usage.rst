@@ -47,7 +47,7 @@ The ``forward`` parameter allows you to specify the location of the forward read
 
    -forward /path/to/your/fastq/*.fq
 
-The ``reverse`` parameter allows you to specify the location of the forward read pairs
+The ``reverse`` parameter allows you to specify the location of the reverse read pairs
 
 .. code-block:: console
 
@@ -77,7 +77,7 @@ The ``threads`` parameter can be used to specify the number of threads to use fo
 
    -threads 10
 
-The ``output`` parameter can be used to specify the location for writing output files. Location for output files to be written to. Note, the output directory does not need to exist prior to pipeline execution
+The ``output`` parameter can be used to specify the location for writing output files. Note, the output directory does not need to exist prior to pipeline execution
 
 .. code-block:: console
 
