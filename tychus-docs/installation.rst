@@ -66,4 +66,4 @@ Tychus utilizes a number of open source projects, which are all resolved by Dock
 * `SPades <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3342519/>`_ Assembler for single-celled bacterial genomes
 * `IDBA-UD <http://i.cs.hku.hk/~chin/paper/idba_ud-revised-latest.pdf>`_ Genome assembler for short reads
 * `Velvet <http://genome.cshlp.org/content/genome/18/5/821.full.html>`_ *De novo* short-read assembler
-* `CISA <http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0060843q`_ Contig integrator
+* `CISA <http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0060843q>`_ Contig integrator
