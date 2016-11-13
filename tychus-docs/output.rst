@@ -11,11 +11,11 @@ Directory: Contigs
 ============================ ===============================================================
 File Name                    Description
 ============================ ===============================================================
-abyss-contigs.fa            
-velvet-contigs.fa
-spades-contigs.fa
-idba-contigs.fa
-master_integrated_contigs.fa
+abyss-contigs.fa             Abyss assembly contigs
+velvet-contigs.fa	     Velvet assembly contigs
+spades-contigs.fa            SPades assembly contigs
+idba-contigs.fa              IDBA assembly contigs
+master_integrated_contigs.fa CISA integrated contigs
 ============================ ===============================================================
 
 Directory: Annotations
