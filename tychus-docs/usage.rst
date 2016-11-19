@@ -15,7 +15,7 @@ Assembly Parameters
 Alignment Parameters
 --------------------
 
-==========  =========================== ================================================================================================================== ==============================================
+=========== =========================== ================================================================================================================== ==============================================
 **Option**  **Parameter**               **Description**                                                                                                    **Default behavior**
 -forward    forward read file(s)        Read forward FASTQ files from the specified directory. These files must have an R1 substring within the file name. Program will use tutorial data.
 -reverse    reverse read file(s)        Read reverse FASTQ files from the specified directory. These files must have an R2 substring within the file name. Program will use tutorial data.
