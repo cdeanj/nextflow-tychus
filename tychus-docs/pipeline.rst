@@ -11,6 +11,13 @@ Although assembly is currently the standard approach for analyzing bacterial WGS
 
 In our pipeline, we have implemented several custom databases against which WGS data can be aligned. First, the sequence data for each isolate are aligned to the reference genome from NCBI; sequence variations identified by this alignment can then be used to compare genomes against one another and against the reference. Next, the sequence data for each isolate are aligned to three databases: an antimicrobial resistance database, a virulence factor database, and a plasmid database. This process allows us to identify whether the sequence data contain resistance genes, virulence factors or plasmids – all of which are important for food safety purposes. In addition, we can characterize any identified genes and look at sequence variability within those genes. The output of the alignment portion of our WGS pipeline is therefore a “consensus” alignment to the reference genome, as well as identification and characterization of genes of food safety significance.
 
+.. image:: _images/alignment.jpg
+   :height: 1500px
+   :width: 1250px
+   :scale: 50 %
+   :alt: alternate text
+   :align: center
+
 Assembly
 --------
 Modern Next-Generation Sequencing methods produce short fragments of DNA that have been isolated from a given source; in this case, that source is (hopefully) the genomic DNA of a single (or multiple clonal) bacteria. In order for us to understand the origin, order and content of the bacterial genome, these fragments of short “reads” of DNA must be pieced back together. In the same way that a puzzle can be reconstructed from the unique shape and color of its pieces, we can utilize the order of DNA bases (ACTG) to overlap sequence fragments into an assembly. Typically, these assemblies are comprised of several long, pieced-together fragments of DNA known as contigs; however, often not all contigs can be pieced together to fully reconstruct the bacterial genome.
