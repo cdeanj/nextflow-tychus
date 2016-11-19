@@ -17,3 +17,9 @@ Modern Next-Generation Sequencing methods produce short fragments of DNA that ha
 
 There exist many variants of algorithms for performing assembly, nearly all of which are based on the de Bruijn graph. Each of these algorithmic variants has different strengths and weaknesses, and therefore integrating multiple approaches can yield better results than a single algorithm in isolation. For our WGS pipeline, we have chosen to utilize a suite of tools called iMetAMOS, which allows us to perform assembly using five separate assemblers (algorithms): SPAdes, IDBA-UD, Velvet, ABySS, and Edena. In addition, the length of sequence (i.e., k-mer size) that is used to find overlapping stretches of DNA and form contigs can significantly alter the quality of the assembly. Therefore, the iMetAMOS suite includes a k-mer size selection step using Kmer genie (citation). Once a kmer size is selected, each of the 5 assemblers is used to produce assemblies, and for each assembler that successfully produces contigs, we then combine the results into one master assembly using the program CISA. The resulting assembly is then passed on to another program called Prokka (citation), which identifies regions in the genome that code for genes (as well as tRNA and tmRNA) and labels them using available databases – a process called annotation. Prokka uses Prodigal (citation) to find protein-coding sequences (CDS), and then uses a hierarchical approach based on several different databases to label these sequences. In addition, we have compiled a custom annotation database specifically for Listeria monocytogenes, and have integrated it into the prokka workflow. The result of the assembly portion of our WGS pipeline is the integrated, master assembly file that is fully annotated.
 
+.. image:: _image/assembly.jpg
+   :height: 100px
+   :width: 200 px
+   :scale: 50 %
+   :alt: alternate text
+   :align: center
