@@ -1,6 +1,8 @@
 Usage
 =====
 
+Below you will find a list and description of each parameter that can be specified on the command-line to run both the ``assembly`` and ``alignment`` modules of the Tychus pipeline.
+
 Assembly Parameters
 -------------------
 
