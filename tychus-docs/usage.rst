@@ -21,6 +21,7 @@ Alignment Parameters
 **Option**  **Parameter**               **Description**                                                                                                    **Default behavior**
 -forward    forward read file(s)        Read forward FASTQ files from the specified directory. These files must have an R1 substring within the file name. Program will use tutorial data.
 -reverse    reverse read file(s)        Read reverse FASTQ files from the specified directory. These files must have an R2 substring within the file name. Program will use tutorial data.
+-ref_db     primary reference database  Name of the FASTA formatted reference database.                                                                    Program will use tutorial reference database.
 -amr_db     primary resistance database Name of the FASTA formatted resistance database.                                                                   Program will use tutorial resistance database.
 -vf_db      primary virulence database  Name of the FASTA formatted virulence database.                                                                    Program will use tutorial virulence database.
 -plasmid_db primary plasmid database    Name of the FASTA formatted plasmid database.                                                                      Program will use tutorial plasmid database.
