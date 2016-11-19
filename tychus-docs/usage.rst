@@ -4,6 +4,20 @@ Usage
 Assembly Parameters
 -------------------
 
+======== ==================== ================================================================================================================== ==================================================
+Option   Parameter            Description                                                                                                        Default behavior
+======== ==================== ================================================================================================================== ==================================================
+                              Input/Output
+======== ==================== ================================================================================================================== ==================================================
+-forward forward read file(s) Read forward FASTQ files from the specified directory. These files must have an R1 substring within the file name. Program will use tutorial data.
+======== ==================== ================================================================================================================== ==================================================
+-reverse reverse read file(s) Read reverse FASTQ files from the specified directory. These files must have an R2 substring within the file name. Program will use tutorial data.
+======== ==================== ================================================================================================================== ==================================================
+-threads integer              The number of threads to use for each process.                                                                     The program will use a single thread.
+======== ==================== ================================================================================================================== ==================================================
+-output  dir                  Create a folder called dir and write output files to it.                                                           The program will create a directory called output.
+======== ==================== ================================================================================================================== ==================================================
+
 The assembly module can run reference-based or *de novo* assemblies. If you want to run de novo assemblies, simply omit the reference parameter. If you wish to run a reference-based assembly, specify the location of your fasta formatted reference database.
 
 The ``forward`` parameter allows you to specify the location of the forward read pairs
