@@ -25,8 +25,6 @@ Docker Installation
 
 Pull Images
 -----------
-Before we pull, let's understand what Docker images and containers are. You can think of a Docker image as a class, similar to what you see in programming languages like Java, C++, or Python. Classes have attributes. In our case, these attributes will be our dependencies (i.e., IDBA, KmerGenie, Prokka, etc..). Furthermore, we know that an instance of a class is an object. For our case, the object is the running container. To sum up, an image is a description of a class and a container is an instance of an object, or an instance of an image.
-
 If you wish to run the ``alignment`` pipeline you will need the latest ``tychus-alignment`` Docker image.
 
 .. code-block:: console
