@@ -143,9 +143,3 @@ process run_prokka_annotation {
 	mv annotations/* .
 	"""
 }
-
-def extractSampleName(s) {
-	ret = s =~ /\/(.+)_R/;
-	basepath = ~/.+\//
-  	return ret[0][1] - basepath;
-}
