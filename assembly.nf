@@ -1,32 +1,14 @@
 #!/usr/bin/env nextflow
 
-params.pair1 = "/home/chris_dean/nextflow/tychus/tutorial/reads/SFBRL001-M3237-15-001_S1_L001_R1_001.fastq"
-params.pair2 = "/home/chris_dean/nextflow/tychus/tutorial/reads/SFBRL001-M3237-15-001_S1_L001_R2_001.fastq"
+params.read_pairs = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/reads/test/test-data/*_R{1,2}_001.fastq"
 params.threads = 1
-params.outdir = "${PWD}/results"
 results_path = './results'
 
 threads = params.threads
 
-forward_reads = Channel
-		.fromPath(params.pair1)
-		.map { path -> [ path.toString().replace('_R1', '_RX'), path ] }
-
-reverse_reads = Channel
-		.fromPath(params.pair2)
-		.map { path -> [ path.toString().replace('_R2', '_RX'), path ] }
-
-params.read_pairs = forward_reads
-	     .phase(reverse_reads)
-             .map { pair1, pair2 -> [ extractSampleName(pair1[1]), pair1[1], pair2[1] ] }
-
-params.read_pairs.into {
-	abyss_read_pairs;
-	velvet_read_pairs;
-	spades_read_pairs;
-	idba_read_pairs;
-	kmer_genie_read_pairs
-}
+Channel
+	.fromFilePairs(params.read_pairs, flat: true)
+	.into { abyss_read_pairs; velvet_read_pairs; spades_read_pairs; idba_read_pairs; kmer_genie_read_pairs }
 
 process run_kmer_genie {
 	input:
@@ -42,12 +24,12 @@ process run_kmer_genie {
 	"""
 }
 
-
-// Thanks Paolo
 best_abyss_kmer_results.map{ id, file -> [id, file.text.trim()] } .set { best_abyss_k } 
 best_velvet_kmer_results.map{ id, file -> [id, file.text.trim()] } .set { best_velvet_k }
 
 process run_abyss_assembly {
+	maxForks 1
+
         input:
         set dataset_id, file(forward), file(reverse) from abyss_read_pairs
 	val best from best_abyss_k
@@ -55,29 +37,32 @@ process run_abyss_assembly {
         output:
         set dataset_id, file("${dataset_id}_abyss-contigs.fa") into abyss_assembly_results
 
-        """
-        abyss-pe k=${best[1]} name=abyss np=${threads} in='${forward} ${reverse}'
-	mv abyss-contigs.fa ${dataset_id}_abyss-contigs.fa
-        """
+	"""
+        abyss-pe k=${best[1]} name=abyss j=${threads} in='${forward} ${reverse}'
+        mv abyss-contigs.fa ${dataset_id}_abyss-contigs.fa
+	"""
 }
 
 process run_velvet_assembly {
+	maxForks 1
+
 	input:
 	set dataset_id, file(forward), file(reverse) from velvet_read_pairs
 	val best from best_velvet_k
 
 	output:
 	set dataset_id, file("${dataset_id}_velvet-contigs.fa") into velvet_assembly_results
-	
+
 	"""
 	velveth auto ${best[1]} -fastq -shortPaired ${forward} -fastq -shortPaired2 ${reverse}
-	velvetg auto -exp_cov auto
+	velvetg auto
 	mv auto/contigs.fa ${dataset_id}_velvet-contigs.fa
 	"""
 }
 
-
 process run_spades_assembly {
+	maxForks 1
+
 	input:
 	set dataset_id, file(forward), file(reverse) from spades_read_pairs
 
@@ -91,6 +76,8 @@ process run_spades_assembly {
 }
 
 process run_idba_assembly {
+	maxForks 1
+
 	input:
 	set dataset_id, file(forward), file(reverse) from idba_read_pairs
 
@@ -99,19 +86,21 @@ process run_idba_assembly {
 
 	"""
 	fq2fa --merge --filter ${forward} ${reverse} ${dataset_id}_idba-paired-contigs.fa
-	idba_ud -r ${dataset_id}_idba-paired-contigs.fa --num_threads ${threads} -o idba_output
-	mv idba_output/contig.fa ${dataset_id}_idba-contigs.fa	
+	idba_ud -r ${dataset_id}_idba-paired-contigs.fa --num_threads ${threads} -o ${dataset_id}_idba_output
+	mv ${dataset_id}_idba_output/contig.fa ${dataset_id}_idba-contigs.fa	
 	"""
 }
 
 process run_cisa_contig_integrator {
+	maxForks 1
+
 	publishDir "$results_path/assembly_contigs"
 
 	input:
-	set dataset_id, spades_contigs from spades_assembly_results
-	set dataset_id, idba_contigs from idba_assembly_results
-	set dataset_id, abyss_contigs from abyss_assembly_results
-	set dataset_id, velvet_contigs from velvet_assembly_results
+	set dataset_id, file(spades_contigs) from spades_assembly_results
+	set dataset_id, file(idba_contigs) from idba_assembly_results
+	set dataset_id, file(abyss_contigs) from abyss_assembly_results
+	set dataset_id, file(velvet_contigs) from velvet_assembly_results
 
 	output:
 	set dataset_id, file("${dataset_id}_master_contigs.fa") into cisa_merged_contigs
@@ -132,12 +121,13 @@ process run_cisa_contig_integrator {
 	echo outfile=!{dataset_id}_master_integrated_contigs.fa >> CISA.config
 	echo nucmer=`which nucmer` >> CISA.config
 	echo R2_Gap=0.95 >> CISA.config
-	echo CISA=/home/chris_dean/nextflow/assembly_pipeline/assemblers/CISA1.2 >> CISA.config
+	echo CISA=/CISA1.2 >> CISA.config
 	echo makeblastdb=`which makeblastdb` >> CISA.config
 	echo blastn=`which blastn` >> CISA.config
 	CISA.py CISA.config
 	'''
 }
+
 
 process run_prokka_annotation {
 	publishDir "$results_path/annotations"
