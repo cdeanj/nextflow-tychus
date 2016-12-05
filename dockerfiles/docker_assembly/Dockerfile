@@ -2,6 +2,8 @@ FROM ubuntu:15.10
 
 MAINTAINER Chris Dean <cdean11@rams.colostate.edu>
 
+ARG cpu_cores=1
+
 RUN apt-get update && apt-get install -y \
         aufs-tools \
         automake \
@@ -42,7 +44,7 @@ RUN git clone https://github.com/cdeanj/idba.git && \
 
 RUN git clone https://github.com/dzerbino/velvet.git && \
 	cd velvet && \
-	make MAXKMERLENGTH=100 && \
+	make MAXKMERLENGTH=100 OPENMP=$cpu_cores && \
 	mv velvetg velveth /usr/local/bin
 
 RUN wget http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz && \
@@ -71,6 +73,13 @@ RUN wget -N ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2
 	gunzip linux64.tbl2asn.gz && \
 	chmod +x linux64.tbl2asn && \
 	mv linux64.tbl2asn prokka/binaries/linux/tbl2asn
+
+RUN wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip && \
+	unzip Trimmomatic-0.36.zip && \
+	rm Trimmomatic-0.36.zip && \
+	cd Trimmomatic-0.36 && \
+	chmod u+x trimmomatic-0.36.jar
+	
 
 ENV PATH="/CISA1.2:${PATH}"
 ENV PATH="/prokka/bin:${PATH}"
