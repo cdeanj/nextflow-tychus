@@ -1,5 +1,5 @@
 #!/usr/bin/env nextflow
-
+params.read_pairs = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/reads/test/*_R{1,2}_001.fastq"
 params.genome = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/listeriadb/listeriadb.fa"
 params.amr_db = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/amrdb/amrdb.fa"
 params.vf_db = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/vfdb/vfdb.fa"
@@ -15,8 +15,8 @@ plasmid_db = file(params.plasmid_db)
 threads = params.threads
 
 Channel
-        .fromFilePairs("/home/chris_dean/nextflow/assembly_pipeline/tutorial/reads/test/test-data/*_R{1,2}_001.fastq", flat: true)
-        .into { genome_read_pairs; amr_read_pairs; vf_read_pairs; plasmid_read_pairs }
+        .fromFilePairs(params.read_pairs, flat: true)
+        .into { trimmomatic_read_pairs }
 
 process build_genome_index {
 	input:
@@ -26,7 +26,7 @@ process build_genome_index {
 	file 'genome.index*' into genome_index
 
 	"""
-	bowtie2-build --threads ${threads} $genome genome.index
+	bowtie2-build $genome genome.index
 	"""
 }
 
@@ -38,7 +38,7 @@ process build_amr_index {
         file 'amr.index*' into amr_index
 
         """
-        bowtie2-build --threads ${threads} $amr_db amr.index
+        bowtie2-build $amr_db amr.index
 	"""
 }
 
@@ -50,7 +50,7 @@ process build_vf_index {
         file 'vf.index*' into vf_index
 
         """
-        bowtie2-build --threads ${threads} $vf_db vf.index
+        bowtie2-build $vf_db vf.index
 	"""
 }
 
@@ -62,13 +62,25 @@ process build_vf_index {
         file 'plasmid.index*' into plasmid_index
 
         """
-        bowtie2-build --threads ${threads} $plasmid_db plasmid.index
+        bowtie2-build $plasmid_db plasmid.index
 	"""
 }*/
 
-process bowtie2_genome_alignment {
-	maxForks 1
+process run_trimmomatic {
+	input:
+        set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
 
+        output:
+        set dataset_id, file("${dataset_id}_1P.fastq"), file("${dataset_id}_2P.fastq") into (amr_read_pairs, plasmid_read_pairs, vf_read_pairs, genome_read_pairs)
+
+        """
+        java -jar /Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+        mv ${dataset_id}_1P ${dataset_id}_1P.fastq
+        mv ${dataset_id}_2P ${dataset_id}_2P.fastq
+        """
+}
+
+process bowtie2_genome_alignment {
 	input:
 	set dataset_id, file(forward), file(reverse) from genome_read_pairs
 	file index from genome_index.first()
@@ -79,15 +91,13 @@ process bowtie2_genome_alignment {
         set dataset_id, file("${dataset_id}_genome_alignment.bai") into genome_index_files
 
 	"""
-	bowtie2 --threads ${threads} -x genome.index -1 $forward -2 $reverse -S ${dataset_id}_genome_alignment.sam
-	samtools view -bS ${dataset_id}_genome_alignment.sam | samtools sort -@ ${threads} - ${dataset_id}_genome_alignment
+	bowtie2 -p ${threads} -x genome.index -1 $forward -2 $reverse -S ${dataset_id}_genome_alignment.sam
+	samtools view -bS ${dataset_id}_genome_alignment.sam | samtools sort -@ ${threads} -o ${dataset_id}_genome_alignment.bam
         samtools index ${dataset_id}_genome_alignment.bam ${dataset_id}_genome_alignment.bai
 	"""
 }
 
 process bowtie2_amr_alignment {
-	maxForks 1
-
 	input:
 	set dataset_id, file(forward), file(reverse) from amr_read_pairs
 	file index from amr_index.first()
@@ -96,13 +106,11 @@ process bowtie2_amr_alignment {
 	set dataset_id, file("${dataset_id}_amr_alignment.sam") into amr_sam_files
 
 	"""
-	bowtie2 --threads ${threads} -x amr.index -1 $forward -2 $reverse -S ${dataset_id}_amr_alignment.sam
+	bowtie2 -p ${threads} -x amr.index -1 $forward -2 $reverse -S ${dataset_id}_amr_alignment.sam
 	"""
 }
 
 process bowtie2_vfdb_alignment {
-	maxForks 1
-
         input:
         set dataset_id, file(forward), file(reverse) from vf_read_pairs
         file index from vf_index.first()
@@ -111,7 +119,7 @@ process bowtie2_vfdb_alignment {
         set dataset_id, file("${dataset_id}_vf_alignment.sam") into vf_sam_files
 
         """
-        bowtie2 --threads ${threads} -x vf.index -1 $forward -2 $reverse -S ${dataset_id}_vf_alignment.sam
+        bowtie2 -p ${threads} -x vf.index -1 $forward -2 $reverse -S ${dataset_id}_vf_alignment.sam
         """
 }
 
@@ -129,80 +137,57 @@ process bowtie2_vfdb_alignment {
 }*/
 
 process freebayes_snp_caller {
+	storeDir 'tempo'
+
 	input:
 	set dataset_id, file(bam) from genome_bam_files
 	set dataset_id, file(bai) from genome_index_files
 	file genome
 
 	output:
-	file("${dataset_id}_genome_variants.vcf.gz") into compressed_variants
-	file("${dataset_id}_genome_variants.vcf.gz.tbi") into indexed_variants
+	file("${dataset_id}_consensus.fa") into consensus_files
+	file("${dataset_id}_in_list.txt") into ksnp3_configuration
 
 	"""
 	freebayes -p 1 -f ${genome} $bam | bgzip -c > ${dataset_id}_genome_variants.vcf.gz
 	tabix ${dataset_id}_genome_variants.vcf.gz
+	cat $genome | bcftools consensus ${dataset_id}_genome_variants.vcf.gz > ${dataset_id}_consensus.fa
+	echo -e "$params.work_dir/${dataset_id}_consensus.fa\t$dataset_id" >> ${dataset_id}_in_list.txt
 	"""
 }
 
-process bcftools_isec_and_consensus {
+process prepare_ksnp3_configuration {
+	storeDir 'tempo'
+
 	input:
 	file genome
-	file(vcf) from compressed_variants.toList()
-	file(idx) from indexed_variants.toList()
 
 	output:
-	file('consensus.fa') into consensus_sequence
+	file("genome_path.txt") into kchooser_configuration
+	file("$genome") into kchooser_genome
 
-	"""
-	bcftools isec -p dir --nfiles=3 -w1 $vcf
-	mv dir/0000.vcf isect.vcf
-	bgzip isect.vcf
-	tabix isect.vcf.gz
-	cat $genome | bcftools consensus isect.vcf.gz > consensus.fa
-	"""
+	shell:
+	'''
+	#!/bin/sh
+	genome_prefix=`echo !{genome} | cut -f1 -d '.'`
+	genome_fp=`readlink !{genome}`
+	echo "${genome_fp}\t${genome_prefix}" > genome_path.txt
+	'''
 }
 
-/*process genome_coverage_sampler {
+process run_ksnp3 {
 	input:
-	set dataset_id, file(genome_sam_alignment) from genome_sam_files
-	file genome
+	file kchooser_config from kchooser_configuration
+	file ksnp3_config from ksnp3_configuration.toList()
 
-	output:
-	set dataset_id, file('coverage_sampler_genome.tab') into genome_csa_files
-
-	"""
-	csa -ref_fp $genome -sam_fp $genome_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_genome.tab
-	"""
-}*/
-
-/*process amr_coverage_sampler {
-	input:
-	set dataset_id, file(amr_sam_alignment) from amr_sam_files
-	file amrdb from amr_db
-
-	output:
-	set dataset_id, file('coverage_sampler_amr.tab') into amr_csa_files
-
-	"""
-	csa -ref_fp $amrdb -sam_fp $amr_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_amr.tab
-	"""
-}*/
-
-/*process vf_coverage_sampler { 
-	input:
-	set dataset_id, file(vf_sam_alignment) from vf_sam_files
-	file vfdb from vf_db
-
-	output:
-	set dataset_id, file('coverage_sampler_vf.tab') into vf_csa_files
-
-	"""
-	csa -ref_fp $vfdb -sam_fp $vf_sam_alignment -min 100 -max 100 -skip 5 -t 80 -samples 1 -out_fp coverage_sampler_vf.tab
-	"""
-}*/
-
-def extractSampleName(s) {
-        ret = s =~ /\/(.+)_R/;
-        basepath = ~/.+\//
-        return ret[0][1] - basepath;
+	shell:
+	'''
+	#!/bin/sh
+	/usr/local/kSNP3/MakeFasta !{kchooser_config} MF.fasta > /dev/null
+	/usr/local/kSNP3/Kchooser MF.fasta > /dev/null
+	optimum_k=`grep "The optimum" Kchooser.report | tr -dc '0-9'`
+	cat !{kchooser_config} > in_list
+	cat !{ksnp3_config} >> in_list
+	/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -core -min_frac 0.75 >> /dev/null
+	'''
 }
