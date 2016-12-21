@@ -13,8 +13,8 @@ Nextflow Installation
    curl -fsSL get.nextflow.io | bash
    ./nextflow
 
-
 If you are installing nextflow behind a proxy server, you may encounter the following error:
+
 .. code-block:: console
    :linenos:
 
@@ -22,6 +22,7 @@ If you are installing nextflow behind a proxy server, you may encounter the foll
 
 
 In this case, open a terminal and type the following commands:
+
 .. code-block:: console
    :linenos:
 
