@@ -25,25 +25,25 @@ Docker Installation
 
 Pull Images
 -----------
-If you wish to run the ``alignment`` pipeline you will need the latest ``tychus-alignment`` Docker image.
+To run the ``alignment`` pipeline you will need the latest ``tychus-alignment`` Docker image.
 
 .. code-block:: console
    :linenos:
 
-   docker pull abdolab/tychus-alignment
+   docker pull chrisd/tychus-alignment
 
-If you wish to run the ``assembly`` pipeline, you will need the latest ``tychus-assembly`` Docker image.
+To run the ``assembly`` pipeline, you will need the latest ``tychus-assembly`` Docker image.
 
 .. code-block:: console
    :linenos:
 
-   docker pull abdolab/tychus-assembly
+   docker pull chrisd/tychus-assembly
 
 ======================== =============== =============== ================= =============
 Repository               Tag             Image OS        Image Size        Download Time
 ======================== =============== =============== ================= =============
-abdolab/tychus-alignment Latest          Ubuntu 15.10    1.436 GB          4 minutes
-abdolab/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          7 minutes
+chrisd/tychus-alignment Latest          Ubuntu 15.10    1.436 GB          4 minutes
+chrisd/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          7 minutes
 ======================== =============== =============== ================= =============
 
 Dependencies
