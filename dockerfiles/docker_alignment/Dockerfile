@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM ubuntu:16.04
 
 MAINTAINER Chris Dean <cdean11@rams.colostate.edu>
 
@@ -20,8 +20,15 @@ RUN apt-get update && apt-get install -y \
 	libdigest-md5-perl \
 	bioperl \
 	ncbi-blast+ \
-	bowtie2 \
+	openjdk-8-jre \
+        openjdk-8-jdk \
+	tcsh \
 && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/BenLangmead/bowtie2.git && \
+        cd bowtie2 && \
+        make NO_TBB=1 && \
+        make install
 
 RUN git clone https://github.com/samtools/htslib.git && \
 	cd htslib && \
@@ -57,5 +64,21 @@ RUN wget -N ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2
         gunzip linux64.tbl2asn.gz && \
         chmod +x linux64.tbl2asn && \
         mv linux64.tbl2asn prokka/binaries/linux/tbl2asn
+
+RUN wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip && \
+        unzip Trimmomatic-0.36.zip && \
+        rm Trimmomatic-0.36.zip && \
+        cd Trimmomatic-0.36 && \
+        chmod u+x trimmomatic-0.36.jar
+
+RUN wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.6/jellyfish-2.2.6.tar.gz && \
+        tar -xvf jellyfish-2.2.6.tar.gz && \
+        cd jellyfish-2.2.6 && \
+        ./configure && \
+        make -j 4 && \
+        mv bin/jellyfish /usr/bin
+
+RUN git clone https://github.com/cdeanj/kSNP3.git && \
+	mv kSNP3 /usr/local
 
 ENV PATH="/prokka/bin:${PATH}"
