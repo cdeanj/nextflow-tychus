@@ -13,11 +13,13 @@ Nextflow Installation
    curl -fsSL get.nextflow.io | bash
    ./nextflow
 
+
 If you are installing nextflow behind a proxy server, you may encounter the following error:
 .. code-block:: console
    :linenos:
 
    Unable to initialize nextflow environment
+
 
 In this case, open a terminal and type the following commands:
 .. code-block:: console
@@ -26,6 +28,7 @@ In this case, open a terminal and type the following commands:
    wget -O nextflow http://www.nextflow.io/releases/v0.20.1/nextflow-0.20.1-all
    chmod u+x nextflow
    ./nextflow
+
 
 Docker Installation
 -------------------
