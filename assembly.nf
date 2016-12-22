@@ -29,6 +29,17 @@ params.threads = 1
 
 threads = params.threads
 
+// Trimmomatic configuration variables
+params.leading = 3
+params.trailing = 3
+params.slidingwindow = "4:15"
+params.minlen = 36
+
+leading = params.leading
+trailing = params.trailing
+slidingwindow = params.slidingwindow
+minlen = params.minlen
+
 if(params.help) {
 	log.info ''
 	log.info 'Tychus - Assembly Pipeline'
@@ -40,10 +51,14 @@ if(params.help) {
 	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
 	log.info '    --threads         INT             Number of threads to use for each process'
 	log.info '    --output          DIR             Directory to write output files to'
-	log.info 'Abyss Options: '
-	log.info 'Velvet Options: '
-	log.info 'SPades Options: '
-	log.info 'IDBA-UD Options: '
+	log.info ''
+	log.info 'Trimmomatic Options: '
+	log.info '    --leading         INT		Remove leading low quality or N bases'
+	log.info '    --trailing        INT		Remove trailing low quality or N bases'
+	log.info '    --slidingwindow   INT		Scan read with a sliding window'
+	log.info '    --minlen          INT		Drop reads below INT bases long'
+	log.info ''
+	log.info 'Assembly Options: '
 	log.info 'Prokka Options: '
 	log.info '
 	return
