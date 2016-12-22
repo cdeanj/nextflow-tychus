@@ -1,18 +1,40 @@
 #!/usr/bin/env nextflow
-params.read_pairs = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/reads/test/*_R{1,2}_001.fastq"
-params.genome = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/listeriadb/listeriadb.fa"
-params.amr_db = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/amrdb/amrdb.fa"
-params.vf_db = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/vfdb/vfdb.fa"
-params.plasmid_db = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/plasmiddb/plasmiddb.fa"
+
+//General configuation variables
+params.work_dir = "$PWD/temporary_files"
+params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.genome = "tutorial/genome_reference/listeriadb.fa"
+params.amr_db = "tutorial/amr_reference/megaresdb.fa"
+params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
+params.plasmid_db = "tutorial/plasmid_reference/plasmiddb.fa"
 params.threads = 1
-params.keep = false
-params.outdir = "${PWD}/alignment_results"
 
 genome = file(params.genome)
 amr_db = file(params.amr_db)
 vf_db = file(params.vf_db)
 plasmid_db = file(params.plasmid_db)
 threads = params.threads
+
+// Trimmomatic configuration variables
+params.leading = 3
+params.trailing = 3
+params.slidingwindow = "4:15"
+params.minlen = 36
+
+leading = params.leading
+trailing = params.trailing
+slidingwindow = params.slidingwindow
+minlen = params.minlen
+
+// kSNP3 configuration variables
+params.ML = true
+params.NJ = false
+params.min_frac = 0.75
+
+ML = params.ML
+NJ = params.NJ
+min_frac = params.min_frac
+
 
 Channel
         .fromFilePairs(params.read_pairs, flat: true)
@@ -74,7 +96,7 @@ process run_trimmomatic {
         set dataset_id, file("${dataset_id}_1P.fastq"), file("${dataset_id}_2P.fastq") into (amr_read_pairs, plasmid_read_pairs, vf_read_pairs, genome_read_pairs)
 
         """
-        java -jar /Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+        java -jar /Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
         mv ${dataset_id}_1P ${dataset_id}_1P.fastq
         mv ${dataset_id}_2P ${dataset_id}_2P.fastq
         """
@@ -137,7 +159,7 @@ process bowtie2_vfdb_alignment {
 }*/
 
 process freebayes_snp_caller {
-	storeDir 'tempo'
+	storeDir 'temporary_files'
 
 	input:
 	set dataset_id, file(bam) from genome_bam_files
@@ -157,7 +179,7 @@ process freebayes_snp_caller {
 }
 
 process prepare_ksnp3_configuration {
-	storeDir 'tempo'
+	storeDir 'temporary_files'
 
 	input:
 	file genome
@@ -188,6 +210,14 @@ process run_ksnp3 {
 	optimum_k=`grep "The optimum" Kchooser.report | tr -dc '0-9'`
 	cat !{kchooser_config} > in_list
 	cat !{ksnp3_config} >> in_list
-	/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -core -min_frac 0.75 >> /dev/null
+	if [ !{ML} && !{NJ} ]
+	then
+		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -NJ -core -min_frac !{min_frac} >> /dev/null
+	elif [ !{ML} ]
+	then
+		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -core -min_frac !{min_frac} >> /dev/null
+	else
+		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
+	fi
 	'''
 }
