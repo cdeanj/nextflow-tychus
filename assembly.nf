@@ -1,10 +1,53 @@
 #!/usr/bin/env nextflow
 
-params.read_pairs = "/home/chris_dean/nextflow/assembly_pipeline/tutorial/reads/test/test-data/*_R{1,2}_001.fastq"
-params.out_dir = "./results"
+/*
+ * Copyright (c) 2017 Chris Dean
+
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+// General configuration variables
+params.help = false
+params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
 params.threads = 1
 
 threads = params.threads
+
+if(params.help) {
+	log.info ''
+	log.info 'Tychus - Assembly Pipeline'
+	log.info ''
+	log.info 'Usage: '
+	log.info '    nextflow run assembly.nf -profile assembly -with-docker [options]'
+	log.info ''
+	log.info 'General Options: '
+	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
+	log.info '    --threads         INT             Number of threads to use for each process'
+	log.info '    --output          DIR             Directory to write output files to'
+	log.info 'Abyss Options: '
+	log.info 'Velvet Options: '
+	log.info 'SPades Options: '
+	log.info 'IDBA-UD Options: '
+	log.info 'Prokka Options: '
+	log.info '
+	return
+}
 
 Channel
 	.fromFilePairs(params.read_pairs, flat: true)
