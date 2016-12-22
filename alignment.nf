@@ -1,6 +1,29 @@
 #!/usr/bin/env nextflow
 
+/*
+ * Copyright (c) 2017 Chris Dean
+
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 //General configuation variables
+params.help = false
 params.work_dir = "$PWD/temporary_files"
 params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
@@ -35,12 +58,42 @@ ML = params.ML
 NJ = params.NJ
 min_frac = params.min_frac
 
+if(params.help) {
+	log.info ''
+	log.info 'Tychus - Alignment Pipeline'
+	log.info ''
+	log.info 'Usage: '
+	log.info '    nextflow run alignment.nf -profile alignment -with-docker [options]'
+	log.info ''
+	log.info 'General Options: '
+	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
+	log.info '    --genome          FILE		Path to the FASTA formatted reference database'
+	log.info '    --amr_db          FILE		Path to the FASTA formatted resistance database'
+	log.info '    --vf_db           FILE		Path to the FASTA formatted virulence database'
+	log.info '    --plasmid_db      FILE		Path to the FASTA formatted plasmid database'
+	log.info '    --threads         INT		Number of threads to use for each process'
+	log.info '    --output          DIR		Directory to write output files to'
+	log.info ''
+	log.info 'Trimmomatic Options: '
+	log.info '    --leading         INT		Remove leading low quality or N bases'
+	log.info '    --trailing        INT		Remove trailing low quality or N bases'
+	log.info '    --slidingwindow   INT		Scan read with a sliding window'
+	log.info '    --minlen          INT		Drop reads below INT bases long'
+	log.info ''
+	log.info 'kSNP Options: '
+	log.info '    --ML              BOOL		Estimate maximum likelihood tree'
+	log.info '    --NJ              BOOL		Estimate neighbor joining tree'
+	log.info '    --min_frac        DECIMAL		Minimum fraction of genomes with locus'
+	log.info ''
+	return
+}
+
 
 Channel
         .fromFilePairs(params.read_pairs, flat: true)
         .into { trimmomatic_read_pairs }
 
-process build_genome_index {
+/*process build_genome_index {
 	input:
 	file genome
 
@@ -74,7 +127,7 @@ process build_vf_index {
         """
         bowtie2-build $vf_db vf.index
 	"""
-}
+}*/
 
 /*process build_plasmid_index {
 	input:
@@ -88,7 +141,7 @@ process build_vf_index {
 	"""
 }*/
 
-process run_trimmomatic {
+/*process run_trimmomatic {
 	input:
         set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
 
@@ -143,7 +196,7 @@ process bowtie2_vfdb_alignment {
         """
         bowtie2 -p ${threads} -x vf.index -1 $forward -2 $reverse -S ${dataset_id}_vf_alignment.sam
         """
-}
+}*/
 
 /*process bowtie2_plasmid_alignment {
 	input:
@@ -158,7 +211,7 @@ process bowtie2_vfdb_alignment {
 	"""
 }*/
 
-process freebayes_snp_caller {
+/*process freebayes_snp_caller {
 	storeDir 'temporary_files'
 
 	input:
@@ -220,4 +273,4 @@ process run_ksnp3 {
 		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	fi
 	'''
-}
+}*/
