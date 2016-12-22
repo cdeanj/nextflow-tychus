@@ -52,7 +52,11 @@ if(params.help) {
 Channel
 	.fromFilePairs(params.read_pairs, flat: true)
 	.into { trimmomatic_read_pairs }
-
+/*
+ * Step: 1
+ * Input: Raw sequence data
+ * Purpose: Remove low quality bases and reads from sequence data with Trimmomatic
+ */
 process run_trimmomatic {
         input:
         set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
@@ -67,6 +71,11 @@ process run_trimmomatic {
         """
 }
 
+/*
+ * Step 2
+ * Input: Trimmed sequence data from step 1
+ * Purpose: Choose an optimal kmer for non-iterative De-Bruijn Graph assemblers using KmerGenie
+ */
 process run_kmer_genie {
 	input:
 	set dataset_id, file(forward), file(reverse) from kmer_genie_read_pairs
@@ -84,6 +93,12 @@ process run_kmer_genie {
 	"""
 }
 
+/*
+ * Step 3
+ * Input: Trimmed sequence data from step 1
+ *        Optimum kmer for assembly from step 2
+ * Purpose: De novo assembly of bacterial genomes with Abyss
+ */
 process run_abyss_assembly {
         input:
         set dataset_id, file(forward), file(reverse) from abyss_kg_pairs
@@ -101,6 +116,12 @@ process run_abyss_assembly {
 	'''
 }
 
+/*
+ * Step 3
+ * Input: Trimmed sequence data from step 1
+ *        Optimum kmer for assembly from step 2
+ * Purpose: De novo assembly of bacterial genomes with Velvet
+ */
 process run_velvet_assembly {
 	input:
 	set dataset_id, file(forward), file(reverse) from velvet_kg_pairs
@@ -119,6 +140,11 @@ process run_velvet_assembly {
 	'''
 }
 
+/*
+ * Step 3
+ * Input: Trimmed sequence data from step 1
+ * Purpose: De novo assembly of bacterial genomes with SPades
+ */
 process run_spades_assembly {
 	input:
 	set dataset_id, file(forward), file(reverse) from spades_read_pairs
@@ -132,6 +158,11 @@ process run_spades_assembly {
 	"""
 }
 
+/*
+ * Step 3
+ * Input: Trimmed sequence data from step 1
+ * Purpose: De novo assembly of bacterial genomes with IDBA
+ */
 process run_idba_assembly {
 	input:
 	set dataset_id, file(forward), file(reverse) from idba_read_pairs
@@ -146,6 +177,11 @@ process run_idba_assembly {
 	"""
 }
 
+/*
+ * Step 4
+ * Input: Contigs from each of the four assemblers
+ * Purpose: Contig integration for the production of a hybrid assembly with CISA
+ */
 process run_cisa_contig_integrator {
 	publishDir "${params.out_dir}/assembly_contigs"
 
@@ -181,7 +217,11 @@ process run_cisa_contig_integrator {
 	'''
 }
 
-
+/*
+ * Step 5
+ * Input: Integrated contigs from step 4
+ * Purpose: Prokaryotic genome annotation of the integrated contigs using Prokka
+ */
 process run_prokka_annotation {
 	publishDir "${params.out_dir}/annotations"
 
