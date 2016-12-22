@@ -93,7 +93,7 @@ Channel
         .fromFilePairs(params.read_pairs, flat: true)
         .into { trimmomatic_read_pairs }
 
-/*process build_genome_index {
+process build_genome_index {
 	input:
 	file genome
 
@@ -127,9 +127,9 @@ process build_vf_index {
         """
         bowtie2-build $vf_db vf.index
 	"""
-}*/
+}
 
-/*process build_plasmid_index {
+process build_plasmid_index {
 	input:
         file plasmid_db
 
@@ -139,9 +139,9 @@ process build_vf_index {
         """
         bowtie2-build $plasmid_db plasmid.index
 	"""
-}*/
+}
 
-/*process run_trimmomatic {
+process run_trimmomatic {
 	input:
         set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
 
@@ -196,9 +196,9 @@ process bowtie2_vfdb_alignment {
         """
         bowtie2 -p ${threads} -x vf.index -1 $forward -2 $reverse -S ${dataset_id}_vf_alignment.sam
         """
-}*/
+}
 
-/*process bowtie2_plasmid_alignment {
+process bowtie2_plasmid_alignment {
 	input:
 	set dataset_id, file(forward), file(reverse) from plasmid_read_pairs
 	file index from plasmid_index.first()
@@ -209,9 +209,9 @@ process bowtie2_vfdb_alignment {
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S ${dataset_id}_plasmid_alignment.sam
 	"""
-}*/
+}
 
-/*process freebayes_snp_caller {
+process freebayes_snp_caller {
 	storeDir 'temporary_files'
 
 	input:
@@ -273,4 +273,4 @@ process run_ksnp3 {
 		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	fi
 	'''
-}*/
+}
