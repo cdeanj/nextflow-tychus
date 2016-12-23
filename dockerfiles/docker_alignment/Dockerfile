@@ -81,4 +81,9 @@ RUN wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.6/jellyfis
 RUN git clone https://github.com/cdeanj/kSNP3.git && \
 	mv kSNP3 /usr/local
 
+RUN git clone https://github.com/cdeanj/figtree.git && \
+	chmod u+x figtree/bin/figtree && \
+	mv figtree/bin/figtree /usr/local/bin && \
+	mv figtree/lib/figtree.jar lib/
+
 ENV PATH="/prokka/bin:${PATH}"
