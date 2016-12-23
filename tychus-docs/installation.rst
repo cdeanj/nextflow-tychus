@@ -48,20 +48,20 @@ To run the ``alignment`` pipeline you will need the latest ``tychus-alignment`` 
 .. code-block:: console
    :linenos:
 
-   docker pull chrisd/tychus-alignment
+   docker pull abdolab/tychus-alignment
 
 To run the ``assembly`` pipeline, you will need the latest ``tychus-assembly`` Docker image.
 
 .. code-block:: console
    :linenos:
 
-   docker pull chrisd/tychus-assembly
+   docker pull abdolab/tychus-assembly
 
 ======================== =============== =============== ================= =============
 Repository               Tag             Image OS        Image Size        Download Time
 ======================== =============== =============== ================= =============
-chrisd/tychus-alignment Latest          Ubuntu 15.10    1.436 GB          4 minutes
-chrisd/tychus-assembly  Latest          Ubuntu 15.10    2.270 GB          7 minutes
+abdolab/tychus-alignment Latest          Ubuntu 16.04    3.5 GB            4 minutes
+abdolab/tychus-assembly  Latest          Ubuntu 16.04    3.4 GB            7 minutes
 ======================== =============== =============== ================= =============
 
 Dependencies
