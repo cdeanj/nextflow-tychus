@@ -129,7 +129,7 @@ process build_vf_index {
 	"""
 }
 
-process build_plasmid_index {
+/*process build_plasmid_index {
 	input:
         file plasmid_db
 
@@ -139,7 +139,7 @@ process build_plasmid_index {
         """
         bowtie2-build $plasmid_db plasmid.index
 	"""
-}
+}*/
 
 process run_trimmomatic {
 	input:
@@ -198,7 +198,7 @@ process bowtie2_vfdb_alignment {
         """
 }
 
-process bowtie2_plasmid_alignment {
+/*process bowtie2_plasmid_alignment {
 	input:
 	set dataset_id, file(forward), file(reverse) from plasmid_read_pairs
 	file index from plasmid_index.first()
@@ -209,7 +209,7 @@ process bowtie2_plasmid_alignment {
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S ${dataset_id}_plasmid_alignment.sam
 	"""
-}
+}*/
 
 process freebayes_snp_caller {
 	storeDir 'temporary_files'
@@ -255,6 +255,9 @@ process run_ksnp3 {
 	file kchooser_config from kchooser_configuration
 	file ksnp3_config from ksnp3_configuration.toList()
 
+	output:
+	file("kSNP3_results/*.tre") into phylogenies
+
 	shell:
 	'''
 	#!/bin/sh
@@ -273,4 +276,18 @@ process run_ksnp3 {
 		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	fi
 	'''
+}
+
+process convert_phylo_to_image {
+	errorStrategy 'ignore'
+
+	input:
+	file newick from phylogenies.flatten()
+
+	output:
+	file("${newick}.png") into phylo_images
+
+        """
+        xvfb-run phylo $newick
+        """
 }
