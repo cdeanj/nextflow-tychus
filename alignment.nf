@@ -94,6 +94,8 @@ Channel
         .into { trimmomatic_read_pairs }
 
 process build_genome_index {
+	tag { "${genome.baseName}" }
+
 	input:
 	file genome
 
@@ -106,6 +108,8 @@ process build_genome_index {
 }
 
 process build_amr_index {
+	tag { "${amr_db.baseName}" }
+
 	input:
         file amr_db
 
@@ -118,6 +122,8 @@ process build_amr_index {
 }
 
 process build_vf_index {
+	tag { "${vf_db.baseName}" }
+
 	input:
         file vf_db
 
@@ -130,6 +136,8 @@ process build_vf_index {
 }
 
 /*process build_plasmid_index {
+	tag { "${plasmid_db.baseName}" }
+
 	input:
         file plasmid_db
 
@@ -142,6 +150,8 @@ process build_vf_index {
 }*/
 
 process run_trimmomatic {
+	tag { dataset_id }
+
 	input:
         set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
 
@@ -156,6 +166,8 @@ process run_trimmomatic {
 }
 
 process bowtie2_genome_alignment {
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from genome_read_pairs
 	file index from genome_index.first()
@@ -173,6 +185,8 @@ process bowtie2_genome_alignment {
 }
 
 process bowtie2_amr_alignment {
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from amr_read_pairs
 	file index from amr_index.first()
@@ -186,6 +200,8 @@ process bowtie2_amr_alignment {
 }
 
 process bowtie2_vfdb_alignment {
+	tag { dataset_id }
+
         input:
         set dataset_id, file(forward), file(reverse) from vf_read_pairs
         file index from vf_index.first()
@@ -199,6 +215,8 @@ process bowtie2_vfdb_alignment {
 }
 
 /*process bowtie2_plasmid_alignment {
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from plasmid_read_pairs
 	file index from plasmid_index.first()
@@ -212,6 +230,8 @@ process bowtie2_vfdb_alignment {
 }*/
 
 process freebayes_snp_caller {
+	tag { dataset_id }
+
 	storeDir 'temporary_files'
 
 	input:
@@ -232,6 +252,8 @@ process freebayes_snp_caller {
 }
 
 process prepare_ksnp3_configuration {
+	tag { "configuration" }
+
 	storeDir 'temporary_files'
 
 	input:
@@ -251,6 +273,8 @@ process prepare_ksnp3_configuration {
 }
 
 process run_ksnp3 {
+	tag { "${kchooser_config}.baseName" }
+
 	input:
 	file kchooser_config from kchooser_configuration
 	file ksnp3_config from ksnp3_configuration.toList()
@@ -279,6 +303,8 @@ process run_ksnp3 {
 }
 
 process convert_phylo_to_image {
+	tag { "${newick}.baseName" }
+
 	errorStrategy 'ignore'
 
 	input:
