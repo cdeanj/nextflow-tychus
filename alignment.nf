@@ -73,7 +73,7 @@ if(params.help) {
 	log.info '    --vf_db           FILE		Path to the FASTA formatted virulence database'
 	log.info '    --plasmid_db      FILE		Path to the FASTA formatted plasmid database'
 	log.info '    --threads         INT		Number of threads to use for each process'
-	log.info '    --output          DIR		Directory to write output files to'
+	log.info '    --out_dir         DIR		Directory to write output files to'
 	log.info ''
 	log.info 'Trimmomatic Options: '
 	log.info '    --leading         INT		Remove leading low quality or N bases'
@@ -94,7 +94,7 @@ Channel
         .fromFilePairs(params.read_pairs, flat: true)
         .into { trimmomatic_read_pairs }
 
-process build_genome_index {
+process BuildGenomeIndex {
 	tag { "${genome.baseName}" }
 
 	input:
@@ -108,7 +108,7 @@ process build_genome_index {
 	"""
 }
 
-process build_amr_index {
+process BuildAMRIndex {
 	tag { "${amr_db.baseName}" }
 
 	input:
@@ -122,7 +122,7 @@ process build_amr_index {
 	"""
 }
 
-process build_vf_index {
+process BuildVFIndex {
 	tag { "${vf_db.baseName}" }
 
 	input:
@@ -136,7 +136,7 @@ process build_vf_index {
 	"""
 }
 
-/*process build_plasmid_index {
+/*process BuildPlasmidIndex {
 	tag { "${plasmid_db.baseName}" }
 
 	input:
@@ -150,7 +150,7 @@ process build_vf_index {
 	"""
 }*/
 
-process run_trimmomatic {
+process RunQC {
 	publishDir "${params.out_dir}/Preprocessing", mode: "copy"
 
 	tag { dataset_id }
@@ -168,7 +168,7 @@ process run_trimmomatic {
         """
 }
 
-process bowtie2_genome_alignment {
+process GenomeAlignment {
 	publishDir "${params.out_dir}/Genome_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -189,7 +189,7 @@ process bowtie2_genome_alignment {
 	"""
 }
 
-process bowtie2_amr_alignment {
+process AMRAlignment {
 	publishDir "${params.out_dir}/AMR_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -206,7 +206,7 @@ process bowtie2_amr_alignment {
 	"""
 }
 
-process bowtie2_vfdb_alignment {
+process VFAlignment {
 	publishDir "${params.out_dir}/Virulence_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -223,7 +223,7 @@ process bowtie2_vfdb_alignment {
         """
 }
 
-/*process bowtie2_plasmid_alignment {
+/*process PlasmidAlignment {
 	publishDir "${params.out_dir}/Plasmid_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -240,7 +240,7 @@ process bowtie2_vfdb_alignment {
 	"""
 }*/
 
-process bcftools_consensus {
+process BuildConesnsusSequence {
 	tag { dataset_id }
 
 	publishDir "${params.out_dir}/Consensus", mode: "copy"
@@ -262,7 +262,7 @@ process bcftools_consensus {
 	"""
 }
 
-process prepare_ksnp3_genome_configuration {
+process PreparePhylogeneticAnalysis {
 	tag { "genome_configuration" }
 
 	storeDir 'temporary_files'
@@ -283,10 +283,10 @@ process prepare_ksnp3_genome_configuration {
 	'''
 }
 
-process run_ksnp3 {
+process BuildPhylogenies {
 	publishDir "${params.out_dir}/Trees", mode: "copy"
 
-	tag { "kchooser_configuration_files" }
+	tag { "configuration_files" }
 
 	input:
 	file kchooser_config from kchooser_configuration
@@ -315,7 +315,7 @@ process run_ksnp3 {
 	'''
 }
 
-process convert_phylo_to_image {
+process CreatePhylogeneticTrees {
 	publishDir "${params.out_dir}/Phylogenetic_Tree_Images", mode: "copy"
 
 	tag { "${newick}" }
@@ -331,6 +331,14 @@ process convert_phylo_to_image {
         """
         xvfb-run phylo $newick
         """
+}
+
+process Cleanup {
+	tag { "cleaning up" }
+
+	"""
+	rm -rf ${params.work_dir}
+	"""
 }
 
 workflow.onComplete {
