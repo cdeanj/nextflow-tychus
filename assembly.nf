@@ -276,3 +276,11 @@ process AnnotateContigs {
 	mv annotations/* .
 	"""
 }
+
+workflow.onComplete {
+	log.info "Nextflow Version:	$workflow.nextflow.version"
+  	log.info "Command Line:		$workflow.commandLine"
+	log.info "Container:		$workflow.container"
+	log.info "Duration:		$workflow.duration"
+	log.info "Output Directory:	$params.out_dir"
+}
