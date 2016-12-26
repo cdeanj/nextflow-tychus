@@ -25,6 +25,7 @@
 // General configuration variables
 params.help = false
 params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.out_dir = "$PWD/tychus_assembly"
 params.threads = 1
 
 threads = params.threads
@@ -58,9 +59,7 @@ if(params.help) {
 	log.info '    --slidingwindow   INT		Scan read with a sliding window'
 	log.info '    --minlen          INT		Drop reads below INT bases long'
 	log.info ''
-	log.info 'Assembly Options: '
-	log.info 'Prokka Options: '
-	log.info '
+	log.info ''
 	return
 }
 
@@ -72,7 +71,11 @@ Channel
  * Input: Raw sequence data
  * Purpose: Remove low quality bases and reads from sequence data with Trimmomatic
  */
-process run_trimmomatic {
+process RunQC {
+	publishDir "${params.out_dir}/PreProcessing", mode: "copy"
+
+	tag { dataset_id }
+
         input:
         set dataset_id, file(forward), file(reverse) from trimmomatic_read_pairs
 
@@ -91,7 +94,9 @@ process run_trimmomatic {
  * Input: Trimmed sequence data from step 1
  * Purpose: Choose an optimal kmer for non-iterative De-Bruijn Graph assemblers using KmerGenie
  */
-process run_kmer_genie {
+process IdentifyBestKmer {
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from kmer_genie_read_pairs
 
@@ -114,7 +119,11 @@ process run_kmer_genie {
  *        Optimum kmer for assembly from step 2
  * Purpose: De novo assembly of bacterial genomes with Abyss
  */
-process run_abyss_assembly {
+process BuildAbyssAssembly {
+	publishDir "${params.out_dir}/Abyss", mode: "copy"
+
+	tag { dataset_id }
+
         input:
         set dataset_id, file(forward), file(reverse) from abyss_kg_pairs
 	val best from best_abyss_kmer_results
@@ -137,7 +146,11 @@ process run_abyss_assembly {
  *        Optimum kmer for assembly from step 2
  * Purpose: De novo assembly of bacterial genomes with Velvet
  */
-process run_velvet_assembly {
+process BuildVelvetAssembly {
+	publishDir "${params.out_dir}/Velvet", mode: "copy"
+
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from velvet_kg_pairs
 	val best from best_velvet_kmer_results
@@ -160,7 +173,11 @@ process run_velvet_assembly {
  * Input: Trimmed sequence data from step 1
  * Purpose: De novo assembly of bacterial genomes with SPades
  */
-process run_spades_assembly {
+process BuildSpadesAssembly {
+	publishDir "${params.out_dir}/SPades", mode: "copy"
+	
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from spades_read_pairs
 
@@ -178,7 +195,11 @@ process run_spades_assembly {
  * Input: Trimmed sequence data from step 1
  * Purpose: De novo assembly of bacterial genomes with IDBA
  */
-process run_idba_assembly {
+process BuildIDBAAssembly {
+	publishDir "${params.out_dir}/IDBA", mode: "copy"
+
+	tag { dataset_id }
+
 	input:
 	set dataset_id, file(forward), file(reverse) from idba_read_pairs
 
@@ -197,8 +218,10 @@ process run_idba_assembly {
  * Input: Contigs from each of the four assemblers
  * Purpose: Contig integration for the production of a hybrid assembly with CISA
  */
-process run_cisa_contig_integrator {
-	publishDir "${params.out_dir}/assembly_contigs"
+process IntegrateContigs {
+	tag { dataset_id }
+
+	publishDir "${params.out_dir}/IntegratedContigs", mode: "copy"
 
 	input:
 	set dataset_id, file(spades_contigs) from spades_assembly_results
@@ -237,8 +260,10 @@ process run_cisa_contig_integrator {
  * Input: Integrated contigs from step 4
  * Purpose: Prokaryotic genome annotation of the integrated contigs using Prokka
  */
-process run_prokka_annotation {
-	publishDir "${params.out_dir}/annotations"
+process AnnotateContigs {
+	publishDir "${params.out_dir}/Annotations", mode: "copy"
+
+	tag { dataset_id }
 
 	input:
 	set dataset_id, file(cisa_contigs) from cisa_integrated_contigs
