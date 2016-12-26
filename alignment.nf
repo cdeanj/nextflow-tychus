@@ -293,7 +293,8 @@ process BuildPhylogenies {
 	file ksnp3_config from ksnp3_configuration.toList()
 
 	output:
-	file("kSNP3_results/*.tre") into phylogenies
+	file("trees/*.tre") into phylogenetic_trees
+	file("polymorphisms/*") into polymorphisms
 
 	shell:
 	'''
@@ -312,6 +313,11 @@ process BuildPhylogenies {
 	else
 		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	fi
+	mkdir trees
+	mkdir polymorphisms
+	mv kSNP3_results/*.tre trees
+	mv kSNP3_results/* polymorphisms
+	rm -rf !{params.work_dir}
 	'''
 }
 
@@ -323,7 +329,7 @@ process CreatePhylogeneticTrees {
 	errorStrategy 'ignore'
 
 	input:
-	file newick from phylogenies.flatten()
+	file newick from phylogenetic_trees.flatten()
 
 	output:
 	file("${newick}.png") into phylo_images
@@ -331,14 +337,6 @@ process CreatePhylogeneticTrees {
         """
         xvfb-run phylo $newick
         """
-}
-
-process Cleanup {
-	tag { "cleaning up" }
-
-	"""
-	rm -rf ${params.work_dir}
-	"""
 }
 
 workflow.onComplete {
