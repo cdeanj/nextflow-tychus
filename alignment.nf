@@ -30,6 +30,7 @@ params.genome = "tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "tutorial/amr_reference/megaresdb.fa"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
 params.plasmid_db = "tutorial/plasmid_reference/plasmiddb.fa"
+params.out_dir = "$PWD/tychus_output"
 params.threads = 1
 
 genome = file(params.genome)
@@ -150,6 +151,8 @@ process build_vf_index {
 }*/
 
 process run_trimmomatic {
+	publishDir "${params.out_dir}/Preprocessing", mode: "copy"
+
 	tag { dataset_id }
 
 	input:
@@ -166,6 +169,8 @@ process run_trimmomatic {
 }
 
 process bowtie2_genome_alignment {
+	publishDir "${params.out_dir}/Genome_Alignment", mode: "copy"
+
 	tag { dataset_id }
 
 	input:
@@ -185,6 +190,8 @@ process bowtie2_genome_alignment {
 }
 
 process bowtie2_amr_alignment {
+	publishDir "${params.out_dir}/AMR_Alignment", mode: "copy"
+
 	tag { dataset_id }
 
 	input:
@@ -200,6 +207,8 @@ process bowtie2_amr_alignment {
 }
 
 process bowtie2_vfdb_alignment {
+	publishDir "${params.out_dir}/Virulence_Alignment", mode: "copy"
+
 	tag { dataset_id }
 
         input:
@@ -215,6 +224,8 @@ process bowtie2_vfdb_alignment {
 }
 
 /*process bowtie2_plasmid_alignment {
+	publishDir "${params.out_dir}/Plasmid_Alignment", mode: "copy"
+
 	tag { dataset_id }
 
 	input:
@@ -229,10 +240,10 @@ process bowtie2_vfdb_alignment {
 	"""
 }*/
 
-process freebayes_snp_caller {
+process bcftools_consensus {
 	tag { dataset_id }
 
-	storeDir 'temporary_files'
+	publishDir "${params.out_dir}/Consensus", mode: "copy"
 
 	input:
 	set dataset_id, file(bam) from genome_bam_files
@@ -247,12 +258,12 @@ process freebayes_snp_caller {
 	freebayes -p 1 -f ${genome} $bam | bgzip -c > ${dataset_id}_genome_variants.vcf.gz
 	tabix ${dataset_id}_genome_variants.vcf.gz
 	cat $genome | bcftools consensus ${dataset_id}_genome_variants.vcf.gz > ${dataset_id}_consensus.fa
-	echo -e "$params.work_dir/${dataset_id}_consensus.fa\t$dataset_id" >> ${dataset_id}_in_list.txt
+	echo -e "$params.out_dir/Consensus/${dataset_id}_consensus.fa\t$dataset_id" >> ${dataset_id}_in_list.txt
 	"""
 }
 
-process prepare_ksnp3_configuration {
-	tag { "configuration" }
+process prepare_ksnp3_genome_configuration {
+	tag { "genome_configuration" }
 
 	storeDir 'temporary_files'
 
@@ -273,7 +284,9 @@ process prepare_ksnp3_configuration {
 }
 
 process run_ksnp3 {
-	tag { "${kchooser_config}.baseName" }
+	publishDir "${params.out_dir}/Trees", mode: "copy"
+
+	tag { "kchooser_configuration_files" }
 
 	input:
 	file kchooser_config from kchooser_configuration
@@ -303,7 +316,9 @@ process run_ksnp3 {
 }
 
 process convert_phylo_to_image {
-	tag { "${newick}.baseName" }
+	publishDir "${params.out_dir}/Phylogenetic_Tree_Images", mode: "copy"
+
+	tag { "${newick}" }
 
 	errorStrategy 'ignore'
 
@@ -317,3 +332,13 @@ process convert_phylo_to_image {
         xvfb-run phylo $newick
         """
 }
+
+workflow.onComplete {
+	log.info "Nextflow Version:	$workflow.nextflow.version"
+  	log.info "Command Line:		$workflow.commandLine"
+	log.info "Container:		$workflow.container"
+	log.info "Duration:		$workflow.duration"
+	log.info "Output Directory:	$params.out_dir"
+}
+
+
