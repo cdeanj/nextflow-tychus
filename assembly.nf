@@ -23,9 +23,11 @@
  */
 
 // General configuration variables
+params.pwd = "$PWD"
+params.output = "tychus_assembly_output"
 params.help = false
 params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
-params.out_dir = "$PWD/tychus_assembly"
+params.out_dir = params.pwd + "/" + params.output
 params.threads = 1
 
 threads = params.threads
@@ -66,11 +68,7 @@ if(params.help) {
 Channel
 	.fromFilePairs(params.read_pairs, flat: true)
 	.into { trimmomatic_read_pairs }
-/*
- * Step: 1
- * Input: Raw sequence data
- * Purpose: Remove low quality bases and reads from sequence data with Trimmomatic
- */
+
 process RunQC {
 	publishDir "${params.out_dir}/PreProcessing", mode: "copy"
 
@@ -89,11 +87,6 @@ process RunQC {
         """
 }
 
-/*
- * Step 2
- * Input: Trimmed sequence data from step 1
- * Purpose: Choose an optimal kmer for non-iterative De-Bruijn Graph assemblers using KmerGenie
- */
 process IdentifyBestKmer {
 	tag { dataset_id }
 
@@ -113,12 +106,6 @@ process IdentifyBestKmer {
 	"""
 }
 
-/*
- * Step 3
- * Input: Trimmed sequence data from step 1
- *        Optimum kmer for assembly from step 2
- * Purpose: De novo assembly of bacterial genomes with Abyss
- */
 process BuildAbyssAssembly {
 	publishDir "${params.out_dir}/Abyss", mode: "copy"
 
@@ -140,12 +127,6 @@ process BuildAbyssAssembly {
 	'''
 }
 
-/*
- * Step 3
- * Input: Trimmed sequence data from step 1
- *        Optimum kmer for assembly from step 2
- * Purpose: De novo assembly of bacterial genomes with Velvet
- */
 process BuildVelvetAssembly {
 	publishDir "${params.out_dir}/Velvet", mode: "copy"
 
@@ -168,11 +149,6 @@ process BuildVelvetAssembly {
 	'''
 }
 
-/*
- * Step 3
- * Input: Trimmed sequence data from step 1
- * Purpose: De novo assembly of bacterial genomes with SPades
- */
 process BuildSpadesAssembly {
 	publishDir "${params.out_dir}/SPades", mode: "copy"
 	
@@ -190,11 +166,6 @@ process BuildSpadesAssembly {
 	"""
 }
 
-/*
- * Step 3
- * Input: Trimmed sequence data from step 1
- * Purpose: De novo assembly of bacterial genomes with IDBA
- */
 process BuildIDBAAssembly {
 	publishDir "${params.out_dir}/IDBA", mode: "copy"
 
@@ -213,11 +184,6 @@ process BuildIDBAAssembly {
 	"""
 }
 
-/*
- * Step 4
- * Input: Contigs from each of the four assemblers
- * Purpose: Contig integration for the production of a hybrid assembly with CISA
- */
 process IntegrateContigs {
 	tag { dataset_id }
 
@@ -255,11 +221,6 @@ process IntegrateContigs {
 	'''
 }
 
-/*
- * Step 5
- * Input: Integrated contigs from step 4
- * Purpose: Prokaryotic genome annotation of the integrated contigs using Prokka
- */
 process AnnotateContigs {
 	publishDir "${params.out_dir}/Annotations", mode: "copy"
 
