@@ -23,10 +23,12 @@ The assembly module requires a single input: a pair of FASTQ files. As mentioned
    ./nextflow run assembly.nf -profile assembly --with-docker --read_pairs=/raw_sequence_data/_R{1,2}_001.fastq
 
 For more information about available parameters and options, you can ask for help:
+
 .. code-block:: console
    :linenos:
 
    ./nextflow run assembly.nf --help
+
 
 Alignment Module Examples
 -------------------------
