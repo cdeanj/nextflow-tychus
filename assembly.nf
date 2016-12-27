@@ -107,7 +107,7 @@ process IdentifyBestKmer {
 }
 
 process BuildAbyssAssembly {
-	publishDir "${params.out_dir}/Abyss", mode: "copy"
+	publishDir "${params.out_dir}/AbyssContigs", mode: "copy"
 
 	tag { dataset_id }
 
@@ -128,7 +128,7 @@ process BuildAbyssAssembly {
 }
 
 process BuildVelvetAssembly {
-	publishDir "${params.out_dir}/Velvet", mode: "copy"
+	publishDir "${params.out_dir}/VelvetContigs", mode: "copy"
 
 	tag { dataset_id }
 
@@ -150,7 +150,7 @@ process BuildVelvetAssembly {
 }
 
 process BuildSpadesAssembly {
-	publishDir "${params.out_dir}/SPades", mode: "copy"
+	publishDir "${params.out_dir}/SPadesContigs", mode: "copy"
 	
 	tag { dataset_id }
 
@@ -167,7 +167,7 @@ process BuildSpadesAssembly {
 }
 
 process BuildIDBAAssembly {
-	publishDir "${params.out_dir}/IDBA", mode: "copy"
+	publishDir "${params.out_dir}/IDBAContigs", mode: "copy"
 
 	tag { dataset_id }
 
@@ -222,7 +222,7 @@ process IntegrateContigs {
 }
 
 process AnnotateContigs {
-	publishDir "${params.out_dir}/Annotations", mode: "copy"
+	publishDir "${params.out_dir}/AnnotationContigs", mode: "copy"
 
 	tag { dataset_id }
 
