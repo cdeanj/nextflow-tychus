@@ -23,14 +23,16 @@
  */
 
 //General configuation variables
-params.help = false
+params.help = ""
+params.pwd = "$PWD"
+params.output = "tychus_output"
 params.work_dir = "$PWD/temporary_files"
 params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "tutorial/amr_reference/megaresdb.fa"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
 params.plasmid_db = "tutorial/plasmid_reference/plasmiddb.fa"
-params.out_dir = "$PWD/tychus_output"
+params.out_dir = params.pwd + "/" + params.output
 params.threads = 1
 
 genome = file(params.genome)
@@ -51,8 +53,8 @@ slidingwindow = params.slidingwindow
 minlen = params.minlen
 
 // kSNP3 configuration variables
-params.ML = true
-params.NJ = false
+params.ML = ""
+params.NJ = ""
 params.min_frac = 0.75
 
 ML = params.ML
