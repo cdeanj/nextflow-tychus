@@ -50,10 +50,18 @@ Linux
 .. code-block:: console
    :linenos:
 
+   # Update package manager
    sudo apt-get update
-   sudo apt-get install docker-compose
-   sudo groupadd docker
-   sudo usermod -aG docker $USER
+   # Add the GPG key for the official Docker repository
+   sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+   # Add the Docker repository to APT sources
+   sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+   # Update package manager
+   sudo apt-get update
+   # Install Docker
+   sudo apt-get install -y docker-engine
+   # Run docker command to make sure installation went as planned
+   docker
 
 MAC OS X
 ````````
