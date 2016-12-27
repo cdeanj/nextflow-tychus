@@ -13,7 +13,7 @@ This will run the alignment pipeline with the appropriate Dockerfile and default
 .. code-block:: console
    :linenos:
 
-   ./nextflow run alignment.nf -profile alignment --with-docker --read_pairs=/raw_sequence_data/\*_R{1,2}_001.fastq
+   ./nextflow run alignment.nf -profile alignment --with-docker --read_pairs=/raw_sequence_data/`*`_R{1,2}_001.fastq
 
 Assembly Parameters
 -------------------
