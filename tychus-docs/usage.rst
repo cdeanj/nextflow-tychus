@@ -1,7 +1,19 @@
 Usage
 =====
 
-Below you will find a list and description of each parameter that can be specified on the command-line to run both the ``assembly`` and ``alignment`` modules of the Tychus pipeline.
+Tychus can be utilized as an alignment-based or assembly-based pipeline. The alignment module requires five inputs: a FASTA formatted reference, virulence, plasmid, and AMR database, as well as a pair of FASTQ files. If you don't have access to any of these, you can simply use the reference databases and sequence files provided in the ``tutorial`` directory of the github repository. For example:
+
+.. code-block:: console
+   :linenos:
+
+   ./nextflow run alignment.nf -profile alignment --with-docker --output dir
+
+This will run the alignment pipeline with the appropriate Dockerfile and default sequence datasets and write output files to the ``dir`` directory. Users may run any number of FASTQ files in parallel by including an appropriate commandline wildcard with the ``--read_pairs`` option. For example:
+
+.. code-block:: console
+   :linenos:
+
+   ./nextflow run alignment.nf -profile alignment --with-docker --read_pairs=/raw_sequence_data/\*_R{1,2}_001.fastq
 
 Assembly Parameters
 -------------------
