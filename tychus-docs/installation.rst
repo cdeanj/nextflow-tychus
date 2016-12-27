@@ -5,13 +5,23 @@ Tychus can be run on all major operating systems, including ``MAC OS X``, ``Linu
 
 To run Tychus, you will need `Nextflow <https://www.nextflow.io>`_, a DSL workflow framework for running computational pipelines, and `Docker <https://www.docker.com>`_, a software containerization platform that resolves dependency nightmares for complex workflows such as Tychus. See below for installation instructions.
 
+Clone Repository
+----------------
+.. code-block:: console
+   :linenos:
+
+   git clone https://github.com/cdeanj/nextflow-tychus.git
+
+
 Nextflow Installation
 ---------------------
 .. code-block:: console
    :linenos:
 
+   cd nextflow-tychus
    curl -fsSL get.nextflow.io | bash
    ./nextflow
+
 
 If you are installing nextflow behind a proxy server, you may encounter the following error:
 
@@ -33,6 +43,10 @@ In this case, open a terminal and type the following commands:
 
 Docker Installation
 -------------------
+Docker can be installed on both Linux and Mac operating systems. See below for installation instructions.
+
+Linux
+`````
 .. code-block:: console
    :linenos:
 
@@ -40,6 +54,26 @@ Docker Installation
    sudo apt-get install docker-compose
    sudo groupadd docker
    sudo usermod -aG docker $USER
+
+MAC OS X
+````````
+.. code-block:: console
+   :linenos:
+
+    # Install Homebrew
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    # Install Cask
+    brew install caskroom/cask/brew-cask
+    # Install docker toolbox
+    brew cask install docker-toolbox
+    # create the docker machine
+    docker-machine create --driver "virtualbox" myBoxName
+    # start the docker machine
+    docker-machine start myBoxName
+    # this command allows the docker commands to be used in the terminal
+    eval "$(docker-machine env myBoxName)"
+    # at this point can run any "docker" or "docker-compose" commands you want
+    docker-compose up
 
 Pull Images
 -----------
