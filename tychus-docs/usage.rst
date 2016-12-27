@@ -6,28 +6,23 @@ The alignment module requires five inputs: a FASTA formatted reference, virulenc
 .. code-block:: console
    :linenos:
 
-   ./nextflow run alignment.nf -profile alignment --with-docker --output dir
+   ./nextflow run alignment.nf -profile alignment --with-docker --threads 10 --output dir
 
-This will run the alignment pipeline with the appropriate Dockerfile and default sequence datasets and write output files to the ``dir`` directory. Users may run any number of FASTQ files in parallel by including an appropriate commandline wildcard with the ``--read_pairs`` option. For example:
+This will run the alignment pipeline with the appropriate Dockerfile and default sequence datasets and write output files to the ``dir`` directory.
 
-.. code-block:: console
-   :linenos:
-
-   ./nextflow run alignment.nf -profile alignment --with-docker --read_pairs=/raw_sequence_data/_R{1,2}_001.fastq
-
-The assembly module requires a single input: a pair of FASTQ files. As mentioned above, any number of FASTQ files can be run in parallel by specifying an appropriate commandline wildcard. For example:
+The assembly module requires a single input: a pair of FASTQ files. To run the tutorial data, you can simply type the following command into a terminal:
 
 .. code-block:: console
    :linenos:
 
-   ./nextflow run assembly.nf -profile assembly --with-docker --read_pairs=/raw_sequence_data/_R{1,2}_001.fastq
+   ./nextflow run assembly.nf -profile assembly --with-docker --threads 10 --output dir
 
 For more information about available parameters and options, you can ask for help:
 
 .. code-block:: console
    :linenos:
 
-   ./nextflow run assembly.nf --help
+   ./nextflow run [nextflow-script-name.nf] --help
 
 
 Alignment Module Examples
