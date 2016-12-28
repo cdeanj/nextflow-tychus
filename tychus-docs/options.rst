@@ -130,3 +130,16 @@ QC Options
 
  - Defaults to removing reads which are less than 36 bases long.
  - Optional parameter.
+
+Annotation Options
+``````````````````
+
+1. **genus** - Genus name (first character of genus name must be capitalized).
+
+ - Must be used with *species* parameter.
+ - Optional parameter.
+
+2. **species** - Species name (first character of species name must be lowercase).
+
+ - Must be used with genus parameter.
+ - Optional parameter.
