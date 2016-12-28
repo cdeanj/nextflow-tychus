@@ -16,15 +16,6 @@ Run a directory of FASTQ files with an R1 and R2 strand specifier.
    --with-docker \
    --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq
 
-.. note ::
-
-    It is not necessary to run these commands as multi-line arguments. You can instead enter them on a single line as shown below.
-    .. code-block:: console
-       :linenos:
-
-       ./nextflow run assembly.nf -profile assembly --with-docker --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq
-
-
 Perform quality filtering for each pair of FASTQ files, removing leading and trailing bases below an average quality of 3, averaging across 5 bases with a minimum average quality of 15, and dropping reads below 36 base pairs.
 
 .. code-block:: console
@@ -39,6 +30,17 @@ Perform quality filtering for each pair of FASTQ files, removing leading and tra
    --slidingwindow 4:15 \
    --minlen 36
 
+Calculate both a *maximum likelihood* and *neighbor joining* tree.
+
+.. code-block:: console
+   :linenos:
+
+   ./nextflow run assembly.nf \
+   -profile assembly \
+   --with-docker \
+   --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq \
+   --ML \
+   --NJ
 
 Assembly Module
 ```````````````
