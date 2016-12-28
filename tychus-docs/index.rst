@@ -14,7 +14,7 @@ Contents:
    overview
    installation
    options
-   output
+   example-usage
    pipeline
    contributors
    contact
