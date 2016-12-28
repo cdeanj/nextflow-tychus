@@ -1,5 +1,5 @@
-Introduction
-============
+Overview
+========
 
 For food safety screen and risk prevention, attaining a high confidence answer is of the utmost importance. In the past, bacterial pathogen screening was done using a combination of laboratory methods and statistical analyses with extensive benchmarking histories and known sensitivity, specificity and accuracy accross many matrices and sampling situations. Recently, the USDA Food Safety Inspection Service (FSIS) and the food industry have begun to employ Whole Genome Sequencing (WGS) on isolates from food production environments and food products. The accuracy of bacterial pathogen screening from WGS data relies not only on the methods used to isolate, extract and sequence the bacterial DNA, but also largely on the bioinformatics and statistical analyses applied to the resulting sequence data.
 
