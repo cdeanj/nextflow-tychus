@@ -20,7 +20,7 @@ Run a directory of FASTQ files with an R1 and R2 strand specifier.
 
     It is not necessary to run these commands as multi-line arguments. You can instead enter them on a single line as shown below.
 
-    .. code-block:: console
+.. code-block:: console
    :linenos:
 
    ./nextflow run assembly.nf -profile assembly --with-docker --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq
