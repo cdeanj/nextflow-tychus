@@ -1,7 +1,7 @@
 Options
 =======
 
-There are a number of available options that can be utilized throughout the Tychus pipeline. Below we describe each option in detail.
+There are a number of available options that can be utilized throughout the Tychus pipeline. Below we describe the function and use of each parameter.
 
 Alignment Module
 ----------------
@@ -16,22 +16,22 @@ General Options
 
 2. **genome** - Location of the FASTA formatted reference database.
 
- - Default reference is a Listeria *Monocytogenes* database which can be found in the tutorial/genome/ directory.
+ - Default reference is a Listeria *monocytogenes* database which can be found in the tutorial/genome/* directory.
  - Required parameter.
 
 3. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
 
- - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_db directory.
+ - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_db/* directory.
  - Required parameter.
 
 4. **vf_db** - Location of the FASTA formatted virulence factor database.
 
- - Defaults to a custom curated virulence factor database, which can be found in the tutorial/vf_db directory.
+ - Defaults to a custom curated virulence factor database, which can be found in the tutorial/vf_db/* directory.
  - Required parameter.
 
 5. **plasmid_db** - Location of the FASTA formatted plasmid database.
 
- - Defaults to a custom curated plasmid database, which can be found in the tutorial/plasmid_db directory.
+ - Defaults to a custom curated plasmid database, which can be found in the *tutorial/plasmid_db/* directory.
  - Required parameter.
 
 6. **threads** - The number of threads to use for each process.
@@ -42,13 +42,13 @@ General Options
 
 7. **out_dir** - Name of the directory to write output files to.
 
- - Default is to publish results to the *tychus_alignment_output* directory.
+ - Default is to publish results to the *tychus_alignment_output/* directory.
  - Optional parameter.
 
 QC Options
 ``````````
 
-1. **leading** - Remove leading low quality or N bases
+1. **leading** - Remove leading low quality or N bases.
 
  - Default is to remove leading low quality or N bases below quality 3.
  - Optional parameter.
@@ -105,13 +105,13 @@ General Options
 
 3. **out_dir** - Name of the directory to write output files to.
 
- - Default is to publish results to the *tychus_assembly_output* directory.
+ - Default is to publish results to the *tychus_assembly_output/* directory.
  - Optional parameter.
 
 QC Options
 ``````````
 
-1. **leading** - Remove leading low quality or N bases
+1. **leading** - Remove leading low quality or N bases.
 
  - Default is to remove leading low quality or N bases below quality 3.
  - Optional parameter.
