@@ -42,7 +42,7 @@ General Options
 
 7. **out_dir** - Name of the directory to write output files to.
 
- - Default is to publish results to the tychus_alignment_output directory.
+ - Default is to publish results to the *tychus_alignment_output* directory.
  - Optional parameter.
 
 QC Options
@@ -60,7 +60,7 @@ QC Options
 
 3. **slidingwindow** - Scan read with a sliding window.
 
- - Defaults is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
+ - Default is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
  - Optional parameter.
 
 4. **minlen** - Name of the directory to write output files to.
@@ -105,7 +105,7 @@ General Options
 
 3. **out_dir** - Name of the directory to write output files to.
 
- - Default is to publish results to the tychus_assembly_output directory.
+ - Default is to publish results to the *tychus_assembly_output* directory.
  - Optional parameter.
 
 QC Options
@@ -123,7 +123,7 @@ QC Options
 
 3. **slidingwindow** - Scan read with a sliding window.
 
- - Defaults is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
+ - Default is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
  - Optional parameter.
 
 4. **minlen** - Name of the directory to write output files to.
