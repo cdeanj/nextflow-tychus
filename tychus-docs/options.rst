@@ -86,4 +86,47 @@ Phylogeny Options
  - Default is to calculate a tree based on SNP loci occurring in atleast 0.75 of genomes.
  - Optional parameter.
 
+Assembly Module
+----------------
 
+General Options
+```````````````
+
+1. **read_pairs** - Directory of FASTQ formatted sequence data.
+
+ - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
+ - Required parameter.
+
+2. **threads** - The number of threads to use for each process.
+
+ - Any number of threads can be used.
+ - Defaults to 1.
+ - Optional parameter.
+
+3. **out_dir** - Name of the directory to write output files to.
+
+ - Default is to publish results to the tychus_assembly_output directory.
+ - Optional parameter.
+
+QC Options
+``````````
+
+1. **leading** - Remove leading low quality or N bases
+
+ - Default is to remove leading low quality or N bases below quality 3.
+ - Optional parameter.
+
+2. **trailing** - Remove trailing low quality or N bases.
+
+ - Default is to remove trailing low quality or N bases below quality 3.
+ - Optional parameter.
+
+3. **slidingwindow** - Scan read with a sliding window.
+
+ - Defaults is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
+ - Optional parameter.
+
+4. **minlen** - Name of the directory to write output files to.
+
+ - Defaults to removing reads which are less than 36 bases long.
+ - Optional parameter.
