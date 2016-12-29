@@ -3,7 +3,7 @@ Frequently Asked Questions
 
 Q: Can you explain how to process multiple FASTQ files again?
 
-A: Sure! Often times in bioinformatics, you want to work with multiple files at once. To do this we can take advantage of command line globs. A glob is simply a way of grouping file names based on a particular search pattern. For example, suppose we want to provide two files as input (**SRR532663_1.fastq** and **SRR532663_2.fastq**)which are stored in a directory called **raw**. To do this we could write:
+A: Sure! Often times in bioinformatics, you want to work with multiple files at once. To do this we can take advantage of command line globs. A glob is simply a way of grouping file names based on a particular search pattern. For example, suppose we want to provide two files as input (**SRR532663_1.fastq** and **SRR532663_2.fastq**) which are stored in a directory called **raw/**. To do this we could write:
 
 .. code-block:: console
    :linenos:
