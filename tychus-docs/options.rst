@@ -9,38 +9,42 @@ Alignment Module
 General Options
 ```````````````
 
-1. **read_pairs** - Directory of FASTQ formatted sequence data.
+1. **help** - Display help text
+ - Default is to not display help text.
+ - Optional parameter.
+
+2. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
 
-2. **genome** - Location of the FASTA formatted reference database.
+3. **genome** - Location of the FASTA formatted reference database.
 
  - Default reference is a Listeria *monocytogenes* database which can be found in the tutorial/genome/* directory.
  - Required parameter.
 
-3. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
+4. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
 
  - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_db/* directory.
  - Required parameter.
 
-4. **vf_db** - Location of the FASTA formatted virulence factor database.
+5. **vf_db** - Location of the FASTA formatted virulence factor database.
 
  - Defaults to a custom curated virulence factor database, which can be found in the tutorial/vf_db/* directory.
  - Required parameter.
 
-5. **plasmid_db** - Location of the FASTA formatted plasmid database.
+6. **plasmid_db** - Location of the FASTA formatted plasmid database.
 
  - Defaults to a custom curated plasmid database, which can be found in the *tutorial/plasmid_db/* directory.
  - Required parameter.
 
-6. **threads** - The number of threads to use for each process.
+7. **threads** - The number of threads to use for each process.
 
  - Any number of threads can be used.
  - Defaults to 1.
  - Optional parameter.
 
-7. **out_dir** - Name of the directory to write output files to.
+8. **out_dir** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_alignment_output/* directory.
  - Optional parameter.
@@ -92,18 +96,22 @@ Assembly Module
 General Options
 ```````````````
 
-1. **read_pairs** - Directory of FASTQ formatted sequence data.
+1. **help** - Display help text
+ - Default is to not display help text.
+ - Optional parameter.
+
+2. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
 
-2. **threads** - The number of threads to use for each process.
+3. **threads** - The number of threads to use for each process.
 
  - Any number of threads can be used.
  - Defaults to 1.
  - Optional parameter.
 
-3. **out_dir** - Name of the directory to write output files to.
+4. **out_dir** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_assembly_output/* directory.
  - Optional parameter.
@@ -141,5 +149,5 @@ Annotation Options
 
 2. **species** - Species name (first character of species name must be lowercase).
 
- - Must be used with genus parameter.
+ - Must be used with *genus* parameter.
  - Optional parameter.
