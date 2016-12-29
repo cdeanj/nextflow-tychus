@@ -11,8 +11,8 @@ Run a directory of FASTQ files with an R1 and R2 strand specifier.
 .. code-block:: console
    :linenos:
 
-   ./nextflow run assembly.nf \
-   -profile assembly \
+   ./nextflow run alignment.nf \
+   -profile alignment \
    --with-docker \
    --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq
 
@@ -21,8 +21,8 @@ Perform quality filtering for each pair of FASTQ files, removing leading and tra
 .. code-block:: console
    :linenos:
 
-   ./nextflow run assembly.nf \
-   -profile assembly \
+   ./nextflow run alignment.nf \
+   -profile alignment \
    --with-docker \
    --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq \
    --leading 3 \
@@ -35,8 +35,8 @@ Calculate both a *maximum likelihood* and *neighbor joining* tree.
 .. code-block:: console
    :linenos:
 
-   ./nextflow run assembly.nf \
-   -profile assembly \
+   ./nextflow run alignment.nf \
+   -profile alignment \
    --with-docker \
    --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq \
    --ML \
@@ -66,4 +66,14 @@ Perform quality filtering for each pair of FASTQ files, removing leading and tra
    --slidingwindow 4:15 \
    --minlen 36
 
+Use a BLAST specific genus database to annotate integrated contigs.
 
+.. code-block:: console
+   :linenos:
+
+   ./nextflow run assembly.nf \
+   -profile assembly \
+   --with-docker \
+   --read_pairs tutorial/raw_sequence_data/_R{1,2}_001.fastq \
+   --genus Listeria \
+   --species monocytogenes
