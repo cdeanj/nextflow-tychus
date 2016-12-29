@@ -16,5 +16,6 @@ Contents:
    options
    example-usage
    pipeline
+   dependencies
    contributors
    contact
