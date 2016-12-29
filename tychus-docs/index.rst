@@ -19,3 +19,4 @@ Contents:
    dependencies
    contributors
    contact
+   faq
