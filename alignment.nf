@@ -27,7 +27,7 @@ params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
 params.work_dir = "$PWD/temporary_files"
-params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.read_pairs = "tutorial/raw_sequence_data/test/*_R{1,2}_001.fastq"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "tutorial/amr_reference/megaresdb.fa"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
@@ -66,7 +66,7 @@ if(params.help) {
 	log.info 'Tychus - Alignment Pipeline'
 	log.info ''
 	log.info 'Usage: '
-	log.info '    nextflow run alignment.nf -profile alignment -with-docker [options]'
+	log.info '    nextflow run alignment.nf -profile alignment [options]'
 	log.info ''
 	log.info 'General Options: '
 	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
@@ -323,23 +323,23 @@ process BuildPhylogenies {
 	'''
 }
 
-process CreatePhylogeneticTrees {
+process ConvertNewickToPDF {
 	publishDir "${params.out_dir}/Phylogenetic_Tree_Images", mode: "copy"
 
-	tag { "${newick}" }
-
-	errorStrategy 'ignore'
-
 	input:
-	file newick from phylogenetic_trees.flatten()
+	file tree from phylogenetic_trees.flatten()
 
 	output:
-	file("${newick}.png") into phylo_images
+	file("${tree.baseName}.pdf") into phylogenetic_pdfs
 
-        """
-        xvfb-run phylo $newick
-        """
+	script:
+	base = tree.baseName
+	
+	"""
+	java -jar /figtree/lib/figtree.jar -graphic PDF $tree ${base}.pdf
+	"""
 }
+
 
 workflow.onComplete {
 	log.info "Nextflow Version:	$workflow.nextflow.version"
