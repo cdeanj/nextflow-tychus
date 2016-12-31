@@ -24,11 +24,6 @@ RUN apt-get update && apt-get install -y \
         openjdk-8-jdk \
 	tcsh \
 	xvfb \
-	python-numpy \
-        python-qt4 \
-        python-six \
-        python-pip \
-        python-lxml \
 && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/BenLangmead/bowtie2.git && \
@@ -87,11 +82,7 @@ RUN wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.6/jellyfis
 RUN git clone https://github.com/cdeanj/kSNP3.git && \
 	mv kSNP3 /usr/local
 
-RUN pip install --upgrade ete3
-
-RUN git clone https://github.com/cdeanj/newickphylo.git && \
-	chmod u+x newickphylo/phylo && \
-	mv newickphylo/phylo /usr/local/bin && \
-	rm -rf newickphylo 
+RUN git clone https://github.com/cdeanj/figtree.git && \
+        chmod u+x figtree/lib/figtree.jar
 
 ENV PATH="/prokka/bin:${PATH}"
