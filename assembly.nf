@@ -43,12 +43,19 @@ trailing = params.trailing
 slidingwindow = params.slidingwindow
 minlen = params.minlen
 
+// Prokka configuration variables
+params.genus = ""
+params.species = ""
+
+genus = params.genus
+species = params.species
+
 if(params.help) {
 	log.info ''
 	log.info 'Tychus - Assembly Pipeline'
 	log.info ''
 	log.info 'Usage: '
-	log.info '    nextflow run assembly.nf -profile assembly -with-docker [options]'
+	log.info '    nextflow run assembly.nf -profile assembly [options]'
 	log.info ''
 	log.info 'General Options: '
 	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
@@ -61,6 +68,9 @@ if(params.help) {
 	log.info '    --slidingwindow   INT		Scan read with a sliding window'
 	log.info '    --minlen          INT		Drop reads below INT bases long'
 	log.info ''
+	log.info 'Prokka Options: '
+	log.info '    --genus           STR		Target genus'
+	log.info '    --species         STR		Target species'
 	log.info ''
 	return
 }
@@ -232,10 +242,17 @@ process AnnotateContigs {
 	output:
 	file("${dataset_id}.*") into prokka_annotations
 
-	"""
-	prokka ${cisa_contigs} --prefix ${dataset_id} --cpus ${threads} --outdir annotations
+	shell:
+	'''
+	#!/bin/sh
+	if [ !{species} && !{genus} ]
+	then
+		prokka !{cisa_contigs} --genus !{genus} --species !{species} --centre tychus --prefix !{dataset_id} --cpus !{threads} --outdir annotations
+	else
+		prokka !{cisa_contigs} --prefix !{dataset_id} --cpus !{threads} --outdir annotations
+	fi
 	mv annotations/* .
-	"""
+	'''
 }
 
 workflow.onComplete {
