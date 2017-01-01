@@ -61,6 +61,18 @@ ML = params.ML
 NJ = params.NJ
 min_frac = params.min_frac
 
+// Figtree configuration variables
+params.PNG = ""
+params.JPEG = ""
+params.PDF = ""
+params.SVG = ""
+
+PNG = params.PNG
+JPEG = params.JPEG
+PDF = params.PDF
+SVG = params.SVG
+
+// Display help message
 if(params.help) {
 	log.info ''
 	log.info 'Tychus - Alignment Pipeline'
@@ -88,10 +100,17 @@ if(params.help) {
 	log.info '    --NJ              BOOL		Estimate neighbor joining tree'
 	log.info '    --min_frac        DECIMAL		Minimum fraction of genomes with locus'
 	log.info ''
+	log.info 'Figtree Options: '
+	log.info '    --JPEG            BOOL		Convert newick tree to annotated JPEG'
+	log.info '    --PDF             BOOL		Convert newick tree to annotated PDF'
+	log.info '    --PNG             BOOL		Convert newick tree to annotated PNG'
+	log.info '    --SVG             BOOL		Convert newick tree to annotated SVG'
+	log.info ''
 	return
 }
 
 
+// Let's group the read pairs and place them into a channel
 Channel
         .fromFilePairs(params.read_pairs, flat: true)
         .into { trimmomatic_read_pairs }
@@ -330,17 +349,32 @@ process ConvertNewickToPDF {
 	file tree from phylogenetic_trees.flatten()
 
 	output:
-	file("${tree.baseName}.pdf") into phylogenetic_pdfs
+	file "${base}*"
 
 	script:
 	base = tree.baseName
-	
-	"""
-	java -jar /figtree/lib/figtree.jar -graphic PDF $tree ${base}.pdf
-	"""
+
+	shell:
+        '''
+        #!/bin/sh
+        if [ !{PDF} ]
+        then
+                java -jar /figtree/lib/figtree.jar -graphic PDF !{tree} !{base}.pdf
+        elif [ !{PNG} ]
+        then
+                java -jar /figtree/lib/figtree.jar -graphic PNG !{tree} !{base}.png
+        elif [ !{JPEG} ]
+        then
+                java -jar /figtree/lib/figtree.jar -graphic JPEG !{tree} !{base}.jpg
+        else
+                java -jar /figtree/lib/figtree.jar -graphic SVG !{tree} !{base}.svg
+        fi
+        '''
 }
 
-
+// Display information about the completed run
+// See https://www.nextflow.io/docs/latest/metadata.html for more
+// information about available onComplete options
 workflow.onComplete {
 	log.info "Nextflow Version:	$workflow.nextflow.version"
   	log.info "Command Line:		$workflow.commandLine"
@@ -348,5 +382,3 @@ workflow.onComplete {
 	log.info "Duration:		$workflow.duration"
 	log.info "Output Directory:	$params.out_dir"
 }
-
-
