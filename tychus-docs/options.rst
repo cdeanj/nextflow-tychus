@@ -13,6 +13,11 @@ General Options
  - Default is to not display help text.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --help
+
+
 2. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
