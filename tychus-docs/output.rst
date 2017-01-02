@@ -10,14 +10,16 @@ Quality Filtered Read Pairs
 ```````````````````````````
 
 **Description**: User-input reads are filtered and trimmed with Trimmomatic
+
 **Directory**: PreProcessing/
+
 **File Names**: {dataset_id}_1P.fastq, {dataset_id}_2P.fastq
 
 .. code-block:: console
    :linenos:
 
-   SFBRL043-M3237-14-001_S7_L001_R1_001_1P.fastq
-   SFBRL043-M3237-14-001_S7_L001_R1_001_2P.fastq
+   SFBRL043-M3237-14-001_S7_L001_1P.fastq
+   SFBRL043-M3237-14-001_S7_L001_2P.fastq
 
 
 Quality filtered reads from each pair of FASTQ inputs are provided as output in the **PreProcessing/** directory. Each pair of FASTQ pairs is prefixed with the ``dataset ID`` from which it came from and suffixed with a ``1P`` and ``2P`` extension for each forward and reverse read in the pair.
