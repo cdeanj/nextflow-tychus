@@ -6,8 +6,8 @@ The output structure and files produced from each Tychus module are described be
 Alignment Module
 ----------------
 
-Quality Filtered Read Pairs
-```````````````````````````
+Quality Filtering
+`````````````````
 
 * **Description**: User-input reads are filtered and trimmed with a program called `Trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>`_.
 * **Directory**: PreProcessing/
@@ -19,8 +19,8 @@ Quality Filtered Read Pairs
    SFBRL043-M3237-14-001_S7_L001_2P.fastq
 
 
-Alignment Files
-```````````````
+Sequence Alignment
+``````````````````
 
 * **Description**: FASTQ inputs that pass quality filtering are then aligned to four reference databases: a reference genome, an antimicrobial resistance database (AMR), a virulence factor database, and a plasmid database. Outputs produced from each of these steps are the corresponding BAM formatted alignment and index files.
 * **Directory**: GenomeAlignment/, AMRAlignment/, VirulenceAlignment/, and PlasmidAlignment/.
@@ -34,8 +34,8 @@ Alignment Files
 
 * **More Info**: For more information about the Sequence Alignment/Map Format, please see this helpful `page <https://samtools.github.io/hts-specs/SAMv1.pdf>`_.
 
-Consensus Files
-```````````````
+Consensus Calling
+`````````````````
 
 * **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genome, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
 * **Directory**: Consensus/
@@ -54,8 +54,8 @@ SNPs and Phylogenies
 * **File Names**: 
 
 
-Annotated Phylogenies
-`````````````````````
+Phylogeny Annotation
+````````````````````
 
 * **Description**: Each Newick formatted phylogeny is then provided as input to `Figtree <http://tree.bio.ed.ac.uk/software/figtree/>`_, a program for visualizing text-based phylogenies. The annotated phylogenies output from Figtree will come in a format specified by you, the user (JPEG|PDF|PNG|SVG). 
 * **Directory**: PhylogeneticTreeImages/
@@ -76,8 +76,8 @@ Annotated Phylogenies
 Assembly Module
 ----------------
 
-Quality Filtered Read Pairs
-```````````````````````````
+Quality Filtering
+`````````````````
 
 * **Description**: User-input reads are filtered and trimmed with Trimmomatic
 * **Directory**: PreProcessing/
@@ -103,7 +103,7 @@ Assembly Contigs
    SFBRL043-M3237-14-001_S7_L001_velvet-contigs.fa
 
 
-Integrated Contigs
+Contig Integration
 ``````````````````
 
 * **Description**: Contigs produced from each of the four genome assemblers are then used as input to a program called CISA, which produces a kind of ``super assembly`` of higher contiguity and accuracy.
@@ -115,7 +115,7 @@ Integrated Contigs
    SFBRL043-M3237-14-001_S7_L001_master_integrated_contigs.fa
 
 
-Annotated Contigs
+Contig Annotation
 `````````````````
 
 * **Description**: The integrated contigs from the previous step are used as input to Prokka, a prokaryotic genome annotation tool used to identify genomic features of interest.
@@ -133,8 +133,8 @@ Annotated Contigs
 
 * **More Info**: For more information about each of the output files produced from Prokka, please see their output files description `page <https://github.com/tseemann/prokka#output-files>`_.
 
-QUAST Evaluation
-````````````````
+Assembly Evaluation
+````````````````````
 
 * **Description**: Assemblies produced from each assembler (including the ``super assembly``) are then evaluated using a genome evaluation tool called `QUAST <https://github.com/ablab/quast>`_. The reports produced can be used to evaluate each assembly based on a variety of metrics such as contig length, number of contigs, and N50. They can also be used to come up with your own assembly score function if you're into that sort of thing.
 * **Directory**: AssemblyReport/
