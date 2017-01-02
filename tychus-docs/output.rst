@@ -1,7 +1,7 @@
 Output
 ======
 
-The output structure from each Tychus module is described below.
+The output structure and files produced from each Tychus module are described below.
 
 Alignment Module
 ----------------
@@ -9,7 +9,7 @@ Alignment Module
 Quality Filtered Read Pairs
 ```````````````````````````
 
-* **Description**: User-input reads are filtered and trimmed with Trimmomatic
+* **Description**: User-input reads are filtered and trimmed with a program called `Trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>`_.
 * **Directory**: PreProcessing/
 * **File Names**: {dataset_id}_1P.fastq, {dataset_id}_2P.fastq
 
@@ -37,7 +37,7 @@ Alignment Files
 Consensus Files
 ```````````````
 
-* **Description**: Each ``BAM`` file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genmone, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
+* **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genmone, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
 * **Directory**: Consensus/
 * **File Names**: {dataset_id}_consensus.fa
 
@@ -120,16 +120,16 @@ Annotated Contigs
 
 * **Description**: The integrated contigs from the previous step are used as input to Prokka, a prokaryotic genome annotation tool used to identify genomic features of interest.
 * **Directory**: AnnotatedContigs/
-* **File Names**: {dataset_id}.*
+* **File Names**: {dataset_id}*
 
 .. code-block:: console
 
-   SFBRL014-M3237-14-001_S7_L001.err		SFBRL014-M3237-14-001_S7_L001.fna  
-   SFBRL014-M3237-14-001_S7_L001.gff		SFBRL014-M3237-14-001_S7_L001.tbl
-   SFBRL014-M3237-14-001_S7_L001.faa		SFBRL014-M3237-14-001_S7_L001.fsa
-   SFBRL014-M3237-14-001_S7_L001.log		SFBRL014-M3237-14-001_S7_L001.txt
-   SFBRL014-M3237-14-001_S7_L001.ffn		SFBRL014-M3237-14-001_S7_L001.gbk
-   SFBRL014-M3237-14-001_S7_L001.sqn
+   SFBRL043-M3237-14-001_S7_L001.err		SFBRL043-M3237-14-001_S7_L001.fna  
+   SFBRL043-M3237-14-001_S7_L001.gff		SFBRL043-M3237-14-001_S7_L001.tbl
+   SFBRL043-M3237-14-001_S7_L001.faa		SFBRL043-M3237-14-001_S7_L001.fsa
+   SFBRL043-M3237-14-001_S7_L001.log		SFBRL043-M3237-14-001_S7_L001.txt
+   SFBRL043-M3237-14-001_S7_L001.ffn		SFBRL043-M3237-14-001_S7_L001.gbk
+   SFBRL043-M3237-14-001_S7_L001.sqn
 
 * **More Info**: For more information about each of the output files produced from Prokka, please see their output files description `page <https://github.com/tseemann/prokka#output-files>`_.
 
@@ -146,3 +146,5 @@ QUAST Evaluation
    SFBRL043-M3237-14-001_S7_L001_report.tex		SFBRL043-M3237-14-001_S7_L001_report.tsv 
    SFBRL043-M3237-14-001_S7_L001_report.txt		SFBRL043-M3237-14-001_S7_L001_transposed_report.tex 
    SFBRL043-M3237-14-001_S7_L001_transposed_report.tsv	SFBRL043-M3237-14-001_S7_L001_transposed_report.txt
+
+* **More info**: For more information about how to interpret the files produced by QUAST, please see the QUAST output `page <http://quast.bioinf.spbau.ru/manual.html#sec3>`_.
