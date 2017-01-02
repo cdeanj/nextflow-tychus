@@ -37,7 +37,7 @@ Alignment Files
 Consensus Files
 ```````````````
 
-* **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genmone, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
+* **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genome, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
 * **Directory**: Consensus/
 * **File Names**: {dataset_id}_consensus.fa
 
@@ -136,7 +136,7 @@ Annotated Contigs
 QUAST Evaluation
 ````````````````
 
-* **Description**: Assemblies produced from each assembler (including the ``super assembly``) are then evaluated using an genome evaluation tool called `QUAST <https://github.com/ablab/quast>`_. The reports produced can be used to evaluate each assembly based on a variety of metrics such as contig length, number of contigs, and N50. They can also be used to come up with your own assembly score function if you're into that sort of thing.
+* **Description**: Assemblies produced from each assembler (including the ``super assembly``) are then evaluated using a genome evaluation tool called `QUAST <https://github.com/ablab/quast>`_. The reports produced can be used to evaluate each assembly based on a variety of metrics such as contig length, number of contigs, and N50. They can also be used to come up with your own assembly score function if you're into that sort of thing.
 * **Directory**: AssemblyReport/
 * **File Names**: {dataset_id}*
 
