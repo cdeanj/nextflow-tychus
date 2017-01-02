@@ -7,7 +7,18 @@ Alignment Module
 ----------------
 
 Quality Filtered Read Pairs
-``````````````````````
+```````````````````````````
+
+**Description**: User-input reads are filtered and trimmed with Trimmomatic
+**Directory**: PreProcessing/
+**File Names**: {dataset_id}_1P.fastq, {dataset_id}_2P.fastq
+
+.. code-block:: console
+   :linenos:
+
+   SFBRL043-M3237-14-001_S7_L001_R1_001_1P.fastq
+   SFBRL043-M3237-14-001_S7_L001_R1_001_2P.fastq
+
 
 Quality filtered reads from each pair of FASTQ inputs are provided as output in the **PreProcessing/** directory. Each pair of FASTQ pairs is prefixed with the ``dataset ID`` from which it came from and suffixed with a ``1P`` and ``2P`` extension for each forward and reverse read in the pair.
 
@@ -19,7 +30,7 @@ FASTQ inputs that pass quality filtering are then aligned to four reference data
 Consensus Files
 ```````````````
 
-Each ``BAM`` file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genmone, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html`_. Each consensus sequence is prefixed with the dataset ID from the previous step and suffixed with a ``.fa`` extension. These files can be found in the **Consensus/** directory.
+Each ``BAM`` file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genmone, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_. Each consensus sequence is prefixed with the ``dataset ID`` from the previous step and suffixed with a ``.fa`` extension. These files can be found in the **Consensus/** directory.
 
 SNPs and Phylogenies
 ````````````````````
