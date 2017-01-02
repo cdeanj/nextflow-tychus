@@ -14,7 +14,6 @@ Contents:
    overview
    installation
    options
-   example-usage
    output
    pipeline
    dependencies

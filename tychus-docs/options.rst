@@ -97,20 +97,40 @@ QC Options
  - Default is to remove leading low quality or N bases below quality 3.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --leading 3
+
+
 2. **trailing** - Remove trailing low quality or N bases.
 
  - Default is to remove trailing low quality or N bases below quality 3.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --trailing 3
+
 
 3. **slidingwindow** - Scan read with a sliding window.
 
  - Default is to scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --slidingwindow 4:15
+
+
 4. **minlen** - Name of the directory to write output files to.
 
  - Defaults to removing reads which are less than 36 bases long.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --minlen 36
+
 
 Phylogeny Options
 `````````````````
@@ -120,15 +140,30 @@ Phylogeny Options
  - Default is to calculate an ML tree.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --ML
+
+
 2. **NJ** - Calculates an NJ tree.
 
  - Default is to not calculate an NJ tree.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --NJ
+
+
 3. **min_frac** - Calculates a tree based on only SNP loci occurring in at least this fraction of genomes.
 
  - Default is to calculate a tree based on SNP loci occurring in atleast 0.75 of genomes.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --min_frac 0.75
+
 
 Assembly Module
 ----------------
@@ -140,10 +175,20 @@ General Options
  - Default is to not display help text.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run assembly.nf --help
+
+
 2. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run assembly.nf --read_pairs /tutorial/raw_sequence_data/_R{1,2}.fastq
+
 
 3. **threads** - The number of threads to use for each process.
 
@@ -151,10 +196,20 @@ General Options
  - Defaults to 1.
  - Optional parameter.
 
-4. **out_dir** - Name of the directory to write output files to.
+.. code-block:: console
+
+   ./nextflow run assembly.nf --threads 8
+
+
+4. **output** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_assembly_output/* directory.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run assembly.nf --output tychus_assembly_output
+
 
 QC Options
 ``````````
@@ -187,7 +242,16 @@ Annotation Options
  - Must be used with *species* parameter.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run assembly.nf --genus Listeria
+
+
 2. **species** - Species name (first character of species name must be lowercase).
 
  - Must be used with *genus* parameter.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run assembly.nf --species monocytogenes
