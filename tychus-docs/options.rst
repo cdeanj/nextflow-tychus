@@ -23,25 +23,50 @@ General Options
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --read_pairs /tutorial/raw_sequence_data/_R{1,2}.fastq
+
+
 3. **genome** - Location of the FASTA formatted reference database.
 
- - Default reference is a Listeria *monocytogenes* database which can be found in the tutorial/genome/* directory.
+ - Default reference is a Listeria *monocytogenes* database which can be found in the tutorial/genome_reference/ directory.
  - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --genome /tutorial/genome_reference/listeriadb.fa
+
 
 4. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
 
- - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_db/* directory.
+ - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_reference/ directory.
  - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --amr_db /tutorial/amr_reference/megaresdb.fa
+
 
 5. **vf_db** - Location of the FASTA formatted virulence factor database.
 
- - Defaults to a custom curated virulence factor database, which can be found in the tutorial/vf_db/* directory.
+ - Defaults to a custom curated virulence factor database, which can be found in the tutorial/virulence_reference/ directory.
  - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --vf_db /tutorial/virulence_reference/virulencedb.fa
+
 
 6. **plasmid_db** - Location of the FASTA formatted plasmid database.
 
- - Defaults to a custom curated plasmid database, which can be found in the *tutorial/plasmid_db/* directory.
+ - Defaults to a custom curated plasmid database, which can be found in the tutorial/plasmid_reference/ directory.
  - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --plasmid_db /tutorial/plasmid_reference/plasmiddb.fa
+
 
 7. **threads** - The number of threads to use for each process.
 
@@ -49,10 +74,20 @@ General Options
  - Defaults to 1.
  - Optional parameter.
 
+.. code-block:: console
+
+   ./nextflow run alignment.nf --threads 8
+
+
 8. **out_dir** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_alignment_output/* directory.
  - Optional parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf --output tychus_alignment_output
+
 
 QC Options
 ``````````
