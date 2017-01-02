@@ -14,7 +14,6 @@ Quality Filtered Read Pairs
 * **File Names**: {dataset_id}_1P.fastq, {dataset_id}_2P.fastq
 
 .. code-block:: console
-   :linenos:
 
    SFBRL043-M3237-14-001_S7_L001_1P.fastq
    SFBRL043-M3237-14-001_S7_L001_2P.fastq
@@ -28,7 +27,6 @@ Alignment Files
 * **File Names**: {dataset_id}_alignment.bam, {dataset_id}_alignment.bai
 
 .. code-block:: console
-   :linenos:
 
    SFBRL043-M3237-14-001_S7_L001_alignment.bam
    SFBRL043-M3237-14-001_S7_L001_alignment.bai
@@ -44,7 +42,6 @@ Consensus Files
 * **File Names**: {dataset_id}_consensus.fa
 
 .. code-block:: console
-   :linenos:
 
    SFBRL043-M3237-14-001_S7_L001_consensus.fa
 
@@ -62,31 +59,15 @@ Annotated Phylogenies
 
 * **Description**: Each Newick formatted phylogeny is then provided as input to `Figtree <http://tree.bio.ed.ac.uk/software/figtree/>`_, a program for visualizing text-based phylogenies. The annotated phylogenies output from Figtree will come in a format specified by you, the user (JPEG|PDF|PNG|SVG). 
 * **Directory**: PhylogeneticTreeImages/
-* **File Names**: {basename}*.pdf
+* **File Names**: {basename}*.svg
 
 .. code-block:: console
-   :linenos:
-
-   tree_AlleleCounts.core.NodeLabel.svg
-   tree_AlleleCounts.core.svg
-   tree_AlleleCounts.majority0.75.NodeLabel.svg
-   tree_AlleleCounts.majority0.75.svg
-   tree_AlleleCounts.NJ.NodeLabel.svg
-   tree_AlleleCounts.NJ.svg
-   tree_AlleleCounts.parsimony.NodeLabel.svg
-   tree_AlleleCounts.parsimony.svg
-   tree.core.svg
-   tree.majority0.75.svg
-   tree.NJ.svg
-   tree.parsimony.svg
-   tree_tipAlleleCounts.core.svg
-   tree_tipAlleleCounts.majority0.75.svg
-   tree_tipAlleleCounts.NJ.svg
-   tree_tipAlleleCounts.parsimony.svg
-
-
-.. code-block:: console
-   :linenos:
 
    tree_AlleleCounts.core.NodeLabel.svg		tree_AlleleCounts.core.svg
    tree_AlleleCounts.majority0.75.NodeLabel.svg	tree_AlleleCounts.majority0.75.svg
+   tree_AlleleCounts.NJ.NodeLabel.svg		tree_AlleleCounts.NJ.svg
+   tree_AlleleCounts.parsimony.NodeLabel.svg	tree_AlleleCounts.parsimony.svg
+   tree.core.svg				tree.majority0.75.svg
+   tree.NJ.svg					tree.parsimony.svg
+   tree_tipAlleleCounts.core.svg		tree_tipAlleleCounts.majority0.75.svg
+   tree_tipAlleleCounts.NJ.svg			tree_tipAlleleCounts.parsimony.svg
