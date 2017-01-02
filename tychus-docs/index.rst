@@ -15,6 +15,7 @@ Contents:
    installation
    options
    example-usage
+   output
    pipeline
    dependencies
    contributors
