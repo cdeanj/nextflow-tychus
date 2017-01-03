@@ -126,7 +126,7 @@ process BuildAbyssAssembly {
 	val best from best_abyss_kmer_results
 
 	output:
-        set dataset_id, file("${dataset_id}_abyss-contigs.fa") into abyss_assembly_results
+        set dataset_id, file("${dataset_id}_abyss-contigs.fa") into (abyss_assembly_results, abyss_assembly_quast_contigs)
 
 	shell:
 	'''
@@ -147,7 +147,7 @@ process BuildVelvetAssembly {
 	val best from best_velvet_kmer_results
 
 	output:
-	set dataset_id, file("${dataset_id}_velvet-contigs.fa") into velvet_assembly_results
+	set dataset_id, file("${dataset_id}_velvet-contigs.fa") into (velvet_assembly_results, velvet_assembly_quast_contigs)
 
 	shell:
 	'''
@@ -168,7 +168,7 @@ process BuildSpadesAssembly {
 	set dataset_id, file(forward), file(reverse) from spades_read_pairs
 
 	output:
-	set dataset_id, file("${dataset_id}_spades-contigs.fa") into spades_assembly_results
+	set dataset_id, file("${dataset_id}_spades-contigs.fa") into (spades_assembly_results, spades_assembly_quast_contigs)
 
 	"""
 	spades.py --pe1-1 ${forward} --pe1-2 ${reverse} -t ${threads} -o spades_output
@@ -185,7 +185,7 @@ process BuildIDBAAssembly {
 	set dataset_id, file(forward), file(reverse) from idba_read_pairs
 
 	output:
-	set dataset_id, file("${dataset_id}_idba-contigs.fa") into idba_assembly_results
+	set dataset_id, file("${dataset_id}_idba-contigs.fa") into (idba_assembly_results, idba_assembly_quast_contigs)
 
 	"""
 	fq2fa --merge --filter ${forward} ${reverse} ${dataset_id}_idba-paired-contigs.fa
@@ -206,8 +206,7 @@ process IntegrateContigs {
 	set dataset_id, file(velvet_contigs) from velvet_assembly_results
 
 	output:
-	set dataset_id, file("${dataset_id}_master_contigs.fa") into cisa_merged_contigs
-	set dataset_id, file("${dataset_id}_master_integrated_contigs.fa") into cisa_integrated_contigs
+	set dataset_id, file("${dataset_id}_master_integrated_contigs.fa") into (cisa_integrated_contigs, cisa_integrated_quast_contigs)
 
 	shell:
 	'''
@@ -232,7 +231,7 @@ process IntegrateContigs {
 }
 
 process AnnotateContigs {
-	publishDir "${params.out_dir}/AnnotationContigs", mode: "copy"
+	publishDir "${params.out_dir}/AnnotatedContigs", mode: "copy"
 
 	tag { dataset_id }
 
@@ -253,6 +252,33 @@ process AnnotateContigs {
 	fi
 	mv annotations/* .
 	'''
+}
+
+process EvaluateAssemblies {
+	publishDir "${params.out_dir}/AssemblyReport", mode: "copy"
+
+	tag { dataset_id }
+
+	input:
+	set dataset_id, file(abyss_contigs) from abyss_assembly_quast_contigs
+	set dataset_id, file(idba_contigs) from idba_assembly_quast_contigs
+	set dataset_id, file(spades_contigs) from spades_assembly_quast_contigs
+	set dataset_id, file(velvet_contigs) from velvet_assembly_quast_contigs
+	set dataset_id, file(integrated_contigs) from cisa_integrated_quast_contigs 
+
+	output:
+	file("${dataset_id}_*") into quast_evaluation
+	
+	shell:
+	'''
+	#!/bin/sh
+	quast.py !{abyss_contigs} !{idba_contigs} !{spades_contigs} !{velvet_contigs} !{integrated_contigs} --space-efficient --threads !{threads} -o output
+        mkdir quast_output
+        find output/ -maxdepth 2 -type f | xargs mv -t quast_output
+        cd quast_output
+        ls * | xargs -I {} mv {} !{dataset_id}_{}
+        mv * ../
+	'''	
 }
 
 workflow.onComplete {
