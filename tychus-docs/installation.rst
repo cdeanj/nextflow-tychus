@@ -31,7 +31,7 @@ If you are installing nextflow behind a proxy server, you may encounter the foll
    Unable to initialize nextflow environment
 
 
-In this case, open a terminal and type the following commands:
+In this case, type the following commands:
 
 .. code-block:: console
    :linenos:
@@ -47,6 +47,9 @@ Docker can be installed on both Linux and Mac operating systems. See below for i
 
 Linux
 `````
+
+.. Docker -> https://docs.docker.com/engine/installation/linux/ubuntulinux/
+
 .. code-block:: console
    :linenos:
 
@@ -65,6 +68,9 @@ Linux
 
 MAC OS X
 ````````
+
+.. Mike Rylander -> http://stackoverflow.com/questions/32744780/install-docker-toolbox-on-a-mac-via-command-line
+
 .. code-block:: console
    :linenos:
 
