@@ -18,7 +18,15 @@ General Options
    ./nextflow run alignment.nf --help
 
 
-2. **read_pairs** - Directory of FASTQ formatted sequence data.
+2. **profile** - Let's Nextflow know which configuration and Dockerfile to use.
+ - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf -profile alignment
+
+
+3. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
@@ -28,47 +36,47 @@ General Options
    ./nextflow run alignment.nf --read_pairs /tutorial/raw_sequence_data/_R{1,2}.fastq
 
 
-3. **genome** - Location of the FASTA formatted reference database.
+4. **genome** - Location of the FASTA formatted reference database.
 
  - Default reference is a Listeria *monocytogenes* database which can be found in the tutorial/genome_reference/ directory.
- - Required parameter.
+ - Optional parameter.
 
 .. code-block:: console
 
    ./nextflow run alignment.nf --genome /tutorial/genome_reference/listeriadb.fa
 
 
-4. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
+5. **amr_db** - Location of the FASTA formatted antimicrobial resistance database.
 
  - Default AMR database is the newly published MEGARes database, which can be found in the tutorial/amr_reference/ directory.
- - Required parameter.
+ - Optional parameter.
 
 .. code-block:: console
 
    ./nextflow run alignment.nf --amr_db /tutorial/amr_reference/megaresdb.fa
 
 
-5. **vf_db** - Location of the FASTA formatted virulence factor database.
+6. **vf_db** - Location of the FASTA formatted virulence factor database.
 
  - Defaults to a custom curated virulence factor database, which can be found in the tutorial/virulence_reference/ directory.
- - Required parameter.
+ - Optional parameter.
 
 .. code-block:: console
 
    ./nextflow run alignment.nf --vf_db /tutorial/virulence_reference/virulencedb.fa
 
 
-6. **plasmid_db** - Location of the FASTA formatted plasmid database.
+7. **plasmid_db** - Location of the FASTA formatted plasmid database.
 
  - Defaults to a custom curated plasmid database, which can be found in the tutorial/plasmid_reference/ directory.
- - Required parameter.
+ - Optional parameter.
 
 .. code-block:: console
 
    ./nextflow run alignment.nf --plasmid_db /tutorial/plasmid_reference/plasmiddb.fa
 
 
-7. **threads** - The number of threads to use for each process.
+8. **threads** - The number of threads to use for each process.
 
  - Any number of threads can be used.
  - Defaults to 1.
@@ -79,7 +87,7 @@ General Options
    ./nextflow run alignment.nf --threads 8
 
 
-8. **out_dir** - Name of the directory to write output files to.
+9. **output** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_alignment_output/* directory.
  - Optional parameter.
@@ -164,6 +172,25 @@ Phylogeny Options
 
    ./nextflow run alignment.nf --min_frac 0.75
 
+Example Usage
+`````````````
+
+Putting it all together, a typical command may look something like this:
+
+.. code-block:: console
+
+   ./nextflow run alignment.nf \
+    -profile alignment
+    --read_pairs /data/raw/_R{1,2}.fastq \
+    --leading 5 \
+    --trailing 5 \
+    --slidingwindow 5:15 \
+    --minlen 40 \
+    --genome Ecoli.fa \
+    --ML \
+    --threads 4 \
+    --output dir
+
 
 Assembly Module
 ----------------
@@ -180,7 +207,15 @@ General Options
    ./nextflow run assembly.nf --help
 
 
-2. **read_pairs** - Directory of FASTQ formatted sequence data.
+2. **profile** - Let's Nextflow know which configuration and Dockerfile to use.
+ - Required parameter.
+
+.. code-block:: console
+
+   ./nextflow run assembly.nf -profile assembly
+
+
+3. **read_pairs** - Directory of FASTQ formatted sequence data.
 
  - To run data in parallel, the FASTQ file names *must* have a strand identifier such as R1 or R2.
  - Required parameter.
@@ -190,7 +225,7 @@ General Options
    ./nextflow run assembly.nf --read_pairs /tutorial/raw_sequence_data/_R{1,2}.fastq
 
 
-3. **threads** - The number of threads to use for each process.
+4. **threads** - The number of threads to use for each process.
 
  - Any number of threads can be used.
  - Defaults to 1.
@@ -201,7 +236,7 @@ General Options
    ./nextflow run assembly.nf --threads 8
 
 
-4. **output** - Name of the directory to write output files to.
+5. **output** - Name of the directory to write output files to.
 
  - Default is to publish results to the *tychus_assembly_output/* directory.
  - Optional parameter.
@@ -255,3 +290,23 @@ Annotation Options
 .. code-block:: console
 
    ./nextflow run assembly.nf --species monocytogenes
+
+
+Example Usage
+`````````````
+
+Putting it all together, a typical command may look something like this:
+
+.. code-block:: console
+
+   ./nextflow run assembly.nf \
+    -profile assembly
+    --read_pairs /data/raw/_R{1,2}.fastq \
+    --leading 5 \
+    --trailing 5 \
+    --slidingwindow 5:15 \
+    --minlen 40 \
+    --genus Escherichia \
+    --species coli \
+    --threads 4 \
+    --output dir
