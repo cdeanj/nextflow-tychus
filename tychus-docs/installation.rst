@@ -85,24 +85,24 @@ MAC OS X
 
 Pull Images
 -----------
-To run the ``alignment`` pipeline you will need the latest ``tychus-alignment`` Docker image.
+Pull the latest ``tychus-alignment`` Docker image.
 
 .. code-block:: console
    :linenos:
 
    docker pull abdolab/tychus-alignment
 
-To run the ``assembly`` pipeline, you will need the latest ``tychus-assembly`` Docker image.
+Pull the latest ``tychus-assembly`` Docker image.
 
 .. code-block:: console
    :linenos:
 
    docker pull abdolab/tychus-assembly
 
-======================== =============== =============== ================= =============
-Repository               Tag             Image OS        Image Size        Download Time
-======================== =============== =============== ================= =============
-abdolab/tychus-alignment Latest          Ubuntu 16.04    3.5 GB            4 minutes
-abdolab/tychus-assembly  Latest          Ubuntu 16.04    3.4 GB            7 minutes
-======================== =============== =============== ================= =============
+======================== ====== =============== ================= ================
+Repository               Tag    Image OS        Image Size        Download Time
+======================== ====== =============== ================= ================
+abdolab/tychus-alignment Latest Ubuntu 16.04    3.5 GB            ~ 5 - 15 minutes
+abdolab/tychus-assembly  Latest Ubuntu 16.04    3.1 GB            ~ 5 - 15 minutes
+======================== ====== =============== ================= ================
 
