@@ -18,7 +18,7 @@ General Options
    ./nextflow run alignment.nf --help
 
 
-2. **profile** - Let's Nextflow know which configuration and Dockerfile to use.
+2. **profile** - Lets Nextflow know which configuration and Dockerfile to use.
  - Required parameter.
 
 .. code-block:: console
