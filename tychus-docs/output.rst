@@ -37,7 +37,7 @@ Sequence Alignment
 Consensus Calling
 `````````````````
 
-* **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `Freebayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genome, creating a FASTA formatted consensus sequence with `Bcftools <https://samtools.github.io/bcftools/bcftools.html>`_.
+* **Description**: Each BAM file produced from the alignment against the reference genome in the previous step is then provided as input to `FreeBayes <https://github.com/ekg/freebayes>`_, a haplotype-based variant caller. The variants produced are then incorporated into the reference genome, creating a FASTA formatted consensus sequence with `BCFtools <https://samtools.github.io/bcftools/bcftools.html>`_.
 * **Directory**: Consensus/
 * **File Names**: {dataset_id}_consensus.fa
 
@@ -51,7 +51,8 @@ SNPs and Phylogenies
 
 * **Description**: The FASTA formatted consensus sequences and reference genome are then provided as input to a program called `kSNP3 <https://sourceforge.net/projects/ksnp/>`_, which identifies SNPs and constructs `Newick <https://en.wikipedia.org/wiki/Newick_format>`_ formatted phylogenies.
 * **Directory**: Polymorphisms/, Trees/
-* **File Names**: 
+* **File Names**: The files produced by this process are abundant and will not be covered in detail. These include SNP matrices, SNP counts shared by each produced genome in the ``consensus step``, phylogenetic trees, core SNPs, majority SNPs, andhomoplasy groups.
+* **More Info:** Users are encouraged to read ``The Output Files`` section of the kSNP3 `user manual <http://download2.nust.na/pub4/sourceforge/k/ks/ksnp/kSNP3.02%20User%20Guide.pdf>`_ to learn more about the output files produced by kSNP3.
 
 
 Phylogeny Annotation
@@ -106,7 +107,7 @@ Assembly Contigs
 Contig Integration
 ``````````````````
 
-* **Description**: Contigs produced from each of the four genome assemblers are then used as input to a program called CISA, which produces a kind of ``super assembly`` of higher contiguity and accuracy.
+* **Description**: Contigs produced from each of the four genome assemblers are then used as input to a program called `CISA <http://sb.nhri.org.tw/CISA/en/CISA;jsessionid=A1D6759153E59AA27F20E0EB4E537E66>`_, which produces a kind of ``super assembly`` of higher contiguity and accuracy.
 * **Directory**: IntegratedContigs/
 * **File Names**: {dataset_id}_master_integrated_contigs.fa
 
@@ -118,7 +119,7 @@ Contig Integration
 Contig Annotation
 `````````````````
 
-* **Description**: The integrated contigs from the previous step are used as input to Prokka, a prokaryotic genome annotation tool used to identify genomic features of interest.
+* **Description**: The integrated contigs from the previous step are used as input to `Prokka <https://github.com/tseemann/prokka>`_, a prokaryotic genome annotation tool used to identify genomic features of interest.
 * **Directory**: AnnotatedContigs/
 * **File Names**: {dataset_id}*
 
