@@ -194,28 +194,47 @@ process BuildIDBAAssembly {
 	"""
 }
 
+
+// What's this do? Good question.
+// I needed a way to group contigs produced from each assembler
+// based on the reads that produced those contigs. If you don't do this
+// you cannot guarantee that the assemblies passed to CISA arrived in the
+// correct order.
+// This function concatenates all of the tuples produced from each assembly
+// (i.e., [dataset_id, dataset_id_[assembler]-contigs.fa]) and groups them
+// into a single tuple based on the dataset_id. The result is the following:
+// [dataset_id, abyss.fa, idba.fa, spades.fa, velvet.fa]. The order in which
+// these contigs appear in the tuple is irrelevant as none of the downstream
+// processes require me to know it.
+abyss_assembly_results.concat(
+		velvet_assembly_results,
+		spades_assembly_results,
+		idba_assembly_results
+	)
+	.groupTuple(sort: true, size: 4)
+	.into { grouped_assembly_contigs }
+	
+
 process IntegrateContigs {
 	tag { dataset_id }
 
 	publishDir "${params.out_dir}/IntegratedContigs", mode: "copy"
 
 	input:
-	set dataset_id, file(spades_contigs) from spades_assembly_results
-	set dataset_id, file(idba_contigs) from idba_assembly_results
-	set dataset_id, file(abyss_contigs) from abyss_assembly_results
-	set dataset_id, file(velvet_contigs) from velvet_assembly_results
+	set dataset_id, file(contigs) from grouped_assembly_contigs
 
 	output:
+	set dataset_id, file("${dataset_id}_master_contigs.fa") into master_contigs
 	set dataset_id, file("${dataset_id}_master_integrated_contigs.fa") into (cisa_integrated_contigs, cisa_integrated_quast_contigs)
 
 	shell:
 	'''
 	#!/bin/sh
 	echo count=4 > Merge.config
-	echo data=!{spades_contigs},title=SPades >> Merge.config
-	echo data=!{idba_contigs},title=IDBA >> Merge.config
-	echo data=!{abyss_contigs},title=Abyss >> Merge.config
-	echo data=!{velvet_contigs},title=Velvet >> Merge.config
+	echo data=!{contigs[0]},title=Contigs0 >> Merge.config
+	echo data=!{contigs[1]},title=Contigs1 >> Merge.config
+	echo data=!{contigs[2]},title=Contigs2 >> Merge.config
+	echo data=!{contigs[3]},title=Contigs3 >> Merge.config
 	echo Master_file=!{dataset_id}_master_contigs.fa >> Merge.config
 	Merge.py Merge.config
 	echo genome=`grep 'Whole Genome' 'Merge_info' | cut -d ':' -f2 | sort -rn | head -n 1 | tr -d [:space:]` > CISA.config
@@ -254,17 +273,23 @@ process AnnotateContigs {
 	'''
 }
 
+abyss_assembly_quast_contigs.concat(
+                velvet_assembly_quast_contigs,
+                spades_assembly_quast_contigs,
+                idba_assembly_quast_contigs,
+		cisa_integrated_quast_contigs
+        )
+        .groupTuple(sort: true, size: 5)
+        .into { grouped_assembly_quast_contigs }
+
+
 process EvaluateAssemblies {
 	publishDir "${params.out_dir}/AssemblyReport", mode: "copy"
 
 	tag { dataset_id }
 
 	input:
-	set dataset_id, file(abyss_contigs) from abyss_assembly_quast_contigs
-	set dataset_id, file(idba_contigs) from idba_assembly_quast_contigs
-	set dataset_id, file(spades_contigs) from spades_assembly_quast_contigs
-	set dataset_id, file(velvet_contigs) from velvet_assembly_quast_contigs
-	set dataset_id, file(integrated_contigs) from cisa_integrated_quast_contigs 
+	set dataset_id, file(quast_contigs) from grouped_assembly_quast_contigs
 
 	output:
 	file("${dataset_id}_*") into quast_evaluation
@@ -272,7 +297,7 @@ process EvaluateAssemblies {
 	shell:
 	'''
 	#!/bin/sh
-	quast.py !{abyss_contigs} !{idba_contigs} !{spades_contigs} !{velvet_contigs} !{integrated_contigs} --space-efficient --threads !{threads} -o output
+	quast.py !{quast_contigs[0]} !{quast_contigs[1]} !{quast_contigs[2]} !{quast_contigs[3]} !{quast_contigs[4]} --space-efficient --threads !{threads} -o output
         mkdir quast_output
         find output/ -maxdepth 2 -type f | xargs mv -t quast_output
         cd quast_output
