@@ -6,5 +6,6 @@ machine:
 
 test:
   override:
+    - gunzip tutorial/raw_sequence_data/*
     - curl -fsSL get.nextflow.io | bash
-    - ./nextflow run alignment.nf --with-docker -profile alignment
+    - ./nextflow run assembly.nf -profile assembly
