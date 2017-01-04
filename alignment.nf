@@ -27,7 +27,7 @@ params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
 params.work_dir = "$PWD/temporary_files"
-params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.read_pairs = "tutorial/raw_sequence_data/test/*_R{1,2}_001.fastq"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "tutorial/amr_reference/megaresdb.fa"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
@@ -157,7 +157,7 @@ process BuildVFIndex {
 	"""
 }
 
-/*process BuildPlasmidIndex {
+process BuildPlasmidIndex {
 	tag { "${plasmid_db.baseName}" }
 
 	input:
@@ -169,7 +169,7 @@ process BuildVFIndex {
         """
         bowtie2-build $plasmid_db plasmid.index
 	"""
-}*/
+}
 
 process RunQC {
 	publishDir "${params.out_dir}/Preprocessing", mode: "copy"
@@ -244,7 +244,7 @@ process VFAlignment {
         """
 }
 
-/*process PlasmidAlignment {
+process PlasmidAlignment {
 	publishDir "${params.out_dir}/Plasmid_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -259,7 +259,7 @@ process VFAlignment {
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S ${dataset_id}_plasmid_alignment.sam
 	"""
-}*/
+}
 
 process BuildConesnsusSequence {
 	tag { dataset_id }
@@ -305,7 +305,7 @@ process PreparePhylogeneticAnalysis {
 }
 
 process BuildPhylogenies {
-	publishDir "${params.out_dir}/Trees", mode: "copy"
+	publishDir "${params.out_dir}/SNPsAndPhylogenies", mode: "copy"
 
 	tag { "configuration_files" }
 
@@ -314,8 +314,8 @@ process BuildPhylogenies {
 	file ksnp3_config from ksnp3_configuration.toList()
 
 	output:
-	file("trees/*.tre") into phylogenetic_trees
-	file("polymorphisms/*") into polymorphisms
+	file("Trees/*.tre") into phylogenetic_trees
+	file("SNPs/*") into polymorphisms
 
 	shell:
 	'''
@@ -334,16 +334,16 @@ process BuildPhylogenies {
 	else
 		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	fi
-	mkdir trees
-	mkdir polymorphisms
-	mv kSNP3_results/*.tre trees
-	mv kSNP3_results/* polymorphisms
+	mkdir Trees
+	mkdir SNPs
+	mv kSNP3_results/*.tre Trees
+	mv kSNP3_results/* SNPs
 	rm -rf !{params.work_dir}
 	'''
 }
 
 process ConvertNewickToPDF {
-	publishDir "${params.out_dir}/Phylogenetic_Tree_Images", mode: "copy"
+	publishDir "${params.out_dir}/SNPsAndPhylogenies/TreeImages", mode: "copy"
 
 	input:
 	file tree from phylogenetic_trees.flatten()
