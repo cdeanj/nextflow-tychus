@@ -75,6 +75,10 @@ if(params.help) {
 	return
 }
 
+
+// Let's group the read pairs and place them into a channel
+// The structure of the this channel will be a list of tuples.
+// [dataset_id, forward.fq, reverse.fq]
 Channel
 	.fromFilePairs(params.read_pairs, flat: true)
 	.into { trimmomatic_read_pairs }
@@ -153,8 +157,8 @@ process BuildVelvetAssembly {
 	'''
 	#!/bin/sh
 	best_kmer=`cat !{best}`
-	velveth auto $best_kmer -fastq -shortPaired !{forward} -fastq -shortPaired2 !{reverse}
-	velvetg auto
+	velveth auto $best_kmer -separate -fastq -shortPaired !{forward} !{reverse}
+	velvetg auto -exp_cov auto -cov_cutoff auto
 	mv auto/contigs.fa !{dataset_id}_velvet-contigs.fa
 	'''
 }
@@ -306,6 +310,9 @@ process EvaluateAssemblies {
 	'''	
 }
 
+// Display information about the completed run
+// See https://www.nextflow.io/docs/latest/metadata.html for more
+// information about available onComplete options
 workflow.onComplete {
 	log.info "Nextflow Version:	$workflow.nextflow.version"
   	log.info "Command Line:		$workflow.commandLine"
