@@ -8,4 +8,5 @@ test:
   override:
     - gunzip tutorial/raw_sequence_data/*
     - curl -fsSL get.nextflow.io | bash
-    - ./nextflow run assembly.nf -profile assembly
+    - ./nextflow run assembly.nf -profile assembly:
+        timeout: 2400
