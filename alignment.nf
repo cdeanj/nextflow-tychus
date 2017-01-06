@@ -27,7 +27,7 @@ params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
 params.work_dir = "$PWD/temporary_files"
-params.read_pairs = "tutorial/raw_sequence_data/test/*_R{1,2}_001.fastq"
+params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "tutorial/amr_reference/megaresdb.fa"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
@@ -157,7 +157,7 @@ process BuildVFIndex {
 	"""
 }
 
-process BuildPlasmidIndex {
+/*process BuildPlasmidIndex {
 	tag { "${plasmid_db.baseName}" }
 
 	input:
@@ -169,7 +169,7 @@ process BuildPlasmidIndex {
         """
         bowtie2-build $plasmid_db plasmid.index
 	"""
-}
+}*/
 
 process RunQC {
 	publishDir "${params.out_dir}/Preprocessing", mode: "copy"
@@ -183,7 +183,7 @@ process RunQC {
         set dataset_id, file("${dataset_id}_1P.fastq"), file("${dataset_id}_2P.fastq") into (amr_read_pairs, plasmid_read_pairs, vf_read_pairs, genome_read_pairs)
 
         """
-        java -jar /Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
+        java -jar /opt/Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
         mv ${dataset_id}_1P ${dataset_id}_1P.fastq
         mv ${dataset_id}_2P ${dataset_id}_2P.fastq
         """
@@ -244,7 +244,7 @@ process VFAlignment {
         """
 }
 
-process PlasmidAlignment {
+/*process PlasmidAlignment {
 	publishDir "${params.out_dir}/Plasmid_Alignment", mode: "copy"
 
 	tag { dataset_id }
@@ -259,7 +259,7 @@ process PlasmidAlignment {
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S ${dataset_id}_plasmid_alignment.sam
 	"""
-}
+}*/
 
 process BuildConesnsusSequence {
 	tag { dataset_id }
@@ -359,15 +359,15 @@ process ConvertNewickToPDF {
         #!/bin/sh
         if [ !{PDF} ]
         then
-                java -jar /figtree/lib/figtree.jar -graphic PDF !{tree} !{base}.pdf
+                java -jar /opt/figtree/lib/figtree.jar -graphic PDF !{tree} !{base}.pdf
         elif [ !{PNG} ]
         then
-                java -jar /figtree/lib/figtree.jar -graphic PNG !{tree} !{base}.png
+                java -jar /opt/figtree/lib/figtree.jar -graphic PNG !{tree} !{base}.png
         elif [ !{JPEG} ]
         then
-                java -jar /figtree/lib/figtree.jar -graphic JPEG !{tree} !{base}.jpg
+                java -jar /opt/figtree/lib/figtree.jar -graphic JPEG !{tree} !{base}.jpg
         else
-                java -jar /figtree/lib/figtree.jar -graphic SVG !{tree} !{base}.svg
+                java -jar /opt/figtree/lib/figtree.jar -graphic SVG !{tree} !{base}.svg
         fi
         '''
 }
