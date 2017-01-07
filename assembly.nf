@@ -26,7 +26,7 @@
 params.pwd = "$PWD"
 params.output = "tychus_assembly_output"
 params.help = false
-params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 params.out_dir = params.pwd + "/" + params.output
 params.threads = 1
 
@@ -153,12 +153,18 @@ process BuildVelvetAssembly {
 	output:
 	set dataset_id, file("${dataset_id}_velvet-contigs.fa") into (velvet_assembly_results, velvet_assembly_quast_contigs)
 
+	
 	shell:
 	'''
 	#!/bin/sh
 	best_kmer=`cat !{best}`
-	velveth auto $best_kmer -separate -fastq -shortPaired !{forward} !{reverse}
-	velvetg auto -exp_cov auto -cov_cutoff auto
+	if [ $best_kmer == 'predict' ]
+	then
+		VelvetOptimiser.pl -s 19 -e 55 -d auto -f '-fastq -separate -shortPaired !{forward} !{reverse}'
+	else
+		velveth auto $best_kmer -separate -fastq -shortPaired !{forward} !{reverse}
+		velvetg auto -exp_cov auto -cov_cutoff auto
+	fi
 	mv auto/contigs.fa !{dataset_id}_velvet-contigs.fa
 	'''
 }
