@@ -27,9 +27,10 @@ params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
 params.work_dir = "$PWD/temporary_files"
-params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq"
+params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 params.genome = "tutorial/genome_reference/listeriadb.fa"
-params.amr_db = "tutorial/amr_reference/megaresdb.fa"
+params.amr_db = "tutorial/amr_reference/megares_database_v1.01.fasta"
+params.annot_db = "tutorial/annotation_database/megares_annotations_v1.01.csv"
 params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
 params.plasmid_db = "tutorial/plasmid_reference/plasmiddb.fa"
 params.out_dir = params.pwd + "/" + params.output
@@ -37,6 +38,7 @@ params.threads = 1
 
 genome = file(params.genome)
 amr_db = file(params.amr_db)
+annot_db = file(params.annot_db)
 vf_db = file(params.vf_db)
 plasmid_db = file(params.plasmid_db)
 threads = params.threads
@@ -110,7 +112,10 @@ if(params.help) {
 }
 
 
-// Let's group the read pairs and place them into a channel
+// Returns a tuple of read pairs in the form
+// [dataset_id, forward.fq, reverse.fq] where
+// the dataset_id is the shared prefix from
+// the two paired FASTQ files.
 Channel
         .fromFilePairs(params.read_pairs, flat: true)
         .into { trimmomatic_read_pairs }
@@ -125,7 +130,7 @@ process BuildGenomeIndex {
 	file 'genome.index*' into genome_index
 
 	"""
-	bowtie2-build $genome genome.index
+	bowtie2-build $genome genome.index --threads ${threads}
 	"""
 }
 
@@ -139,7 +144,7 @@ process BuildAMRIndex {
         file 'amr.index*' into amr_index
 
         """
-        bowtie2-build $amr_db amr.index
+        bowtie2-build $amr_db amr.index --threads ${threads}
 	"""
 }
 
@@ -153,11 +158,11 @@ process BuildVFIndex {
         file 'vf.index*' into vf_index
 
         """
-        bowtie2-build $vf_db vf.index
+        bowtie2-build $vf_db vf.index --threads ${threads}
 	"""
 }
 
-/*process BuildPlasmidIndex {
+process BuildPlasmidIndex {
 	tag { "${plasmid_db.baseName}" }
 
 	input:
@@ -167,9 +172,9 @@ process BuildVFIndex {
         file 'plasmid.index*' into plasmid_index
 
         """
-        bowtie2-build $plasmid_db plasmid.index
+        bowtie2-build $plasmid_db plasmid.index --threads ${threads}
 	"""
-}*/
+}
 
 process RunQC {
 	publishDir "${params.out_dir}/Preprocessing", mode: "copy"
@@ -183,14 +188,14 @@ process RunQC {
         set dataset_id, file("${dataset_id}_1P.fastq"), file("${dataset_id}_2P.fastq") into (amr_read_pairs, plasmid_read_pairs, vf_read_pairs, genome_read_pairs)
 
         """
-        java -jar /opt/Trimmomatic-0.36/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
+        java -jar ${TRIMMOMATIC}/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
         mv ${dataset_id}_1P ${dataset_id}_1P.fastq
         mv ${dataset_id}_2P ${dataset_id}_2P.fastq
         """
 }
 
 process GenomeAlignment {
-	publishDir "${params.out_dir}/Genome_Alignment", mode: "copy"
+	publishDir "${params.out_dir}/Alignment", mode: "copy", pattern: "*.bam"
 
 	tag { dataset_id }
 
@@ -199,7 +204,6 @@ process GenomeAlignment {
 	file index from genome_index.first()
 
 	output:
-	set dataset_id, file("${dataset_id}_genome_alignment.sam") into genome_sam_files
 	set dataset_id, file("${dataset_id}_genome_alignment.bam") into genome_bam_files
         set dataset_id, file("${dataset_id}_genome_alignment.bai") into genome_index_files
 
@@ -211,7 +215,7 @@ process GenomeAlignment {
 }
 
 process AMRAlignment {
-	publishDir "${params.out_dir}/AMR_Alignment", mode: "copy"
+	publishDir "${params.out_dir}/Alignment", mode: "move", pattern: "*.bam"
 
 	tag { dataset_id }
 
@@ -221,14 +225,37 @@ process AMRAlignment {
 
 	output:
 	set dataset_id, file("${dataset_id}_amr_alignment.sam") into amr_sam_files
+	set dataset_id, file("${dataset_id}_amr_alignment.bam") into amr_bam_files
 
 	"""
 	bowtie2 -p ${threads} -x amr.index -1 $forward -2 $reverse -S ${dataset_id}_amr_alignment.sam
+	samtools view -bS ${dataset_id}_amr_alignment.sam | samtools sort -@ ${threads} -o ${dataset_id}_amr_alignment.bam
 	"""
 }
 
+process AMRResistome {
+	publishDir "${params.out_dir}/Resistome", mode: "move"
+
+	tag { dataset_id }
+
+	input:
+	file amr_db
+	set dataset_id, file(amr_sam) from amr_sam_files
+
+	output:
+	set dataset_id, file("${dataset_id}_amr_class_resistome.tsv") into amr_class_level
+	set dataset_id, file("${dataset_id}_amr_group_resistome.tsv") into amr_group_level
+	set dataset_id, file("${dataset_id}_amr_mech_resistome.tsv") into amr_mech_level
+	set dataset_id, file("${dataset_id}_amr_gene_resistome.tsv") into amr_gene_level
+
+	"""
+	resistome -ref_fp ${amr_db} -sam_fp ${amr_sam} -annot_fp ${annot_db} -class_fp "${dataset_id}_amr_class_resistome.tsv" -group_fp "${dataset_id}_amr_group_resistome.tsv" -mech_fp "${dataset_id}_amr_mech_resistome.tsv" -gene_fp "${dataset_id}_amr_gene_resistome.tsv" -t 0
+	"""
+	
+}
+
 process VFAlignment {
-	publishDir "${params.out_dir}/Virulence_Alignment", mode: "copy"
+	publishDir "${params.out_dir}/Alignment", mode: "move", pattern: "*.bam"
 
 	tag { dataset_id }
 
@@ -238,14 +265,33 @@ process VFAlignment {
 
         output:
         set dataset_id, file("${dataset_id}_vf_alignment.sam") into vf_sam_files
+	set dataset_id, file("${dataset_id}_vf_alignment.bam") into vf_bam_files
 
         """
         bowtie2 -p ${threads} -x vf.index -1 $forward -2 $reverse -S ${dataset_id}_vf_alignment.sam
+	samtools view -bS ${dataset_id}_vf_alignment.sam | samtools sort -@ ${threads} -o ${dataset_id}_vf_alignment.bam
         """
 }
 
-/*process PlasmidAlignment {
-	publishDir "${params.out_dir}/Plasmid_Alignment", mode: "copy"
+process VFResistome {
+	publishDir "${params.out_dir}/Resistome", mode: "move"
+
+        tag { dataset_id }
+
+        input:
+        file vf_db
+        set dataset_id, file(vf_sam) from vf_sam_files
+
+        output:
+        set dataset_id, file("${dataset_id}_vf_gene_resistome.tsv") into vf_gene_level
+
+        """
+        csa -ref_fp ${vf_db} -sam_fp ${vf_sam} -min 5 -max 100 -skip 5 -t 0 -samples 1 -out_fp "${dataset_id}_vf_gene_resistome.tsv"
+        """
+}
+
+process PlasmidAlignment {
+	publishDir "${params.out_dir}/Alignment", mode: "move", pattern: "*.bam"
 
 	tag { dataset_id }
 
@@ -255,11 +301,30 @@ process VFAlignment {
 
 	output:
 	set dataset_id, file("${dataset_id}_plasmid_alignment.sam") into plasmid_sam_files
+	set dataset_id, file("${dataset_id}_plasmid_alignment.bam") into plasmid_bam_files
 
 	"""
 	bowtie2 -p ${threads} -x plasmid.index -1 $forward -2 $reverse -S ${dataset_id}_plasmid_alignment.sam
+	samtools view -bS ${dataset_id}_plasmid_alignment.sam | samtools sort -@ ${threads} -o ${dataset_id}_plasmid_alignment.bam
 	"""
-}*/
+}
+
+process PlasmidResistome {
+	publishDir "${params.out_dir}/Resistome", mode: "move"
+        
+        tag { dataset_id }
+
+        input:
+        file plasmid_db
+        set dataset_id, file(plasmid_sam) from plasmid_sam_files
+
+        output:
+        set dataset_id, file("${dataset_id}_plasmid_gene_resistome.tsv") into plasmid_gene_level
+
+	"""
+	csa -ref_fp ${plasmid_db} -sam_fp ${plasmid_sam} -min 5 -max 100 -skip 5 -t 0 -samples 1 -out_fp "${dataset_id}_plasmid_gene_resistome.tsv"
+        """
+}
 
 process BuildConesnsusSequence {
 	tag { dataset_id }
@@ -284,7 +349,7 @@ process BuildConesnsusSequence {
 }
 
 process PreparePhylogeneticAnalysis {
-	tag { "genome_configuration" }
+	tag { "Configuration" }
 
 	storeDir 'temporary_files'
 
@@ -307,7 +372,7 @@ process PreparePhylogeneticAnalysis {
 process BuildPhylogenies {
 	publishDir "${params.out_dir}/SNPsAndPhylogenies", mode: "copy"
 
-	tag { "configuration_files" }
+	tag { "ConfigurationFiles" }
 
 	input:
 	file kchooser_config from kchooser_configuration
@@ -320,19 +385,19 @@ process BuildPhylogenies {
 	shell:
 	'''
 	#!/bin/sh
-	/usr/local/kSNP3/MakeFasta !{kchooser_config} MF.fasta > /dev/null
-	/usr/local/kSNP3/Kchooser MF.fasta > /dev/null
+	${KSNP3}/MakeFasta !{kchooser_config} MF.fasta > /dev/null
+	${KSNP3}/Kchooser MF.fasta > /dev/null
 	optimum_k=`grep "The optimum" Kchooser.report | tr -dc '0-9'`
 	cat !{kchooser_config} > in_list
 	cat !{ksnp3_config} >> in_list
 	if [ !{ML} && !{NJ} ]
 	then
-		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -NJ -core -min_frac !{min_frac} >> /dev/null
-	elif [ !{ML} ]
+		${KSNP3}/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -NJ -core -min_frac !{min_frac} >> /dev/null
+	elif [ !{NJ} ]
 	then
-		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -core -min_frac !{min_frac} >> /dev/null
+		${KSNP3}/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
 	else
-		/usr/local/kSNP3/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -NJ -core -min_frac !{min_frac} >> /dev/null
+		${KSNP3}/kSNP3 -in in_list -outdir kSNP3_results -k ${optimum_k} -ML -core -min_frac !{min_frac} >> /dev/null
 	fi
 	mkdir Trees
 	mkdir SNPs
@@ -343,7 +408,7 @@ process BuildPhylogenies {
 }
 
 process ConvertNewickToPDF {
-	publishDir "${params.out_dir}/SNPsAndPhylogenies/TreeImages", mode: "copy"
+	publishDir "${params.out_dir}/SNPsAndPhylogenies/TreeImages", mode: "move"
 
 	input:
 	file tree from phylogenetic_trees.flatten()
@@ -359,15 +424,15 @@ process ConvertNewickToPDF {
         #!/bin/sh
         if [ !{PDF} ]
         then
-                java -jar /opt/figtree/lib/figtree.jar -graphic PDF !{tree} !{base}.pdf
+                java -jar ${FIGTREE}/figtree.jar -graphic PDF !{tree} !{base}.pdf
         elif [ !{PNG} ]
         then
-                java -jar /opt/figtree/lib/figtree.jar -graphic PNG !{tree} !{base}.png
+                java -jar ${FIGTREE}/figtree.jar -graphic PNG !{tree} !{base}.png
         elif [ !{JPEG} ]
         then
-                java -jar /opt/figtree/lib/figtree.jar -graphic JPEG !{tree} !{base}.jpg
+                java -jar ${FIGTREE}/figtree.jar -graphic JPEG !{tree} !{base}.jpg
         else
-                java -jar /opt/figtree/lib/figtree.jar -graphic SVG !{tree} !{base}.svg
+                java -jar ${FIGTREE}/figtree.jar -graphic SVG !{tree} !{base}.svg
         fi
         '''
 }
