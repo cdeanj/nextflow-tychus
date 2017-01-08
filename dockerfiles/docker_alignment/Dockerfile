@@ -130,6 +130,26 @@ RUN cd /opt && \
 	mv kSNP3 /usr/local && \
 	cd /
 
+################################################################################################
+# Install ResistomeAnalyzer
+################################################################################################
+RUN cd /opt && \
+	git clone https://github.com/cdeanj/resistomeanalyzer.git && \
+	cd resistomeanalyzer && \
+	make && \
+	ln -s /opt/resistomeanalyzer/resistome /usr/bin && \
+	cd /
+
+################################################################################################
+# Install CoverageSampler
+################################################################################################
+RUN cd /opt && \
+	git clone https://github.com/cdeanj/coverage_sampler.git && \
+	cd coverage_sampler && \
+	make && \
+	ln -s /opt/coverage_sampler/csa /usr/bin && \
+	cd /
+
 
 RUN mkdir /SCRATCH
 WORKDIR /SCRATCH
