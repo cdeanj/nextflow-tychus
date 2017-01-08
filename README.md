@@ -184,7 +184,7 @@ $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequen
 
 Figtree Options
 ---------------
-By deafult the SNP phylogenies produced by kSNP and written to a Newick formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as scalable vector graphic [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) images. To change this, simply specify an alternative image format (JPEG,PDF,PNG,SVG).
+By deafult the SNP phylogenies produced by kSNP and written to a [Newick](https://en.wikipedia.org/wiki/Newick_format) formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as scalable vector graphic [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) images. To change this, simply specify an alternative image format (JPEG,PDF,PNG,SVG).
 ```
 $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --JPEG
 ```
