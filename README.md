@@ -6,13 +6,21 @@ Tychus: A tool to characterize the bacterial genome.
 Table of Contents
 -----------------
 [Overview](https://github.com/cdeanj/nextflow-tychus$overview)
+
 [Requirements](https://github.com/cdeanj/nextflow-tychus#requirements)
+
 [Quickstart](https://github.com/cdeanj/nextflow-tychus#quickstart)
+
 [Options](https://github.com/cdeanj/nextflow-tychus#options)
+
 [Example Usage](https://github.com/cdeanj/nextflow-tychus#example-usage)
+
 [Results](https://github.com/cdeanj/nextflow-tychus#results)
+
 [Dependencies](https://github.com/cdeanj/nextflow-tychus#dependencies)
+
 [Contact](https://github.com/cdeanj/nextflow-tychus#contact)
+
 -----------------
 
 Overview
