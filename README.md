@@ -1,4 +1,6 @@
-[comment]: <> (Modelled after Will-Rowe's beautiful SEAR README https://github.com/will-rowe/SEAR/blob/master/README.md)
+<!---
+(Modelled after Will-Rowe's beautiful SEAR README https://github.com/will-rowe/SEAR/blob/master/README.md)
+-->
 
 Tychus: A tool to characterize the bacterial genome.
 ====================================================
