@@ -135,6 +135,16 @@ RUN cd /opt && \
 	./setup.py install && \
 	cd / && \
 	rm -rf /opt/quast-4.4 /opt/quast-4.4.tar.gz
+
+#########################################################################################################
+# Install Velvet Optimiser
+#########################################################################################################
+RUN cd /opt && \
+	git clone https://github.com/tseemann/VelvetOptimiser.git && \
+	ln -s /opt/VelvetOptimiser/VelvetOptimiser.pl /usr/bin && \
+	ln -s /opt/VelvetOptimiser/VelvetOpt /usr/bin && \
+	cd /
+	
 	
 
 RUN mkdir /SCRATCH
