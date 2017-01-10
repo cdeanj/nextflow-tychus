@@ -28,7 +28,11 @@ Table of Contents
 
 Overview
 ========
-Tychus is a tool that allows researchers to perform massively parallel sequence data analysis with the goal of producing a high confidence and comprehensive description of the bacterial genome. Key features of the Tychus pipeline include the assembly, annotation, and phylogenetic inference of large numbers of WGS isolates in parallel using open-source bioinformatics tools and virtualization technology.
+Tychus is a tool that allows researchers to perform massively parallel sequence data analysis with the goal of producing a high confidence and comprehensive description of the bacterial genome. Key features of the Tychus pipeline include the assembly, annotation, and phylogenetic inference of large numbers of WGS isolates in parallel using open-source bioinformatics tools and virtualization technology. The Tychus pipeline relies on two methods to characterize your bacterial sequence data.
+
+The first method is assembly based. The assembly module attempts to produce a comprehensive reconstruction of the genome by relying on the results of multiple genome assemblies through the use of multiple assemblers. These assemblies are then used to produce a sort of hybrid assembly with fewer and longer contigs that can be used as a draft genome for further downstream processes such as annotation, a process by genomic features of interest are identified and appropriately labelled.
+
+The second method is alignment based. The alignment module attempts to produce a revealing and thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) and producing pictorial descriptions about the relatedness of your samples. In addition, information about the types of genes, whether they be antimicrobials, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
 
 -------
 
@@ -76,6 +80,10 @@ The Tychus pipeline can be pulled and installed from Github with the following c
 $ git clone https://github.com/cdeanj/nextflow-tychus.git
 $ cd nextflow-tychus/
 ```
+
+Install Docker Images
+---------------------
+There are 
 
 ----------
 
