@@ -65,7 +65,7 @@ $ curl -fsSL get.nextflow.io | bash
 $ ./nextflow
 ```
 
-If installing Nextflow behind a proxy server, you may encounter the following error message:
+If installing Nextflow behind a proxy server, you may encounter the following `error` message:
 ```
 $ Unable to initialize nextflow environment
 ```
@@ -192,7 +192,7 @@ Here, we are using the `*` wildcard to grab all files within the `tutorial/raw_s
 
 Trimmomatic Operations
 ----------------------
-You may want to use your own trimming operation instead of the defaults provided by each module. To change them you can enter the following command:
+You may want to use your own trimming operations instead of the defaults provided by each module. To change them you can enter the following command:
 ```
 $ nextflow run <module-name> -profile <profile-name> --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
 ```
