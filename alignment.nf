@@ -26,14 +26,14 @@
 params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
-params.work_dir = "$PWD/temporary_files"
-params.read_pairs = "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
-params.genome = "tutorial/genome_reference/listeriadb.fa"
-params.amr_db = "tutorial/amr_reference/megares_database_v1.01.fasta"
-params.annot_db = "tutorial/annotation_database/megares_annotations_v1.01.csv"
-params.vf_db = "tutorial/virulence_reference/virulencedb.fa"
-params.plasmid_db = "tutorial/plasmid_reference/plasmiddb.fa"
-params.out_dir = params.pwd + "/" + params.output
+params.work_dir = "$baseDir/temporary_files"
+params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+params.genome = "$baseDir/tutorial/genome_reference/listeriadb.fa"
+params.amr_db = "$baseDir/tutorial/amr_reference/megares_database_v1.01.fasta"
+params.annot_db = "$baseDir/tutorial/annotation_database/megares_annotations_v1.01.csv"
+params.vf_db = "$baseDir/tutorial/virulence_reference/virulencedb.fa"
+params.plasmid_db = "$baseDir/tutorial/plasmid_reference/plasmiddb.fa"
+params.out_dir = "$baseDir/" + params.output
 params.threads = 1
 
 genome = file(params.genome)
