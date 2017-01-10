@@ -91,12 +91,12 @@ $ cd nextflow-tychus/
 
 Install Docker Images
 ---------------------
-Depending on which Tychus module you would like to run, you will need to download the appropriate Docker image in order to resolve the module's tool dependencies. These can be easilly downloaded by typing the following commands:
+Depending on which Tychus module you would like to run, you will need to download the appropriate Docker image in order to resolve the module's tool dependencies. These can be easilly downloaded by typing the following command(s):
 ```
 $ docker pull abdolab/tychus-alignment
 $ docker pull abdolab/tychus-assembly
 ```
-The download time will take anywhere from 5 to 15 minuets depending on your connection speed.
+The download time will take between 5 and 10 minutes depending on your connection speed.
 
 
 ----------
