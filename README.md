@@ -42,7 +42,6 @@ Requirements
 Hardware Requirements
 ---------------------
   - 32+ gigabytes (GB) of RAM.
-    - For demonstration purposes, Tychus can be run on a machine with 16 GB of RAM, but is not intended for analyzing multiple sequencing datasets.
   - 125+ gigabytes of hard drive (HDD) space.
 
 Program Requirements
