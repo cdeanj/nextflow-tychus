@@ -30,9 +30,9 @@ Overview
 ========
 Tychus is a tool that allows researchers to perform massively parallel sequence data analysis with the goal of producing a high confidence and comprehensive description of the bacterial genome. Key features of the Tychus pipeline include the assembly, annotation, and phylogenetic inference of large numbers of WGS isolates in parallel using open-source bioinformatics tools and virtualization technology. The Tychus pipeline relies on two methods to characterize your bacterial sequence data.
 
-The first method is assembly based. The assembly module attempts to produce a comprehensive reconstruction of the genome by relying on the results of multiple genome assemblies through the use of multiple assemblers. These assemblies are then used to produce a sort of hybrid assembly with fewer and longer contigs that can be used as a draft genome for further downstream processes such as annotation, a process by genomic features of interest are identified and appropriately labelled.
+The first method is assembly based. The assembly module attempts to produce a comprehensive reconstruction of the genome by relying on the results of multiple *de novo* genome assemblies through the use of multiple assemblers. These assemblies are then used to produce a hybrid or consensus assembly with fewer and longer contigs that can be used as a draft genome for further downstream processes such as annotation, a process by which genomic features of interest are identified and appropriately labelled. Assemblies are then evaluated based on common scoring metrics, such as number of contigs, contig size, and N50.
 
-The second method is alignment based. The alignment module attempts to produce a revealing and thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) and producing pictorial descriptions about the relatedness of your samples. In addition, information about the types of genes, whether they be antimicrobials, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
+The second method is alignment based. The alignment module attempts to produce a thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) and SNP phylogenies that will aid in inferring the relatedness and origin of your samples. In addition, information about the types of genes, whether they be antimicrobials, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
 
 -------
 
@@ -41,8 +41,11 @@ Requirements
 
 Hardware Requirements
 ---------------------
-  - 32+ gigabytes (GB) of RAM.
+  - 16+ gigabytes (GB) of RAM.
   - 125+ gigabytes of hard drive (HDD) space.
+
+The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multple computing cores. The requirements listed above are an absolute must for demonstration purposes.
+
 
 Program Requirements
 --------------------
@@ -61,6 +64,8 @@ Install Nextflow
 ----------------
 Open a terminal and type the following commands:
 ```
+$ mkdir tychus
+$ cd tychus/
 $ curl -fsSL get.nextflow.io | bash
 $ ./nextflow
 ```
@@ -76,9 +81,14 @@ $ chmod u+x nextflow
 $ ./nextflow
 ```
 
-It may be beneficial for you to move the Nextflow executable to somewhere you have global execute permissions, such as `/usr/local/bin`. If you don't have the appropriate permissions to do so, you can add the following line to your `.bashrc` file, which can be found inside your `home` directory.
+### Add To Path
+It may be beneficial for you to move the Nextflow executable to somewhere you have global execute permissions. Two of the many options are listed below:
 ```
-export PATH=$PATH:/path/to/your/executable/nextflow
+$ mv nextflow /usr/local/bin
+```
+or
+```
+$ export PATH=$PATH:$PWD
 ```
 
 Install Tychus Pipeline
@@ -98,15 +108,12 @@ $ docker pull abdolab/tychus-assembly
 ```
 The download time will take between 5 and 10 minutes depending on your connection speed.
 
-
 ----------
 
 Pipeline Options
 ================
-To view available pipeline options for each of the Tychus modules, you can type the following command into a terminal:
-```
-$ nextflow run <module-name> --help
-```
+To view available pipeline options for each of the Tychus modules, you can type the following command(s) into a terminal:
+
 Alignment Module
 ----------------
 ```
@@ -206,7 +213,7 @@ $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequen
 
 Figtree Options
 ---------------
-By deafult the SNP phylogenies produced by kSNP are written to a [Newick](https://en.wikipedia.org/wiki/Newick_format) formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as scalable vector graphic [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) images. To change this, simply specify an alternative image format (JPEG,PDF,PNG).
+By deafult the SNP phylogenies produced by kSNP are written to a [Newick](https://en.wikipedia.org/wiki/Newick_format) formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as scalable vector graphic ([SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)) images. To change this, simply specify an alternative image format (JPEG,PDF,PNG).
 ```
 $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --JPEG
 ```
