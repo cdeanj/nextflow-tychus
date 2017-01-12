@@ -27,7 +27,7 @@ params.help = ""
 params.pwd = "$PWD"
 params.output = "tychus_alignment_output"
 params.work_dir = "$baseDir/temporary_files"
-params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}.fastq.gz"
 params.genome = "$baseDir/tutorial/genome_reference/listeriadb.fa"
 params.amr_db = "$baseDir/tutorial/amr_reference/megares_database_v1.01.fasta"
 params.annot_db = "$baseDir/tutorial/annotation_database/megares_annotations_v1.01.csv"
@@ -407,34 +407,40 @@ process BuildPhylogenies {
 	'''
 }
 
+// Ignore files with nothing in them. This will
+// occur when there aren't enough samples for kSNP
+// to build the appropriate trees.
+phylogenetic_trees.flatten()
+	.filter { file -> !file.isEmpty() }
+	.into { trees }
+
 process ConvertNewickToPDF {
 	publishDir "${params.out_dir}/SNPsAndPhylogenies/TreeImages", mode: "move"
 
 	input:
-	file tree from phylogenetic_trees.flatten()
+	file tree from trees
 
 	output:
-	file "${base}*"
+	file "*"
 
 	script:
 	base = tree.baseName
 
-	shell:
-        '''
-        #!/bin/sh
-        if [ !{PDF} ]
+	"""
+	#!/bin/sh
+        if [ ${PDF} ]
         then
-                java -jar ${FIGTREE}/figtree.jar -graphic PDF !{tree} !{base}.pdf
-        elif [ !{PNG} ]
+               	java -jar ${FIGTREE}/figtree.jar -graphic PDF ${tree} ${base}.pdf
+        elif [ ${PNG} ]
         then
-                java -jar ${FIGTREE}/figtree.jar -graphic PNG !{tree} !{base}.png
-        elif [ !{JPEG} ]
+               	java -jar ${FIGTREE}/figtree.jar -graphic PNG ${tree} ${base}.png
+        elif [ ${JPEG} ]
         then
-                java -jar ${FIGTREE}/figtree.jar -graphic JPEG !{tree} !{base}.jpg
+               	java -jar ${FIGTREE}/figtree.jar -graphic JPEG ${tree} ${base}.jpg
         else
-                java -jar ${FIGTREE}/figtree.jar -graphic SVG !{tree} !{base}.svg
-        fi
-        '''
+               	java -jar ${FIGTREE}/figtree.jar -graphic SVG ${tree} ${base}.svg
+       	fi
+	"""
 }
 
 // Display information about the completed run
