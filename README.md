@@ -32,7 +32,7 @@ Tychus is a tool that allows researchers to perform massively parallel sequence 
 
 The first method is assembly based. The assembly module attempts to produce a comprehensive reconstruction of the genome by relying on the results of multiple *de novo* genome assemblies through the use of multiple assemblers. These assemblies are then used to produce a hybrid or consensus assembly with fewer and longer contigs that can be used as a draft genome for further downstream processes such as annotation, a process by which genomic features of interest are identified and appropriately labelled. Assemblies are then evaluated based on common scoring metrics, such as number of contigs, contig size, and N50.
 
-The second method is alignment based. The alignment module attempts to produce a thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) and SNP phylogenies that will aid in inferring the relatedness and origin of your samples. In addition, information about the types of genes, whether they be antimicrobials, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
+The second method is alignment based. The alignment module attempts to produce a thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) with the goal of producing SNP phylogenies that can aid in inferring the relatedness and origin of your samples. In addition, information about the types of genes, whether they be antimicrobial, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
 
 -------
 
@@ -47,10 +47,12 @@ Hardware Requirements
 The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multple computing cores. The requirements listed above are a must for demonstration purposes.
 
 
-Program Requirements
---------------------
+Software Requirements
+---------------------
   - Java 7+
   - Docker
+    - MAC users should download the [Stable channel](https://docs.docker.com/docker-for-mac/) release.
+    - Linux users can [download](https://docs.docker.com/engine/installation/) the most appropriate version for their Linux distribution.
 
 To check your Java version, type the following command into a terminal:
 ```
@@ -62,7 +64,7 @@ Quickstart
 ==========
 Install Nextflow
 ----------------
-Open a terminal and type the following commands:
+Open a terminal and type the following commands (omitting the '$' sign):
 ```
 $ mkdir tychus
 $ cd tychus/
@@ -76,7 +78,7 @@ $ Unable to initialize nextflow environment
 ```
 In this case, you can type the following commands to obtain the Nextflow executable.
 ```
-$ wget -O nextflow http://www.nextflow.io/releases/v0.20.1/nextflow-0.20.1-all
+$ wget -O nextflow http://www.nextflow.io/releases/v0.23.0/nextflow-0.23.0-all
 $ chmod u+x nextflow
 $ ./nextflow
 ```
@@ -132,7 +134,7 @@ Output Directory:	/home/username/nextflow-tychus/my_alignment_output
 
 Assembly Module
 ---------------
-Included in the `assembly` module is simply a reference to the simulated reads mentioned above. Similarly, you won't need to specify the location of any reads in this example either. To get started, run the following command within the `nextflow-tychus/` directory:
+Included in the `assembly` module is a reference to the simulated reads mentioned above. You will not need to specify the location of any reads in this example. To get started, run the following command within the `nextflow-tychus/` directory:
 ```
 $ nextflow run assembly.nf -profile assembly --threads 2 --output my_assembly_output
 ```
@@ -258,21 +260,21 @@ $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequen
 
 Prokka Options
 --------------
-We allow users to annotate contigs using specific BLAST databases. To do this, you must specify both the `genus` and `species` parameters. The default annotation method is to not use a BLAST specific database.
+We allow users to annotate contigs using BLAST specific databases. To do this, you must specify both the `genus` and `species` parameters. The default annotation method is to not use a BLAST specific database.
 ```
 $ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --genus Listeria --species monocytogenes
 ```
 
 Database Options
 ----------------
-If you would like to specify an alternative `reference`, `virulence`, `plasmid` or `resistance` database than the ones already provided, you can do that as well.
+If you would like to specify an alternative `reference`, `virulence`, `plasmid` or `resistance` database than the ones provided, you can do that as well.
 ```
 $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --ref_db "path/to/your/reference/db/ref.fa" --vf_db "path/to/your/virulence/db/vf.fa" --plasmid path/to/your/plasmid/db/plasmid.fa --amr_db path/to/your/resistance/db/resistance.fa
 ```
 
 Other Options
 -------------
-By now you should be familiar with how to specify the various options provided by each module. Here are some more options. The `threads` parameter allows you to control how many threads each process will use. By default, this value is set to 1. The `output` directory allows you to specify where outputs will be stored. The default directory depends on which module you are using. When running the `alignment` module, results will be saved to a directory called `tychus_alignment_output`. When running the `assembly` module, results will be saved to a directory called `tychus_assembly_output`.
+Here are some more options. The `threads` parameter allows you to control how many threads each process will use. By default, this value is set to 1. The `output` directory allows you to specify where outputs will be stored. The default directory depends on which module you are using. When running the `alignment` module, results will be saved to a directory called `tychus_alignment_output`. When running the `assembly` module, results will be saved to a directory called `tychus_assembly_output`.
 ```
 $ nextflow run <module-name> -profile <profile-name> --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
 ```
