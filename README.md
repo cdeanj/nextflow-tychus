@@ -112,7 +112,7 @@ The download time will take between 5 and 10 minutes depending on your connectio
 
 Run a Test
 ==========
-It is `recommended` that you run these tests for both the `alignment` and `assembly` modules before doing any large-scale analysis. This serves the purpose of getting you comfortable with running each Tychus module, as well as providing you with real output, which you can look back upon when you get to the [Results]("https://github.com/cdeanj/nextflow-tychus#results") section. The reads used in each test were produced with [Art]("https://www.niehs.nih.gov/research/resources/software/biostatistics/art/"), an artificial read simulator, and constructed with 20x-30x coverage.
+It is `recommended` that you run these tests for both the `alignment` and `assembly` modules before doing any large-scale analysis. This serves the purpose of getting you comfortable with running each Tychus module, as well as providing you with real output, which you can look back upon when you get to the [Results](https://github.com/cdeanj/nextflow-tychus#results) section. The reads used in each test were produced with [Art](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/), an artificial read simulator, and constructed with 20x-30x coverage.
 
 Alignment Module
 ----------------
@@ -125,8 +125,8 @@ Results should be produced shortly, and you will see the following message:
 ```
 Nextflow Version:	0.23.0
 Command Line:		nextflow run alignment.nf -profile alignment --threads 2 --output my_alignment_output
-Container:		abdolab/tychus-alignment
-Duration:		5m 28s
+Container:			abdolab/tychus-alignment
+Duration:			5m 28s
 Output Directory:	/home/username/nextflow-tychus/my_alignment_output
 ```
 
