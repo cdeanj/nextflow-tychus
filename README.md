@@ -82,7 +82,7 @@ $ ./nextflow
 ```
 
 ### Add To Path
-It may be beneficial for you to move the Nextflow executable to somewhere you have global execute permissions. Two of the many options are listed below:
+Add the Nextflow executable to your system path. You can accomplish this by typing one of the two commands:
 ```
 $ mv nextflow /usr/local/bin
 ```
@@ -109,6 +109,43 @@ $ docker pull abdolab/tychus-assembly
 The download time will take between 5 and 10 minutes depending on your connection speed.
 
 ----------
+
+Run a Test
+==========
+It is `recommended` that you run these tests for both the `alignment` and `assembly` modules before doing any large-scale analysis. This serves the purpose of getting you comfortable with running each Tychus module, as well as providing you with real output, which you can look back upon when you get to the [Results]("https://github.com/cdeanj/nextflow-tychus#results") section. The reads used in each test were produced with [Art]("https://www.niehs.nih.gov/research/resources/software/biostatistics/art/"), an artificial read simulator, and constructed with 20x-30x coverage.
+
+Alignment Module
+----------------
+Included in the `alignment` module are four databases: a resistance, virulence, plasmid, and reference. These are used by default when running data through this module. Also, the simulated reads mentioned above are also used and can be found in the `tutorial/raw_sequence_data/` directory. To get started, run the following command within the `nextflow-tychus/` directory:
+```
+$ nextflow run alignment.nf -profile alignment --threads 2 --output my_alignment_output
+```
+
+Results should be produced shortly, and you will see the following message:
+```
+Nextflow Version:	0.23.0
+Command Line:		nextflow run alignment.nf -profile alignment --threads 2 --output my_alignment_output
+Container:		abdolab/tychus-alignment
+Duration:		5m 28s
+Output Directory:	/home/username/nextflow-tychus/my_alignment_output
+```
+
+
+Assembly Module
+---------------
+Included in the `assembly` module is simply a reference to the simulated reads mentioned above. Similarly, you won't need to specify the location of any reads in this example either. To get started, run the following command within the `nextflow-tychus/` directory:
+```
+$ nextflow run assembly.nf -profile assembly --threads 2 --output my_assembly_output
+```
+
+Since we are doing *de novo* assemblies, this could take a while, but hopefully not too long! When everything is said and done, you should see the following message:
+```
+Nextflow Version:       0.23.0
+Command Line:           nextflow run assembly.nf -profile assembly --threads 2 --output my_assembly_output
+Container:              abdolab/tychus-assembly
+Duration:               15m 28s
+Output Directory:       /home/username/nextflow-tychus/my_assembly_output
+```
 
 Pipeline Options
 ================
