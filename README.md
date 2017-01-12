@@ -272,7 +272,7 @@ Database Options
 ----------------
 If you would like to specify an alternative `reference`, `virulence`, `plasmid` or `resistance` database than the ones provided, you can do that as well.
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --ref_db "path/to/your/reference/db/ref.fa" --vf_db "path/to/your/virulence/db/vf.fa" --plasmid path/to/your/plasmid/db/plasmid.fa --amr_db path/to/your/resistance/db/resistance.fa
+$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --ref_db "path/to/your/reference/db/ref.fa" --vf_db "path/to/your/virulence/db/vf.fa" --plasmid_db "path/to/your/plasmid/db/plasmid.fa" --amr_db "path/to/your/resistance/db/resistance.fa"
 ```
 
 Other Options
