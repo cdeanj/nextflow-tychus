@@ -26,7 +26,7 @@
 params.pwd = "$PWD"
 params.output = "tychus_assembly_output"
 params.help = false
-params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}.fq.gz"
 params.out_dir = params.pwd + "/" + params.output
 params.threads = 1
 
@@ -84,8 +84,6 @@ Channel
 	.into { trimmomatic_read_pairs }
 
 process RunQC {
-	maxForks 1
-
 	publishDir "${params.out_dir}/PreProcessing", mode: "copy"
 
 	tag { dataset_id }
@@ -104,8 +102,6 @@ process RunQC {
 }
 
 process IdentifyBestKmer {
-	maxForks 1
-
 	tag { dataset_id }
 
 	input:
@@ -125,8 +121,6 @@ process IdentifyBestKmer {
 }
 
 process BuildAbyssAssembly {
-	maxForks 1
-
 	publishDir "${params.out_dir}/AbyssContigs", mode: "copy"
 
 	tag { dataset_id }
@@ -148,8 +142,6 @@ process BuildAbyssAssembly {
 }
 
 process BuildVelvetAssembly {
-	maxForks 1
-
 	publishDir "${params.out_dir}/VelvetContigs", mode: "copy"
 
 	tag { dataset_id }
@@ -178,8 +170,6 @@ process BuildVelvetAssembly {
 }
 
 process BuildSpadesAssembly {
-	maxForks 1
-
 	publishDir "${params.out_dir}/SPadesContigs", mode: "copy"
 	
 	tag { dataset_id }
@@ -197,8 +187,6 @@ process BuildSpadesAssembly {
 }
 
 process BuildIDBAAssembly {
-	maxForks 1
-
 	publishDir "${params.out_dir}/IDBAContigs", mode: "copy"
 
 	tag { dataset_id }
@@ -238,11 +226,9 @@ abyss_assembly_results.concat(
 	
 
 process IntegrateContigs {
-	maxForks 1
+	publishDir "${params.out_dir}/IntegratedContigs", mode: "copy"
 
 	tag { dataset_id }
-
-	publishDir "${params.out_dir}/IntegratedContigs", mode: "copy"
 
 	input:
 	set dataset_id, file(contigs) from grouped_assembly_contigs
@@ -274,8 +260,6 @@ process IntegrateContigs {
 }
 
 process AnnotateContigs {
-	maxForks 1
-
 	publishDir "${params.out_dir}/AnnotatedContigs", mode: "copy"
 
 	tag { dataset_id }
@@ -310,9 +294,7 @@ abyss_assembly_quast_contigs.concat(
 
 
 process EvaluateAssemblies {
-	maxForks 1
-
-	publishDir "${params.out_dir}/AssemblyReport", mode: "copy"
+	publishDir "${params.out_dir}/AssemblyReport", mode: "move"
 
 	tag { dataset_id }
 
