@@ -14,6 +14,8 @@ Table of Contents
 
 [Quickstart](https://github.com/cdeanj/nextflow-tychus#quickstart)
 
+[Run a Test](https://github.com/cdeanj/nextflow-tychus#run-a-test)
+
 [Options](https://github.com/cdeanj/nextflow-tychus#pipeline-options)
 
 [Example Usage](https://github.com/cdeanj/nextflow-tychus#example-usage)
