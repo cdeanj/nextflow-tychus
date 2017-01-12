@@ -44,7 +44,7 @@ Hardware Requirements
   - 16+ gigabytes (GB) of RAM.
   - 125+ gigabytes of hard drive (HDD) space.
 
-The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multple computing cores. The requirements listed above are an absolute must for demonstration purposes.
+The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multple computing cores. The requirements listed above are a must for demonstration purposes.
 
 
 Program Requirements
@@ -112,11 +112,11 @@ The download time will take between 5 and 10 minutes depending on your connectio
 
 Run a Test
 ==========
-It is `recommended` that you run these tests for both the `alignment` and `assembly` modules before doing any large-scale analysis. This serves the purpose of getting you comfortable with running each Tychus module, as well as providing you with real output, which you can look back upon when you get to the [Results](https://github.com/cdeanj/nextflow-tychus#results) section. The reads used in each test were produced with [Art](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/), an artificial read simulator, and constructed with 20x-30x coverage.
+It is `recommended` that you run these tests for both the `alignment` and `assembly` modules before doing any large-scale analysis. This serves the purpose of getting you comfortable with running each Tychus module, as well as providing you with real output, which you can look back upon later when you get to the [Results](https://github.com/cdeanj/nextflow-tychus#results) section. The reads used in each test were produced with [Art](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/), an artificial read simulator, and constructed with 20x-30x coverage.
 
 Alignment Module
 ----------------
-Included in the `alignment` module are four databases: a resistance, virulence, plasmid, and reference. These are used by default when running data through this module. Also, the simulated reads mentioned above are also used and can be found in the `tutorial/raw_sequence_data/` directory. To get started, run the following command within the `nextflow-tychus/` directory:
+Included in the `alignment` module are four databases: a resistance, virulence, plasmid, and reference. These are used by default when running data through this module. The simulated reads mentioned above are also used and can be found in the `tutorial/raw_sequence_data/` directory. To get started, run the following command within the `nextflow-tychus/` directory:
 ```
 $ nextflow run alignment.nf -profile alignment --threads 2 --output my_alignment_output
 ```
@@ -129,7 +129,6 @@ Container:			abdolab/tychus-alignment
 Duration:			5m 28s
 Output Directory:	/home/username/nextflow-tychus/my_alignment_output
 ```
-
 
 Assembly Module
 ---------------
@@ -146,6 +145,8 @@ Container:              abdolab/tychus-assembly
 Duration:               15m 28s
 Output Directory:       /home/username/nextflow-tychus/my_assembly_output
 ```
+
+See below for a list of available options included in each Tychus module.
 
 Pipeline Options
 ================
