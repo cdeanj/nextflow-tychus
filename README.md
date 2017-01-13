@@ -232,6 +232,7 @@ Prokka Options:
 
 Example Usage
 =============
+Some pipeline options can be used by both Tychus modules. Example usages for identical parameters are provided side-by-side where applicable.
 
 
 FASTQ Input
