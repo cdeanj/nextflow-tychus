@@ -243,7 +243,7 @@ $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequen
 ```
 or
 ```
-$ nextflow run assembly.nf -profile assembpy --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 ```
 
 Here, we are using the `*` wildcard to grab all files within the `tutorial/raw_sequence_data/` directory. The `{1,2}` wildcards allows us to further group the files based on the presence of an `_R1` or `_R2` substring. What is returned is a sorted list of files that Nextflow can group together and process appropriately.
