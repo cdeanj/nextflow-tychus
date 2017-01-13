@@ -36,6 +36,8 @@ The first method is assembly based. The assembly module attempts to produce a co
 
 The second method is alignment based. The alignment module attempts to produce a thorough description of your bacterial sequence data by identifying related single nucleotide polymorphisms (SNPs) with the goal of producing SNP phylogenies that can aid in inferring the relatedness and origin of your samples. In addition, information about the types of genes, whether they be antimicrobial, virulence, or plasmids are also identified and can be used for further analysis and interrogation.
 
+These two modules are not completely independent. Contigs produced from the `assembly` module can be used as input to the `alignment` module. In addition to the user-input reference genome and raw read sequences, these draft genomes can be used by the module's downstream processes to identify SNPs and build phylogenetic trees.
+
 -------
 
 Requirements
@@ -46,7 +48,7 @@ Hardware Requirements
   - 16+ gigabytes (GB) of RAM.
   - 125+ gigabytes of hard drive (HDD) space.
 
-The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multple computing cores. The requirements listed above are a must for demonstration purposes.
+The Tychus pipeline is intended to be utilized on Linux servers with large amounts of RAM and disk space with multiple computing cores. The requirements listed above are a must for demonstration purposes.
 
 
 Software Requirements
@@ -230,21 +232,31 @@ Prokka Options:
 
 Example Usage
 =============
+
+
 FASTQ Input
 -----------
 The most useful command for both modules will be to read in your sequence data. With Nextflow, we can specify a command line glob to provide a directory of FASTQ files as input. Doing so will allow Nextflow to process data in parallel, using multiple processors. For example, a typical command may look like the following:
 
 ```
-$ nextflow run <module-name> -profile <profile-name> --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+```
+or
+```
+$ nextflow run assembly.nf -profile assembpy --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 ```
 
-Here, we are using the `*` wildcard to grab all files within the `tutorial/raw_sequence_data/` directory. The `{1,2}` wildcards allows us to further group the files based on the presence of an `_R1` or `_R2` substring. What is returned is essentially a sorted list of files that Nextflow can group together and process appropriately.
+Here, we are using the `*` wildcard to grab all files within the `tutorial/raw_sequence_data/` directory. The `{1,2}` wildcards allows us to further group the files based on the presence of an `_R1` or `_R2` substring. What is returned is a sorted list of files that Nextflow can group together and process appropriately.
 
 Trimmomatic Operations
 ----------------------
 You may want to use your own trimming operations instead of the defaults provided by each module. To change them you can enter the following command:
 ```
-$ nextflow run <module-name> -profile <profile-name> --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
+$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
+```
+or
+```
+$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
 ```
 
 kSNP Operations
@@ -277,9 +289,13 @@ $ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequen
 
 Other Options
 -------------
-Here are some more options. The `threads` parameter allows you to control how many threads each process will use. By default, this value is set to 1. The `output` directory allows you to specify where outputs will be stored. The default directory depends on which module you are using. When running the `alignment` module, results will be saved to a directory called `tychus_alignment_output`. When running the `assembly` module, results will be saved to a directory called `tychus_assembly_output`.
+Here are some more options. The `threads` parameter allows you to control how many threads each process will use. By default, this value is set to 1. The `output` directory allows you to specify where outputs will be stored.
 ```
-$ nextflow run <module-name> -profile <profile-name> --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
+$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
+```
+or
+```
+$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
 ```
 
 ----------------
