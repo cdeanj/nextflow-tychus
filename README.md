@@ -43,8 +43,8 @@ These two modules are not completely independent. Contigs produced from the `ass
 Requirements
 ============
 
-Hardware Requirements
----------------------
+Minimum Hardware Requirements
+-----------------------------
   - 16+ gigabytes (GB) of RAM.
   - 125+ gigabytes of hard drive (HDD) space.
 
