@@ -357,4 +357,4 @@ Software | Function
 
 Contact
 =======
-Questions, bugs, or feature requests should be directed to Chris Dean at cdean11 at rams dot colostate dot edu. Alternatively, you can [Submit an Issue](https://github.com/cdeanj/nextflow-tychus/issues) on Github.
+Questions, bugs, or feature requests should be directed to Chris Dean at cdean11 AT rams DOT colostate DOT edu. Alternatively, you can [Submit an Issue](https://github.com/cdeanj/nextflow-tychus/issues) on Github.
