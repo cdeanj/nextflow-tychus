@@ -144,6 +144,15 @@ RUN cd /opt && \
 	ln -s /opt/VelvetOptimiser/VelvetOptimiser.pl /usr/bin && \
 	ln -s /opt/VelvetOptimiser/VelvetOpt /usr/bin && \
 	cd /
+
+#########################################################################################################
+# Install Tbl2san
+#########################################################################################################
+RUN wget -N ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz && \
+	gunzip linux64.tbl2asn.gz && \
+	chmod +x linux64.tbl2asn && \
+	mv linux64.tbl2asn /opt/prokka/binaries/linux/tbl2asn && \
+	cd /
 	
 	
 
