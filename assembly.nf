@@ -26,8 +26,8 @@
 params.pwd = "$PWD"
 params.output = "tychus_assembly_output"
 params.help = false
-params.read_pairs = "$baseDir/reads/*dat{1,2}.fq.gz"
-params.out_dir = params.pwd + "/" + params.output
+params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*dat{1,2}.fq.gz"
+params.out_dir = "$baseDir/" + params.output
 params.threads = 1
 
 threads = params.threads
