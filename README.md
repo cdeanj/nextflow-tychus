@@ -127,7 +127,7 @@ Alignment Module
 ----------------
 Included in the `alignment` module are four databases: a resistance, virulence, plasmid, and reference. These are used by default when running data through this module. The simulated reads mentioned above are also used and can be found in the `tutorial/raw_sequence_data/` directory. To get started, run the following command within the `nextflow-tychus/` directory:
 ```
-$ nextflow run alignment.nf -profile alignment --threads 2 --output my_alignment_output
+$ nextflow alignment.nf -profile alignment --threads 2 --output my_alignment_output
 ```
 
 Results should be produced shortly, and you will see the following message:
@@ -143,7 +143,7 @@ Assembly Module
 ---------------
 Included in the `assembly` module is a reference to the simulated reads mentioned above. You will not need to specify the location of any reads in this example. To get started, run the following command within the `nextflow-tychus/` directory:
 ```
-$ nextflow run assembly.nf -profile assembly --threads 2 --output my_assembly_output
+$ nextflow assembly.nf -profile assembly --threads 2 --output my_assembly_output
 ```
 
 Since we are doing *de novo* assemblies, this could take a while, but hopefully not too long! When everything is said and done, you should see the following message:
@@ -172,7 +172,7 @@ Launching `alignment.nf` [tender_wing] - revision: aa90f777d3
 Tychus - Alignment Pipeline
 
 Usage: 
-    nextflow run alignment.nf -profile alignment [options]
+    nextflow alignment.nf -profile alignment [options]
 
 General Options: 
     --read_pairs      DIR		Directory of paired FASTQ files
@@ -188,6 +188,7 @@ Trimmomatic Options:
     --trailing        INT		Remove trailing low quality or N bases
     --slidingwindow   INT		Scan read with a sliding window
     --minlen          INT		Drop reads below INT bases long
+    --adapters        FILE		FASTA formatted adapter sequences
 
 kSNP Options: 
     --ML              BOOL		Estimate maximum likelihood tree
@@ -212,7 +213,7 @@ Launching `assembly.nf` [sleepy_bohr] - revision: 05adc382a5
 Tychus - Assembly Pipeline
 
 Usage: 
-    nextflow run assembly.nf -profile assembly [options]
+    nextflow assembly.nf -profile assembly [options]
 
 General Options: 
     --read_pairs      DIR		Directory of paired FASTQ files
@@ -224,6 +225,7 @@ Trimmomatic Options:
     --trailing        INT		Remove trailing low quality or N bases
     --slidingwindow   STR		Scan read with a sliding window
     --minlen          INT		Drop reads below INT bases long
+    --adapters        FILE		FASTA formatted adapter sequences	
     
 Prokka Options:
     --genus           STR		Target genus
@@ -242,63 +244,64 @@ FASTQ Input
 The most useful command for both modules will be to read in your sequence data. With Nextflow, we can specify a command line glob to provide a directory of FASTQ files as input. Doing so will allow Nextflow to process data in parallel, using multiple processors. For example, a typical command may look like the following:
 
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 ```
 or
 ```
-$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
+$ nextflow assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz"
 ```
 
 Here, we are using the `*` wildcard to grab all files within the `tutorial/raw_sequence_data/` directory. The `{1,2}` wildcards allows us to further group the files based on the presence of an `_R1` or `_R2` substring. What is returned is a sorted list of files that Nextflow can group together and process appropriately.
 
 Trimmomatic Operations
 ----------------------
-You may want to use your own trimming operations instead of the defaults provided by each module. To change them you can enter the following command:
+Trimmomatic comes with four FASTA formatted adapter files (NexteraPE-PE.fa, TruSeq2-PE.fa, TruSeq3-PE.fa, TruSeq3-PE-2.fa). To remove adapter specific sequences or modify the default trimming operations, you can enter the following command:
+
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45 --adapters NexteraPE-PE.fa
 ```
 or
 ```
-$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45
+$ nextflow assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --leading 5 --trailing 5 --slidingwindow 5:16 --minlen 45 --adapters NexteraPE-PE.fa
 ```
 
 kSNP Operations
 ---------------
 By default, maximum likelihood (ML) trees are computed with kSNP. Although this is the `recommended` tree format to produce, you can specify the neighbor joining (NJ) method by including the `--NJ` option. Furthermore, you can enter a decimal number between 0 and 1 specifying the fraction of loci that must be present in all genomes to be included in the resulting SNP phylogeny.
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --NJ --min_frac 0.85
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --NJ --min_frac 0.85
 ```
 
 Figtree Options
 ---------------
-By deafult the SNP phylogenies produced by kSNP are written to a [Newick](https://en.wikipedia.org/wiki/Newick_format) formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as scalable vector graphic ([SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)) images. To change this, simply specify an alternative image format (JPEG,PDF,PNG).
+By deafult the SNP phylogenies produced by kSNP are written to a [Newick](https://en.wikipedia.org/wiki/Newick_format) formatted `.tre` file. Figtree is used to produce phylogenies in the image format of your choosing. By default, SNP phylognies are annotated and saved as PNG images. To change this, simply specify an alternative image format (JPEG,PDF,SVG).
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --JPEG
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --JPEG
 ```
 
 Prokka Options
 --------------
 We allow users to annotate contigs using BLAST specific databases. To do this, you must specify both the `genus` and `species` parameters. The default annotation method is to not use a BLAST specific database.
 ```
-$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --genus Listeria --species monocytogenes
+$ nextflow assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --genus Listeria --species monocytogenes
 ```
 
 Database Options
 ----------------
 If you would like to specify an alternative `reference`, `virulence`, `plasmid` or `resistance` database than the ones provided, you can do that as well.
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --ref_db "path/to/your/reference/db/ref.fa" --vf_db "path/to/your/virulence/db/vf.fa" --plasmid_db "path/to/your/plasmid/db/plasmid.fa" --amr_db "path/to/your/resistance/db/resistance.fa"
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --ref_db "path/to/your/reference/db/ref.fa" --vf_db "path/to/your/virulence/db/vf.fa" --plasmid_db "path/to/your/plasmid/db/plasmid.fa" --amr_db "path/to/your/resistance/db/resistance.fa"
 ```
 
 Other Options
 -------------
 Here are some more options. The `threads` parameter allows you to control how many threads each process will use. By default, this value is set to 1. The `output` directory allows you to specify where outputs will be stored.
 ```
-$ nextflow run alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
+$ nextflow alignment.nf -profile alignment --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
 ```
 or
 ```
-$ nextflow run assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
+$ nextflow assembly.nf -profile assembly --read_pairs "tutorial/raw_sequence_data/*_R{1,2}_001.fastq.gz" --threads 4 --output dir
 ```
 
 ----------------
@@ -333,7 +336,7 @@ PreProcessing | `Contains all FASTQ formatted trimmed sequence files produced by
 Dependencies
 ============
 
-Tychus utilizes a number of open-source bioinformatics tools to run. Please click on the tool names below to learn more about each tool. Keep in mind that all of these dependencies (except Docker of course) are resolved by Docker.
+Tychus utilizes a number of open-source bioinformatics tools to run. Please click on the tool names below to learn more about each tool. Keep in mind that all of these dependencies are resolved by Docker.
 
 Software | Function
 --------- | --------
@@ -353,7 +356,6 @@ Software | Function
 [SPAdes](https://github.com/ablab/spades) | `Used to produce assembly contigs.`
 [Trimmomatic](https://github.com/timflutre/trimmomatic) | `Used for the removal of adapter sequences and low quality base pairs.`
 [Velvet](https://github.com/dzerbino/velvet) | `Used to produce assembly contigs.`
-[VelvetOptimiser](https://github.com/tseemann/VelvetOptimiser) | `Used to optimize parameter values for the Velvet assembler.`
 
 ------------
 
