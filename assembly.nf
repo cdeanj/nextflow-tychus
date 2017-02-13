@@ -26,7 +26,7 @@
 params.pwd = "$PWD"
 params.output = "tychus_assembly_output"
 params.help = false
-params.read_pairs = "$baseDir/tutorial/raw_sequence_data/*_R{1,2}.fq.gz"
+params.read_pairs = "$baseDir/reads/*dat{1,2}.fq.gz"
 params.out_dir = params.pwd + "/" + params.output
 params.threads = 1
 
@@ -37,11 +37,13 @@ params.leading = 3
 params.trailing = 3
 params.slidingwindow = "4:15"
 params.minlen = 36
+params.adapters = "TruSeq3-PE.fa"
 
 leading = params.leading
 trailing = params.trailing
 slidingwindow = params.slidingwindow
 minlen = params.minlen
+adapters = params.adapters
 
 // Prokka configuration variables
 params.genus = ""
@@ -50,23 +52,25 @@ params.species = ""
 genus = params.genus
 species = params.species
 
+// Display help menu
 if(params.help) {
 	log.info ''
 	log.info 'Tychus - Assembly Pipeline'
 	log.info ''
 	log.info 'Usage: '
-	log.info '    nextflow run assembly.nf -profile assembly [options]'
+	log.info '    nextflow assembly.nf -profile assembly [options]'
 	log.info ''
 	log.info 'General Options: '
 	log.info '    --read_pairs      DIR		Directory of paired FASTQ files'
-	log.info '    --threads         INT             Number of threads to use for each process'
-	log.info '    --output          DIR             Directory to write output files to'
+	log.info '    --threads         INT		Number of threads to use for each process'
+	log.info '    --output          DIR		Directory to write output files to'
 	log.info ''
 	log.info 'Trimmomatic Options: '
 	log.info '    --leading         INT		Remove leading low quality or N bases'
 	log.info '    --trailing        INT		Remove trailing low quality or N bases'
 	log.info '    --slidingwindow   INT		Scan read with a sliding window'
 	log.info '    --minlen          INT		Drop reads below INT bases long'
+	log.info '    --adapters        STR		FASTA formatted adapter file'
 	log.info ''
 	log.info 'Prokka Options: '
 	log.info '    --genus           STR		Target genus'
@@ -75,14 +79,18 @@ if(params.help) {
 	return
 }
 
-
-// Let's group the read pairs and place them into a channel
-// The structure of the this channel will be a list of tuples.
-// [dataset_id, forward.fq, reverse.fq]
+// Returns a tuple of read pairs in the form
+// [dataset_id, forward.fq, reverse.fq] where
+// the dataset_id is the shared prefix from
+// the two paired FASTQ files.
 Channel
 	.fromFilePairs(params.read_pairs, flat: true)
+	.ifEmpty { exit 1, "Read pairs could not be found: ${params.read_pairs}" }
 	.into { trimmomatic_read_pairs }
 
+/*
+ * Remove adapter sequences and low quality base pairs with Trimmomatic
+ */
 process RunQC {
 	publishDir "${params.out_dir}/PreProcessing", mode: "copy"
 
@@ -95,12 +103,15 @@ process RunQC {
         set dataset_id, file("${dataset_id}_1P.fastq"), file("${dataset_id}_2P.fastq") into (abyss_read_pairs, velvet_read_pairs, spades_read_pairs, idba_read_pairs, kmer_genie_read_pairs)
 
         """
-        java -jar ${TRIMMOMATIC}/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
+        java -jar ${TRIMMOMATIC}/trimmomatic-0.36.jar PE -threads ${threads} $forward $reverse -baseout ${dataset_id} ILLUMINACLIP:Trimmomatic-0.36/adapters/${adapters}:2:30:10:3:TRUE LEADING:${leading} TRAILING:${trailing} SLIDINGWINDOW:${slidingwindow} MINLEN:${minlen}
         mv ${dataset_id}_1P ${dataset_id}_1P.fastq
         mv ${dataset_id}_2P ${dataset_id}_2P.fastq
         """
 }
 
+/*
+ * Choose a best kmer to build the underlying De Bruijn graph for Abyss and Velvet with KmerGenie
+ */
 process IdentifyBestKmer {
 	tag { dataset_id }
 
@@ -120,6 +131,9 @@ process IdentifyBestKmer {
 	"""
 }
 
+/*
+ * Build assembly with Abyss
+ */
 process BuildAbyssAssembly {
 	publishDir "${params.out_dir}/AbyssContigs", mode: "copy"
 
@@ -141,6 +155,9 @@ process BuildAbyssAssembly {
 	'''
 }
 
+/*
+ * Build assembly with Velvet
+ */
 process BuildVelvetAssembly {
 	publishDir "${params.out_dir}/VelvetContigs", mode: "copy"
 
@@ -158,17 +175,15 @@ process BuildVelvetAssembly {
 	'''
 	#!/bin/sh
 	best_kmer=`cat !{best}`
-	if [ $best_kmer == 'predict' ]
-	then
-		VelvetOptimiser.pl -s 19 -e 55 -d auto -f '-fastq -separate -shortPaired !{forward} !{reverse}'
-	else
-		velveth auto $best_kmer -separate -fastq -shortPaired !{forward} !{reverse}
-		velvetg auto -exp_cov auto -cov_cutoff auto
-	fi
+	velveth auto $best_kmer -separate -fastq -shortPaired !{forward} !{reverse}
+	velvetg auto -exp_cov auto -cov_cutoff auto
 	mv auto/contigs.fa !{dataset_id}_velvet-contigs.fa
 	'''
 }
 
+/*
+ * Build assembly with SPAdes
+ */
 process BuildSpadesAssembly {
 	publishDir "${params.out_dir}/SPadesContigs", mode: "copy"
 	
@@ -186,6 +201,9 @@ process BuildSpadesAssembly {
 	"""
 }
 
+/*
+ * Build assembly with IDBA-UD
+ */
 process BuildIDBAAssembly {
 	publishDir "${params.out_dir}/IDBAContigs", mode: "copy"
 
@@ -225,6 +243,9 @@ abyss_assembly_results.concat(
 	.into { grouped_assembly_contigs }
 	
 
+/*
+ * Integrate contigs produced from each assembler with CISA
+ */
 process IntegrateContigs {
 	publishDir "${params.out_dir}/IntegratedContigs", mode: "copy"
 
@@ -259,6 +280,9 @@ process IntegrateContigs {
 	'''
 }
 
+/*
+ * Annotate the CISA integrated contigs with Prokka
+ */
 process AnnotateContigs {
 	publishDir "${params.out_dir}/AnnotatedContigs", mode: "copy"
 
@@ -293,6 +317,9 @@ abyss_assembly_quast_contigs.concat(
         .into { grouped_assembly_quast_contigs }
 
 
+/*
+ * Evaluate ALL assemblies with QUAST
+ */
 process EvaluateAssemblies {
 	publishDir "${params.out_dir}/AssemblyReport", mode: "move"
 
