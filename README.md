@@ -2,7 +2,7 @@
 (Modelled after Will-Rowe's beautiful SEAR README https://github.com/will-rowe/SEAR/blob/master/README.md)
 -->
 
-[![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nextflow-tychus/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+Note: The production version of this repository has been moved to https://github.com/cdeanj/Tychus
 
 Tychus: A tool to characterize the bacterial genome.
 ====================================================
