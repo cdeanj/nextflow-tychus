@@ -2,7 +2,7 @@
 (Modelled after Will-Rowe's beautiful SEAR README https://github.com/will-rowe/SEAR/blob/master/README.md)
 -->
 
-Note: The production version of this repository has been moved to https://github.com/cdeanj/Tychus
+Note: The production version of this repository has been moved to https://github.com/abdo-lab/tychus
 
 Tychus: A tool to characterize the bacterial genome.
 ====================================================
